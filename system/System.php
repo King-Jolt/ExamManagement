@@ -57,19 +57,25 @@ class System
 	{
 		self::redirect('/system/error/404.php', TRUE, 404);
 	}
-	public static function alert($type, $msg)
+	public function generate_uniqid()
+	{
+		return uniqid() . sprintf('%02x', rand(1, 255));
+	}
+	public static function alert($type, $msg, $auto_close)
 	{
 		$title = ucfirst($type);
+		$classes = "alert alert-$type ";
+		if ($auto_close) $classes .= 'auto-close-msg';
 		return <<<EOF
-		<div class="alert alert-$type auto-close-msg">
+		<div class="$classes">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong> $title! </strong> $msg
 		</div>
 EOF;
 	}
-	public static function put_msg($type, $msg)
+	public static function put_msg($type, $msg, $auto_close = TRUE)
 	{
-		$str = self::alert($type, $msg);
+		$str = self::alert($type, $msg, $auto_close);
 		Session::set('msg', $str);
 	}
 	public static function get_msg()

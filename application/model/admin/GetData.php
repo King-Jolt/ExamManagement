@@ -21,6 +21,7 @@ class GetData
 	public static function list_Question($exam_id)
 	{
 		$query = 'SELECT question.* FROM question WHERE question.exam_id = ? ';
+		$query .= 'ORDER BY question.no';
 		$param = array($exam_id);
 		return new Sql_QueryCommand($query, $param);
 	}

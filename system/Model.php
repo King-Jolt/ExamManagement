@@ -5,9 +5,16 @@ namespace App\System;
 class Model
 {
 	private $_controller = NULL;
-	public function __construct($controller = NULL)
+	public function __construct($controller)
 	{
-		$this->_controller = $controller;
+		if ($controller instanceof Controller)
+		{
+			$this->_controller = $controller;
+		}
+		else
+		{
+			throw new \Exception('Construct parameter is not Controller Object !');
+		}
 	}
 	public function controller()
 	{

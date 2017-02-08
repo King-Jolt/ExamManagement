@@ -85,13 +85,22 @@ EOF;
 				$form = $this->controller()->load_view('application/view/admin/question_type/link.php', $data, FALSE);
 				break;
 			}
+			case 'multiple-choice':
+			{
+				$data = array(
+					'title' => 'Thêm câu chọn đáp án',
+					'action' => 'add-question', 'type' => 'multiple-choice'
+				);
+				$form = $this->controller()->load_view('application/view/admin/question_type/multiple_choice.php', $data, FALSE);
+				break;
+			}
 		} 
 		$data = array(
 			'title' => 'Thêm câu hỏi mới',
 			'add' => $this->_add_button(),
 			'content' => $form
 		);
-		$this->controller()->load_view('application/view/common/ckeditor.php');
+		$this->controller()->load_view('application/view/common/ckeditor.php'); // use CKEditor for Input
 		$this->controller()->load_view('application/view/admin/question.php', $data);
 	}
 }

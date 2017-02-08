@@ -19,7 +19,9 @@ $(document).ready(function(){
 	CKEDITOR.config.htmlEncodeOutput = false;
 	CKEDITOR.config.entities = false;
 	CKEDITOR.config.autoParagraph = false;
-	CKEDITOR.config.mathJaxLib = '/extension/mathjax/MathJax.js?config=TeX-MML-AM_CHTML';
+	CKEDITOR.config.showProcessingMessages = false;
+	//CKEDITOR.config.mathJaxLib = '/extension/mathjax/MathJax.js?config=TeX-MML-AM_CHTML';
+	CKEDITOR.config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML';
 	CKEDITOR.config.mathJaxClass = 'equation';
 	CKEDITOR.replace('ckinput');
 	var field = new (function(){
@@ -42,6 +44,5 @@ $(document).ready(function(){
 	$('#ck-modal-input .save').click(function(){
 		field.get().val(CKEDITOR.instances['ckinput'].getData());
 	});
-	$('.form-hint').html('<h6><em> Kích đúp chuột vào ô nhập để gõ văn bản dạng nâng cao </em></h6>')
 });
 </script>

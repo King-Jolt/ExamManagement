@@ -31,7 +31,7 @@ EOF;
 			$html .= '</tbody>';
 			return $html;
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			echo $e->getMessage();
 		}
@@ -66,9 +66,9 @@ EOF;
 			$html .= '</ul></div>';
 			return $html;
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
-			
+			echo $e->getMessage();
 		}
 	}
 }

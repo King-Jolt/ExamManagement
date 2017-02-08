@@ -68,18 +68,33 @@ class Exam extends Admin
 	}
 	protected function on_post()
 	{
-		if (($add_q = System::input_post('add-question')))
+		if (($type = System::input_post('add-question')))
 		{
 			$data = System::input_post('q');
-			DML::insert_Question($this->selected_id, $data);
+			switch ($type)
+			{
+				case 'link':
+				{
+					DML::insert_Question($this->selected_id, $data);
+					break;
+				}
+				case 'multiple-choice':
+				{
+					
+					break;
+				}
+				case 'fill':
+				{
+					break;
+				}
+			}
 			unset($_GET['add-question']);
 			System::redirect();
 		}
 	}
 	protected function main()
 	{
-		// use CKEditor for Input
-		// $this->load_view('view/common/ckeditor.php');
+		//
 	}
 }
 
