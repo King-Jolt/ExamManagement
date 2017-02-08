@@ -16,29 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `_m_choice`
+-- Table structure for table `_link_option_a`
 --
 
-DROP TABLE IF EXISTS `_m_choice`;
+DROP TABLE IF EXISTS `_link_option_a`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_m_choice` (
-  `id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-  `question_id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-  `content` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
-  `answer` bit(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `_option_a`
---
-
-DROP TABLE IF EXISTS `_option_a`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_option_a` (
+CREATE TABLE `_link_option_a` (
   `id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `option_b` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `question_id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
@@ -47,26 +31,72 @@ CREATE TABLE `_option_a` (
   PRIMARY KEY (`id`),
   KEY `question_id` (`question_id`),
   KEY `option_b` (`option_b`),
-  CONSTRAINT `_option_a_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`),
-  CONSTRAINT `_option_a_ibfk_2` FOREIGN KEY (`option_b`) REFERENCES `_option_b` (`id`)
+  CONSTRAINT `_link_option_a_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`),
+  CONSTRAINT `_link_option_a_ibfk_2` FOREIGN KEY (`option_b`) REFERENCES `_link_option_b` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `_link_a_trigger_insert` BEFORE INSERT ON `_link_option_a` FOR EACH ROW SET NEW.position = RAND() * 100 + 20 */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
--- Table structure for table `_option_b`
+-- Table structure for table `_link_option_b`
 --
 
-DROP TABLE IF EXISTS `_option_b`;
+DROP TABLE IF EXISTS `_link_option_b`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_option_b` (
+CREATE TABLE `_link_option_b` (
   `id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `question_id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `content` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
   `position` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `question_id` (`question_id`),
-  CONSTRAINT `_option_b_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`)
+  CONSTRAINT `_link_option_b_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `_link_b_trigger_insert` BEFORE INSERT ON `_link_option_b` FOR EACH ROW SET NEW.position = RAND() * 100 + 20 */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `_multiple_choice`
+--
+
+DROP TABLE IF EXISTS `_multiple_choice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_multiple_choice` (
+  `id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `question_id` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `content` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
+  `answer` bit(1) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,9 +175,10 @@ CREATE TABLE `question` (
   `b_title` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
   `score` float DEFAULT NULL,
   `type` int(11) NOT NULL,
-  `no` int(11) NOT NULL,
+  `no` smallint(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `exam_id` (`exam_id`)
+  KEY `exam_id` (`exam_id`),
+  CONSTRAINT `question_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -160,9 +191,9 @@ CREATE TABLE `question` (
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `que_trigger_insert` BEFORE INSERT ON `question` FOR EACH ROW BEGIN
-	DECLARE no INT;
-	SELECT (COUNT(question.id) + 1) INTO no FROM question WHERE question.exam_id = NEW.exam_id;
-    SET NEW.no = no;
+	DECLARE pos INT;
+	SELECT MAX(question.no) INTO pos FROM question;
+    SET NEW.no = (pos + 1);
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -179,9 +210,9 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `que_trigger_delete` BEFORE DELETE ON `question` FOR EACH ROW BEGIN
-	DELETE FROM _option_a WHERE _option_a.question_id = OLD.id;
-	DELETE FROM _option_b WHERE _option_b.question_id = OLD.id;
-    DELETE FROM _m_choice WHERE _m_choice.question_id = OLD.id;
+	DELETE FROM _link_option_a WHERE _link_option_a.question_id = OLD.id;
+	DELETE FROM _link_option_b WHERE _link_option_b.question_id = OLD.id;
+    DELETE FROM _multiple_choice WHERE _multiple_choice.question_id = OLD.id;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -249,19 +280,71 @@ DELIMITER ;;
 CREATE  PROCEDURE `link_question`(IN `q_id` VARCHAR(15))
     NO SQL
 SELECT
-	_option_a.content AS 'a_content',
-    _option_a.position AS 'a_position',
-    _option_b.content AS 'b_content',
-    _option_b.position AS 'b_position',
+	a.content AS 'a_content',
+    a.pos AS 'a_position',
+    b.content AS 'b_content',
+    b.pos AS 'b_position',
     ab.content AS 'ab_content',
-    ab.position AS 'ab_position'
-FROM _option_b
-LEFT JOIN _option_a
-ON _option_a.question_id = q_id AND _option_a.position = _option_b.position
-LEFT JOIN _option_b AS ab
-ON ab.id = _option_a.option_b
-WHERE _option_b.question_id = q_id
-ORDER BY _option_b.position, _option_a.position ;;
+    ab.pos AS 'ab_position'
+FROM
+	(
+		SELECT _link_option_b.*, (@n:=@n + 1) AS 'pos' FROM _link_option_b
+		JOIN (SELECT @n:=0) AS r
+		WHERE _link_option_b.question_id = q_id
+		ORDER BY _link_option_b.position
+	) AS b
+LEFT JOIN
+	(
+		SELECT _link_option_a.*, (@n2:=@n2 + 1) AS 'pos' FROM _link_option_a
+        JOIN (SELECT @n2:=0) AS r
+		WHERE _link_option_a.question_id = q_id
+        ORDER BY _link_option_a.position
+    ) AS a
+ON b.pos = a.pos
+LEFT JOIN
+	(
+		SELECT _link_option_b.*, (@n3:=@n3 + 1) AS 'pos' FROM _link_option_b
+		JOIN (SELECT @n3:=0) AS r
+		WHERE _link_option_b.question_id = q_id
+		ORDER BY _link_option_b.position
+	) AS ab
+ON ab.id = a.option_b
+ORDER BY -a.pos DESC ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `shuffle_question` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE  PROCEDURE `shuffle_question`(IN `exam_id` VARCHAR(15))
+    NO SQL
+BEGIN
+	/* shuffle question order */
+    UPDATE question
+    SET question.no = RAND() * 5000
+    WHERE question.exam_id = exam_id;
+	/* shuffle option a */
+	UPDATE _link_option_a
+	JOIN question ON question.id = _link_option_a.question_id
+	JOIN exam ON exam.id = question.exam_id
+    SET _link_option_a.position = RAND() * 100 + 20
+    WHERE exam.id = exam_id;
+    /* shuffle option b */
+    UPDATE _link_option_b
+    JOIN question ON question.id = _link_option_b.question_id
+    JOIN exam ON exam.id = question.exam_id
+    SET _link_option_b.position = RAND() * 100 + 20
+    WHERE exam.id = exam_id;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -296,4 +379,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-08  1:25:03
+-- Dump completed on 2017-02-09  5:53:41
