@@ -65,9 +65,9 @@ class Mysql extends \mysqli
 		$arr_field = array();
 		$arr_ret = array();
 		$arr_bind_result = array();
-		$field_result = $stmt->result_metadata();
-		if ($field_result)
+		if ($stmt->store_result())
 		{
+			$field_result = $stmt->result_metadata();
 			$i = 0;
 			while (($field = $field_result->fetch_field()))
 			{
@@ -83,6 +83,7 @@ class Mysql extends \mysqli
 				array_push($arr_ret, (object)($this->_array_copy($arr_bind_result)));
 			}
 			$total = $this->_get_num_rows();
+			$stmt->free_result();
 			return new Sql_Result($arr_field, $arr_ret, $total);
 		}
 		else

@@ -71,7 +71,7 @@ CREATE TABLE `_link_option_a` (
 
 LOCK TABLES `_link_option_a` WRITE;
 /*!40000 ALTER TABLE `_link_option_a` DISABLE KEYS */;
-INSERT INTO `_link_option_a` VALUES ('589c8a0ec6eeb3f','589c8a0ec112a32','589c8a0eba3c8c6','Từ đơn',98),('589c8a0eca59c4e','589c8a0ec72d392','589c8a0eba3c8c6','Từ ghép',100),('589c8a0ee2c42fe','589c8a0ed0b2e70','589c8a0eba3c8c6','Từ láy',84);
+INSERT INTO `_link_option_a` VALUES ('589c8a0ec6eeb3f','589c8a0ec112a32','589c8a0eba3c8c6','Từ đơn',107),('589c8a0eca59c4e','589c8a0ec72d392','589c8a0eba3c8c6','Từ ghép',34),('589c8a0ee2c42fe','589c8a0ed0b2e70','589c8a0eba3c8c6','Từ láy',31);
 /*!40000 ALTER TABLE `_link_option_a` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -114,7 +114,7 @@ CREATE TABLE `_link_option_b` (
 
 LOCK TABLES `_link_option_b` WRITE;
 /*!40000 ALTER TABLE `_link_option_b` DISABLE KEYS */;
-INSERT INTO `_link_option_b` VALUES ('589c8a0ec112a32','589c8a0eba3c8c6','điện, ga, sông, núi',100),('589c8a0ec72d392','589c8a0eba3c8c6','lác đác, long lanh, róc rách',31),('589c8a0ed0b2e70','589c8a0eba3c8c6','sách vở, thước kẻ',31),('589c8a0ee302a7a','589c8a0eba3c8c6','khoa học, kỹ thuật',44);
+INSERT INTO `_link_option_b` VALUES ('589c8a0ec112a32','589c8a0eba3c8c6','điện, ga, sông, núi',31),('589c8a0ec72d392','589c8a0eba3c8c6','lác đác, long lanh, róc rách',44),('589c8a0ed0b2e70','589c8a0eba3c8c6','sách vở, thước kẻ',106),('589c8a0ee302a7a','589c8a0eba3c8c6','khoa học, kỹ thuật',78);
 /*!40000 ALTER TABLE `_link_option_b` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -158,7 +158,7 @@ CREATE TABLE `_multiple_choice` (
 
 LOCK TABLES `_multiple_choice` WRITE;
 /*!40000 ALTER TABLE `_multiple_choice` DISABLE KEYS */;
-INSERT INTO `_multiple_choice` VALUES ('589c8bf3992eb78','589c8bf3915ead4','Có biên độ giảm dần theo thời gian.','',108),('589c8bf3a469e8a','589c8bf3915ead4','Có biên độ không đổi theo thời gian.','\0',88),('589c8bf3a4e6e08','589c8bf3915ead4','Luôn có hại.','\0',94),('589c8bf3b542ad3','589c8bf3915ead4','Luôn có lợi.','\0',88),('589cc0600ff1735','589cc0600477d8f','<span class=\"equation\">\\([1; 3] \\cup [2; 4]\\)</span>','\0',36),('589cc0601689167','589cc0600477d8f','<span class=\"equation\">\\([-\\infty; 2] \\cup [3; +\\infty]\\)</span>','\0',95),('589cc0601a32a58','589cc0600477d8f','<span class=\"equation\">\\([2; 3]\\)</span>','',48),('589cc0601a712fa','589cc0600477d8f','<span class=\"equation\">\\(\\Phi\\)</span>','\0',35),('589cc1894f9cffa','589cc189459a535','<span class=\"equation\">\\((1; 2)\\)</span>','',110),('589cc189520e03c','589cc189459a535','<span class=\"equation\">\\((1; +\\infty)\\)</span>','\0',28),('589cc1895a5b29e','589cc189459a535','<span class=\"equation\">\\((0; 1)\\)</span>','\0',88),('589cc1895ad82d5','589cc189459a535','<span class=\"equation\">\\((0; 2)\\)</span>','\0',37);
+INSERT INTO `_multiple_choice` VALUES ('589c8bf3992eb78','589c8bf3915ead4','Có biên độ giảm dần theo thời gian.','',51),('589c8bf3a469e8a','589c8bf3915ead4','Có biên độ không đổi theo thời gian.','\0',100),('589c8bf3a4e6e08','589c8bf3915ead4','Luôn có hại.','\0',30),('589c8bf3b542ad3','589c8bf3915ead4','Luôn có lợi.','\0',27),('589cc0600ff1735','589cc0600477d8f','<span class=\"equation\">\\([1; 3] \\cup [2; 4]\\)</span>','\0',26),('589cc0601689167','589cc0600477d8f','<span class=\"equation\">\\([-\\infty; 2] \\cup [3; +\\infty]\\)</span>','\0',27),('589cc0601a32a58','589cc0600477d8f','<span class=\"equation\">\\([2; 3]\\)</span>','',41),('589cc0601a712fa','589cc0600477d8f','<span class=\"equation\">\\(\\Phi\\)</span>','\0',100),('589cc1894f9cffa','589cc189459a535','<span class=\"equation\">\\((1; 2)\\)</span>','',60),('589cc189520e03c','589cc189459a535','<span class=\"equation\">\\((1; +\\infty)\\)</span>','\0',77),('589cc1895a5b29e','589cc189459a535','<span class=\"equation\">\\((0; 1)\\)</span>','\0',86),('589cc1895ad82d5','589cc189459a535','<span class=\"equation\">\\((0; 2)\\)</span>','\0',79);
 /*!40000 ALTER TABLE `_multiple_choice` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -301,7 +301,7 @@ CREATE TABLE `question` (
 
 LOCK TABLES `question` WRITE;
 /*!40000 ALTER TABLE `question` DISABLE KEYS */;
-INSERT INTO `question` VALUES ('589c8a0eba3c8c6','Ghép các từ ở <strong>cột A</strong> với <strong>cột B</strong> sao cho phù hợp','589c896d46977f8','Cột A','Cột B',2,1,3529),('589c8bf3915ead4','Dao động tắt dần','589c896d46977f8',NULL,NULL,1,2,1809),('589cc0600477d8f','Cho hàm số&nbsp;<span class=\"equation\">\\(y = \\sqrt{-x^2 + 4x - 3} + \\sqrt{-x^2 + 6x - 8}\\)</span>&nbsp;. Tập xác định của hàm số là:','589c896d46977f8',NULL,NULL,5,2,3457),('589cc189459a535','Hàm số&nbsp;<span class=\"equation\">\\(y = \\sqrt{2x - x^2}\\)</span>&nbsp;nghịch biến trên khoảng:','589c896d46977f8',NULL,NULL,0,2,1856);
+INSERT INTO `question` VALUES ('589c8a0eba3c8c6','Ghép các từ ở <strong>cột A</strong> với <strong>cột B</strong> sao cho phù hợp','589c896d46977f8','Cột A','Cột B',2,1,2159),('589c8bf3915ead4','Dao động tắt dần','589c896d46977f8',NULL,NULL,1,2,1335),('589cc0600477d8f','Cho hàm số&nbsp;<span class=\"equation\">\\(y = \\sqrt{-x^2 + 4x - 3} + \\sqrt{-x^2 + 6x - 8}\\)</span>&nbsp;. Tập xác định của hàm số là:','589c896d46977f8',NULL,NULL,5,2,198),('589cc189459a535','Hàm số&nbsp;<span class=\"equation\">\\(y = \\sqrt{2x - x^2}\\)</span>&nbsp;nghịch biến trên khoảng:','589c896d46977f8',NULL,NULL,0,2,1986);
 /*!40000 ALTER TABLE `question` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -460,7 +460,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `link_question`(IN `q_id` VARCHAR(15))
+CREATE  PROCEDURE `link_question`(IN `q_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 SELECT
 	a.content AS 'a_content',
@@ -508,7 +508,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `multiple_choice_question`(IN `q_id` VARCHAR(15))
+CREATE  PROCEDURE `multiple_choice_question`(IN `q_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 SELECT _multiple_choice.*, (@n:=@n + 1) AS 'pos' FROM _multiple_choice
 JOIN (SELECT @n:=0) AS r
@@ -529,7 +529,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `shuffle_question`(IN `exam_id` VARCHAR(15))
+CREATE  PROCEDURE `shuffle_question`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 BEGIN
 	/* shuffle question order */
@@ -589,4 +589,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-10  4:26:40
+-- Dump completed on 2017-02-10  6:43:38

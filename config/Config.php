@@ -4,8 +4,6 @@ $config['base_url'] = sprintf('http%s://%s', isset($_SERVER['HTTPS']) ? 's' : ''
 
 // Database config
 
-$config['db'] = array();
-
 $config['db'] = array(
 	'host' => 'localhost',
 	'user' => 'root',
@@ -17,7 +15,7 @@ $config['db'] = array(
 );
 
 /*
-$config['db'][] = array(
+$config['db'] = array(
 	'host' => 'localhost',
 	'user' => 'nocut_trungnt',
 	'password' => 'a9apymama5ym',
