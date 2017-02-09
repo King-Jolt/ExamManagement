@@ -23,7 +23,7 @@ class Preview extends Controller
 		$data = array(
 			'content' => $view->get()
 		);
-		$this->load_view('application/view/common/preview_exam.php', $data);
+		$this->load_view('application/view/admin/preview_exam.php', $data);
 		$this->interrupt();
 		exit;
 	}

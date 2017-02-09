@@ -31,13 +31,18 @@ class Home extends Admin
 	protected function on_get()
 	{
 		$request = System::input_get('action');
+		$id = System::input_get('id');
 		if ($request)
 		{
 			switch ($request)
 			{
+				case 'shuffle':
+				{
+					DML::shuffle_Exam($id);
+					break;
+				}
 				case 'delete':
 				{
-					$id = System::input_get('id');
 					DML::delete_Exam($id);
 					break;
 				}

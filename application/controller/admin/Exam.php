@@ -75,12 +75,12 @@ class Exam extends Admin
 			{
 				case 'link':
 				{
-					DML::insert_Question($this->selected_id, $data);
+					DML::insert_LinkQuestion($this->selected_id, $data);
 					break;
 				}
 				case 'multiple-choice':
 				{
-					
+					DML::insert_MultipleChoiceQuestion($this->selected_id, $data);
 					break;
 				}
 				case 'fill':

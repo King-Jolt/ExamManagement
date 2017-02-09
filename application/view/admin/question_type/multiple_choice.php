@@ -31,6 +31,11 @@
 			</li>
 		</ol>
 	</div>
+	<div class="form-group">
+		<div class="form-inline">
+			<input type="number" class="form-control" name="q[score]" placeholder="Điểm" value="<?php self::put($score) ?>" step="0.1" />
+		</div>
+	</div>
 	<button type="submit" class="btn btn-success" name="<?php self::put($action) ?>" value="<?php self::put($type) ?>"> Xác nhận </button>
 </form>
 <script>

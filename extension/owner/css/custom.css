@@ -32,7 +32,7 @@
 {
 	.modal.ckeditor .modal-dialog
 	{
-		width: 700px;
+		width: 50%;
 	}
 }
 
@@ -43,7 +43,7 @@
 	size: A4;
 }
 
-.question-preview ul li
+.question-preview ul > li
 {
 	margin-top: 15px;
 	list-style-type: none;
@@ -55,6 +55,11 @@
 	margin-left: 10%;
 }
 
+.table tbody tr td
+{
+	vertical-align: middle;
+}
+
 .question-preview .link-table td:first-child, .question-preview .link-table th:first-child
 {
 	width: 30%;
@@ -64,4 +69,26 @@
 {
 	vertical-align: top;
 	padding-top: 5px;
+}
+
+.dropdown button .glyphicon:first-child:after
+{
+	content: "\2009";
+}
+
+.dropdown-menu li a .glyphicon:first-child:after
+{
+	content: "\2009";
+}
+
+ol.multiple-choice.col-2 li
+{
+	width: 50%;
+	float: left;
+}
+
+ol.multiple-choice.col-4 li
+{
+	width: 25%;
+	float: left;
 }

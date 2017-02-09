@@ -10,7 +10,7 @@ use App\System\Library\Session;
 
 class System
 {
-	public static function &get_config($name = NULL)
+	public static function get_config($name = NULL)
 	{
 		global $config;
 		if ($name)
@@ -19,7 +19,7 @@ class System
 		}
 		return $config;
 	}
-	public static function &get_user_config($name = NULL)
+	public static function get_user_config($name = NULL)
 	{
 		global $userconfig;
 		if ($name)
@@ -57,7 +57,7 @@ class System
 	{
 		self::redirect('/system/error/404.php', TRUE, 404);
 	}
-	public function generate_uniqid()
+	public static function generate_uniqid()
 	{
 		return uniqid() . sprintf('%02x', rand(1, 255));
 	}
@@ -69,12 +69,18 @@ class System
 		return <<<EOF
 		<div class="$classes">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong> $title! </strong> $msg
+			<div class="inner-msg">
+				<strong> $title! </strong> $msg
+			</div>
 		</div>
 EOF;
 	}
 	public static function put_msg($type, $msg, $auto_close = TRUE)
 	{
+		if ($msg instanceof \Exception)
+		{
+			$msg = self::get_exception_msg($msg);
+		}
 		$str = self::alert($type, $msg, $auto_close);
 		Session::set('msg', $str);
 	}
@@ -83,6 +89,19 @@ EOF;
 		$r = Session::get('msg');
 		Session::remove('msg');
 		return $r;
+	}
+	public static function get_exception_msg($ExceptionObject)
+	{
+		$html = $ExceptionObject->getMessage();
+		foreach ($ExceptionObject->getTrace() as $trace)
+		{
+			$trace['args'] = var_dump($trace['args']);
+			$html .= <<<EOF
+			<br />
+			$trace[file] <strong>#$trace[line]</strong> : $trace[function] ( $trace[args] ) {...}
+EOF;
+		}
+		return $html;
 	}
 }
 

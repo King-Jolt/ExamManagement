@@ -27,14 +27,14 @@ class Question extends Model
 		$data = array(
 			'content' => $view->get()
 		);
-		$this->controller()->load_view('application/view/common/preview_exam.php', $data);
+		$this->controller()->load_view('application/view/admin/preview_exam.php', $data);
 	}
 	public function view()
 	{
 		$view = new View_Question($this->exam_id);
 		$data = array(
 			'title' => 'Xem các câu hỏi',
-			'content' => $this->controller()->load_view('application/view/common/view_question.php', array('view' => $view->get()), FALSE)
+			'content' => $this->controller()->load_view('application/view/admin/view_question.php', array('view' => $view->get()), FALSE)
 		);
 		$this->controller()->load_view('application/view/admin/question.php', $data);
 	}
@@ -48,8 +48,7 @@ class Question extends Model
 		$btn = <<<EOF
 		<div class="form-group">
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="color: #fff"> Thêm loại câu hỏi
-				<span class="caret"></span></button>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="color: #fff"> Thêm câu hỏi mới &nbsp;<span class="caret"></span></button>
 				<ul class="dropdown-menu">
 					<li><a href="$url[link]" class="add-choice"> Ghép nối </a></li>
 					<li><a href="$url[mchoice]" class="add-link"> Chọn đáp án </a></li>
@@ -97,10 +96,9 @@ EOF;
 		} 
 		$data = array(
 			'title' => 'Thêm câu hỏi mới',
-			'add' => $this->_add_button(),
 			'content' => $form
 		);
-		$this->controller()->load_view('application/view/common/ckeditor.php'); // use CKEditor for Input
+		$this->controller()->load_view('application/view/admin/ckeditor.php'); // use CKEditor for Input
 		$this->controller()->load_view('application/view/admin/question.php', $data);
 	}
 }

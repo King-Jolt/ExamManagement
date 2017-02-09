@@ -1,7 +1,5 @@
 <?php
 
-// View Object
-
 namespace App\System\Library;
 
 class View

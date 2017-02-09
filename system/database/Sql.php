@@ -2,15 +2,16 @@
 
 namespace App\System\Database;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config/Config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql_Result.php';
+
+use App\System\System;
 
 class Mysql extends \mysqli
 {
 	public function __construct()
 	{
-		global $config;
-		$db = $config['db'];
+		$db = System::get_config('db');
 		parent::__construct(
 			$db['host'],
 			$db['user'],
@@ -32,6 +33,7 @@ class Mysql extends \mysqli
 		{
 			parent::query("SET collation_connection = $db[collation]");
 		}
+
 	}
 	public function __destruct()
 	{

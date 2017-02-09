@@ -10,7 +10,7 @@ class GetData
 {
 	public static $types = array(
 		'link' => 1,
-		'mchoice' => 2,
+		'multiple-choice' => 2,
 		'fill' => 4
 	);
 	public static function list_Exam()
@@ -21,7 +21,7 @@ class GetData
 	public static function list_Question($exam_id)
 	{
 		$query = 'SELECT question.* FROM question WHERE question.exam_id = ? ';
-		$query .= 'ORDER BY question.no';
+		$query .= 'ORDER BY question.position';
 		$param = array($exam_id);
 		return new Sql_QueryCommand($query, $param);
 	}
@@ -33,6 +33,17 @@ class GetData
 			{
 				return new Sql_QueryCommand('CALL link_question(?)', array($id));
 			}
+			case self::$types['multiple-choice']:
+			{
+				return new Sql_QueryCommand('CALL multiple_choice_question(?)', array($id));
+			}
+			/*
+			case self::$types['fill']:
+			{
+				//
+			}
+			 * 
+			 */
 		}
 	} 
 }
