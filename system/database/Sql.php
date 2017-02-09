@@ -65,9 +65,9 @@ class Mysql extends \mysqli
 		$arr_field = array();
 		$arr_ret = array();
 		$arr_bind_result = array();
-		if ($stmt->store_result())
+		if ($field_result = $stmt->result_metadata())
 		{
-			$field_result = $stmt->result_metadata();
+			$stmt->store_result();
 			$i = 0;
 			while (($field = $field_result->fetch_field()))
 			{
