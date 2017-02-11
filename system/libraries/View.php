@@ -9,10 +9,6 @@ class View
 	public function __construct($file, $data)
 	{
 		$f = $this->get_AbsPath($file);
-		if (!file_exists($f))
-		{
-			throw new \Exception("View file $f is not exist !");
-		}
 		$this->_file = $f;
 		$this->_data = $data;
 	}
@@ -29,19 +25,27 @@ class View
 	}
 	public function get()
 	{
-		$__html_result = '';
-		ob_start();
-		if (is_array($this->_data))
+		if (file_exists($this->_file))
 		{
-			foreach ($this->_data as $var => $value)
+			$__html_result = '';
+			ob_start();
+			if (is_array($this->_data))
 			{
-				$$var = $value;
+				foreach ($this->_data as $var => $value)
+				{
+					$$var = $value;
+				}
 			}
+			eval ('?>' . file_get_contents($this->_file));
+			$__html_result = ob_get_contents();
+			ob_end_clean();
+			return $__html_result;
 		}
-		eval ('?>' . file_get_contents($this->_file));
-		$__html_result = ob_get_contents();
-		ob_end_clean();
-		return $__html_result;
+		else
+		{
+			throw new \Exception("View file $this->_file is not exist !", 2);
+		}
+		
 	}
 }
 

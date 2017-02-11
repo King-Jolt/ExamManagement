@@ -18,6 +18,11 @@
 	margin-top: 15px;
 }
 
+.top-25
+{
+	margin-top: 25px;
+}
+
 #input-table td, #input-table th
 {
 	vertical-align: middle;

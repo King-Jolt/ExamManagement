@@ -12,17 +12,16 @@ use App\System\System;
 
 class DML
 {
-	private function __construct()
+	private $connect = NULL;
+	public function __construct()
 	{
-		// prevent DML instance
+		$this->connect = new Mysql();
 	}
-	public static function insert_Exam($title)
+	public function insert_Exam($title)
 	{
 		try
 		{
-			$connect = new Mysql();
-			$connect->query('INSERT INTO exam(id, title) VALUES(?, ?)', array(System::generate_uniqid(), $title));
-			$connect->close();
+			$this->connect->query('INSERT INTO exam(id, title) VALUES(?, ?)', array(System::generate_uniqid(), $title));
 			System::put_msg('success', "Đã thêm mới đề kiểm tra \"$title\" !");
 		}
 		catch (\Exception $e)
@@ -30,13 +29,11 @@ class DML
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public static function delete_Exam($id)
+	public function delete_Exam($id)
 	{
 		try
 		{
-			$connect = new Mysql();
-			$connect->query('DELETE FROM exam WHERE exam.id = ?', array($id));
-			$connect->close();
+			$this->connect->query('DELETE FROM exam WHERE exam.id = ?', array($id));
 			System::put_msg('success', "Đã xóa thành công !");
 		}
 		catch (\Exception $e)
@@ -48,9 +45,7 @@ class DML
 	{
 		try
 		{
-			$connect = new Mysql();
-			$connect->query('CALL shuffle_question(?)', array($id));
-			$connect->close();
+			$this->connect->query('CALL shuffle_question(?)', array($id));
 			System::put_msg('success', 'Đã xáo trộn đề thi thành công !');
 		}
 		catch (\Exception $e)
@@ -58,13 +53,13 @@ class DML
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public static function insert_LinkQuestion($exam_id, &$data)
+	public function insert_LinkQuestion($exam_id, &$data)
 	{
 		try
 		{
-			$connect = new Mysql();
+			$this->connect->begin();
 			$id = System::generate_uniqid();
-			$connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type) VALUES(?, ?, ?, ?, ?, ?, ?)', array(
+			$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type) VALUES(?, ?, ?, ?, ?, ?, ?)', array(
 				$id,
 				$data['q'],
 				$exam_id,
@@ -76,7 +71,7 @@ class DML
 			foreach ($data['b'] as $index => $b_content)
 			{
 				$b_id = System::generate_uniqid();
-				$connect->query('INSERT INTO _link_option_b(id, question_id, content) VALUES(?, ?, ?)', array(
+				$this->connect->query('INSERT INTO _link_option_b(id, question_id, content) VALUES(?, ?, ?)', array(
 					$b_id,
 					$id,
 					$b_content
@@ -84,7 +79,7 @@ class DML
 				if (isset($data['a'][$index]))
 				{
 					$a_id = System::generate_uniqid();
-					$connect->query('INSERT INTO _link_option_a(id, option_b, question_id, content) VALUES(?, ?, ?, ?)', array(
+					$this->connect->query('INSERT INTO _link_option_a(id, option_b, question_id, content) VALUES(?, ?, ?, ?)', array(
 						$a_id,
 						$b_id,
 						$id,
@@ -92,20 +87,22 @@ class DML
 					));
 				}
 			}
+			$this->connect->commit();
 			System::put_msg('success', 'Đã thêm mới một câu hỏi !');
 		}
 		catch (\Exception $e)
 		{
+			$this->connect->rollback();
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public static function insert_MultipleChoiceQuestion($exam_id, &$data)
+	public function insert_MultipleChoiceQuestion($exam_id, &$data)
 	{
 		try
 		{
-			$connect = new Mysql();
+			$this->connect->begin();
 			$id = System::generate_uniqid();
-			$connect->query('INSERT question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+			$this->connect->query('INSERT question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
 				$id,
 				$data['q'],
 				$exam_id,
@@ -116,29 +113,29 @@ class DML
 			{
 				if (!isset($data['bool'][$index]))
 				{
-					throw new \Exception('Lỗi dữ liệu nhập');
+					throw new \Exception('Lỗi dữ liệu nhập', 2);
 				}
-				$connect->query('INSERT _multiple_choice(id, question_id, content, answer) VALUES(?, ?, ?, ?)', array(
+				$this->connect->query('INSERT _multiple_choice(id, question_id, content, answer) VALUES(?, ?, ?, ?)', array(
 					System::generate_uniqid(),
 					$id,
 					$content,
 					intval($data['bool'][$index])
 				));
 			}
+			$this->connect->commit();
 			System::put_msg('success', 'Đã thêm mới một câu hỏi !');
 		}
 		catch (\Exception $e)
 		{
+			$this->connect->rollback();
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public static function delete_Question($id)
+	public function delete_Question($id)
 	{
 		try
 		{
-			$connect = new Mysql();
-			$connect->query('DELETE FROM question WHERE question.id = ?', array($id));
-			$connect->close();
+			$this->connect->query('DELETE FROM question WHERE question.id = ?', array($id));
 			System::put_msg('success', 'Đã xóa một câu hỏi !');
 		}
 		catch (\Exception $e)

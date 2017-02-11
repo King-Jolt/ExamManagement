@@ -8,13 +8,12 @@ use App\System\System;
 
 class Table
 {
-	public $class = 'table table-striped table-hover';
-	
-	protected $_arr_title = array(); // for custom title
+	protected $class = 'table table-striped table-hover'; // Use Bootstrap table
+	protected $arr_title = array(); // for custom title
 	protected $sql_query = NULL;
 	
 	private $_page = 1;
-	private $_page_size = 20;
+	private $_page_size = 15;
 	private $_use_db = TRUE;
 	private $_total = 0;
 	
@@ -53,9 +52,9 @@ class Table
 		$body = '';
 		$n_start = ($this->_page - 1) * $this->_page_size;
 		$n_end = $n_start + $this->_page_size;		
-		if ($this->_arr_title)
+		if ($this->arr_title)
 		{
-			foreach ($this->_arr_title as $str)
+			foreach ($this->arr_title as $str)
 			{
 				$head .= "<th> $str </th>";
 			}
@@ -65,17 +64,13 @@ class Table
 			try
 			{
 				$result = $this->sql_query->limit($this->_page_size, $n_start)->execute();
-				if (!$result)
-				{
-					return 'Table Error !';
-				}
 				$this->_total = $result->num_rows();
 				if ($this->_total)
 				{
 					if ($n_start >= 0 and $n_start < $this->_total)
 					{
 						// fetch columns title if not set
-						if (!$this->_arr_title)
+						if (!$this->arr_title)
 						{
 							foreach ($result->get_field() as $title)
 							{
@@ -91,8 +86,7 @@ class Table
 					}
 					else
 					{
-						unset($_GET['page']);
-						System::redirect();
+						throw new \Exception("Page number '$_GET[page]' is invalid !", 2);
 					}
 				}
 				else
@@ -102,11 +96,11 @@ class Table
 			}
 			catch (\Exception $ex)
 			{
-				return $ex->getMessage();
+				return System::get_exception_msg($ex);
 			}
 		}
 		// Return html
-		return <<<EOF
+		$html = <<<EOF
 		<table class="$this->class">
 			<thead>
 				$head
@@ -116,6 +110,7 @@ class Table
 			</tbody>
 		</table>
 EOF;
+		return $html;
 	}
 }
 

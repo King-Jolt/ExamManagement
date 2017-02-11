@@ -36,15 +36,19 @@ class System
 	{
 		return isset($_POST[$attr]) ? $_POST[$attr] : FALSE;
 	}
-	public static function redirect($location = NULL, $with_get = TRUE)
+	public static function redirect($location = NULL, $data = NULL)
 	{
-		if ($with_get and $_GET)
-		{
-			$location .= '?' . http_build_query($_GET);
-		}
 		if (!$location)
 		{
 			$location = self::current_uri();
+		}
+		if ($data === NULL)
+		{
+			$data = $_GET;
+		}
+		if (is_array($data) and !empty($data))
+		{
+			$location .= '?' . http_build_query($_GET);
 		}
 		header('Location: ' . $location);
 		exit;
@@ -70,7 +74,7 @@ class System
 		<div class="$classes">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<div class="inner-msg">
-				<strong> $title! </strong> $msg
+				<strong> $title ! </strong> $msg
 			</div>
 		</div>
 EOF;
@@ -92,15 +96,11 @@ EOF;
 	}
 	public static function get_exception_msg($ExceptionObject)
 	{
-		$html = $ExceptionObject->getMessage();
-		foreach ($ExceptionObject->getTrace() as $trace)
-		{
-			$trace['args'] = var_dump($trace['args']);
-			$html .= <<<EOF
-			<br />
-			$trace[file] <strong>#$trace[line]</strong> : $trace[function] ( $trace[args] ) {...}
-EOF;
-		}
+		$html =
+			'<pre><strong>#Message: </strong><em>#' . $ExceptionObject->getCode() . ': ' . $ExceptionObject->getMessage() . '</em>' . PHP_EOL .
+			'=> ' . $ExceptionObject->getFile() . '(' . $ExceptionObject->getLine() . ')' .
+			PHP_EOL . $ExceptionObject->getTraceAsString() .
+			'</pre>';
 		return $html;
 	}
 }

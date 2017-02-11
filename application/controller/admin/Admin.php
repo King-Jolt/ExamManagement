@@ -3,11 +3,20 @@
 namespace App\Controller\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Controller.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Auth.php';
 
 use App\System\Controller;
+use App\System\Library\Auth;
 
 abstract class Admin extends Controller
 {
+	public function __construct()
+	{
+		Auth::set_Key('admin');
+		Auth::redirect_Fail('/index.php'); // redirect to Login page if have not login
+		Auth::validate();
+		parent::__construct();
+	}
 	protected $menu = array(
 		'1' => array(
 			'href' => '/application/admin/index.php',

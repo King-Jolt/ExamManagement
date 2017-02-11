@@ -35,10 +35,6 @@ class Mysql extends \mysqli
 		}
 
 	}
-	public function __destruct()
-	{
-		$this->close(); // auto close connection;
-	}
 	private function _stmt_get_type($value)
 	{
 		$type = array('i', 'd', 's');
@@ -91,6 +87,19 @@ class Mysql extends \mysqli
 			return FALSE; // no result
 		}
 	}
+	public function raw_query($query_str)
+	{
+		$result = parent::query($query_str);
+		if ($result)
+		{
+			return $result;
+		}
+		throw new \Exception($this->error, $this->errno);
+	}
+	public function begin()
+	{
+		return $this->raw_query('BEGIN');
+	}
 	public function query($query_str, $param = NULL)
 	{
 		$result = NULL;
@@ -98,7 +107,7 @@ class Mysql extends \mysqli
 		$statement = $this->prepare($query);
 		if (!$statement)
 		{
-			throw new \Exception("Invalid query statement !");
+			throw new \Exception("Invalid query statement !", 2);
 		}
 		if (($n = $statement->param_count))
 		{
@@ -110,12 +119,12 @@ class Mysql extends \mysqli
 				$index = $i - 1;
 				if (!isset($param[$index]))
 				{
-					throw new \Exception("Expected parameter $i for statement !");
+					throw new \Exception("Expected parameter $i for statement !", 2);
 				}
 				$type = $this->_stmt_get_type($param[$index]);
 				if (!$type)
 				{
-					throw new \Exception("Invalid given value $i for statement !");
+					throw new \Exception("Invalid given value $i for statement !", 2);
 				}
 				$stmt_param[0] .= $type;
 				$stmt_param[$i] = &$param[$index];
@@ -126,14 +135,13 @@ class Mysql extends \mysqli
 		if ($statement->execute())
 		{
 			$result = $this->_get_result_from_stmt($statement);
-			if (!$result) $result = TRUE;
 			$statement->close();
-			return $result;
+			return $result instanceof Sql_Result ? $result : TRUE;
 		}
 		else
 		{
-			$err = $statement->error;
 			$code = $statement->errno;
+			$err = $statement->error;
 			throw new \Exception("#$code : $err", $code);
 		}
 	}

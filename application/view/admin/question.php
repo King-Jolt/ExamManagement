@@ -6,4 +6,4 @@
 		<?php self::put($content) ?>
 	</div>
 </div>
-<script src="/application/view/javascript/admin/question.js"></script>
+<script src="/application/view/admin/javascript/admin/question.js"></script>

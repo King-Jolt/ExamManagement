@@ -14,7 +14,7 @@ class Exam_Table extends Table
 		parent::__construct();
 		$this->_query_str = 'SELECT * FROM list_exam ';
 		$this->sql_query = GetData::list_Exam();
-		$this->_arr_title = array(
+		$this->arr_title = array(
 			'No.', 'Tiêu đề', 'Số câu hỏi', ''
 		);
 	}

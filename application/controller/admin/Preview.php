@@ -24,7 +24,7 @@ class Preview extends Controller
 			'content' => $view->get()
 		);
 		$this->load_view('application/view/admin/preview_exam.php', $data);
-		$this->interrupt();
+		$this->send_response();
 		exit;
 	}
 	final protected function output($html)

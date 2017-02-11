@@ -16,9 +16,18 @@ class Exam extends Admin
 {
 	private $selected_id = NULL;
 	private $question = NULL;
+	private $DML = NULL;
 	public function __construct()
 	{
-		$this->question = new Question($this);
+		try
+		{
+			$this->DML = new DML();
+			$this->question = new Question($this);
+		}
+		catch (\Exception $e)
+		{
+			$this->error($e);
+		}
 		parent::__construct();
 	}
 	protected function on_get()
@@ -27,7 +36,7 @@ class Exam extends Admin
 		$this->question->exam_ID($this->selected_id);
 		if (($id = System::input_get('delete')))
 		{
-			DML::delete_Question($id);
+			$this->DML->delete_Question($id);
 			unset($_GET['delete']);
 			System::redirect();
 		}
@@ -75,12 +84,12 @@ class Exam extends Admin
 			{
 				case 'link':
 				{
-					DML::insert_LinkQuestion($this->selected_id, $data);
+					$this->DML->insert_LinkQuestion($this->selected_id, $data);
 					break;
 				}
 				case 'multiple-choice':
 				{
-					DML::insert_MultipleChoiceQuestion($this->selected_id, $data);
+					$this->DML->insert_MultipleChoiceQuestion($this->selected_id, $data);
 					break;
 				}
 				case 'fill':

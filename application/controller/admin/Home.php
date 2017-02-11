@@ -14,6 +14,19 @@ use App\System\System;
 
 class Home extends Admin
 {
+	protected $DML = NULL;
+	public function __construct()
+	{
+		try
+		{
+			$this->DML = new DML();
+		}
+		catch (\Exception $e)
+		{
+			$this->error($e);
+		}
+		parent::__construct();
+	}
 	protected function on_post()
 	{
 		$btn = System::input_post('action');
@@ -22,7 +35,7 @@ class Home extends Admin
 			case 'add':
 			{
 				$title = System::input_post('title');
-				DML::insert_Exam($title);
+				$this->DML->insert_Exam($title);
 				System::redirect();
 				break;
 			}
@@ -38,12 +51,12 @@ class Home extends Admin
 			{
 				case 'shuffle':
 				{
-					DML::shuffle_Exam($id);
+					$this->DML->shuffle_Exam($id);
 					break;
 				}
 				case 'delete':
 				{
-					DML::delete_Exam($id);
+					$this->DML->delete_Exam($id);
 					break;
 				}
 			}

@@ -3,6 +3,7 @@
 namespace App\System\Database;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql_Result.php';
 
 class Sql_QueryCommand
 {
@@ -25,7 +26,7 @@ class Sql_QueryCommand
 	{
 		$query = $this->_query;
 		$pattern = '/(^\s*SELECT(?=\s))/i';
-		$replace = '${1} SQL_CALC_FOUND_ROWS';	
+		$replace = '${1} SQL_CALC_FOUND_ROWS';
 		if ($this->_limit >= 0 and $this->_offset >= 0 and preg_match($pattern, $query) == 1)
 		{
 			$query = preg_replace($pattern, $replace, $query, 1);
@@ -36,8 +37,13 @@ class Sql_QueryCommand
 	public function execute()
 	{
 		$connect = new Mysql();
-		return $connect->query($this->get_Query(), $this->_parameter);
+		$result = $connect->query($this->get_Query(), $this->_parameter);
 		$connect->close();
+		if ($result instanceof Sql_Result)
+		{
+			return $result;
+		}
+		throw new \Exception('This query is DML or DDL statement !', 2);
 	}
 }
 

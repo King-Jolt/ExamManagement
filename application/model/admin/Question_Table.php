@@ -13,7 +13,7 @@ class Question_Table extends Table
 	{
 		parent::__construct();
 		$this->sql_query = GetData::list_Question($id);
-		$this->_arr_title = array(
+		$this->arr_title = array(
 			'No.', 'Câu hỏi', ''
 		);
 	}

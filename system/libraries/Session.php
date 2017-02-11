@@ -26,6 +26,10 @@ class Session
 	public static function set($key, $value)
 	{
 		self::start();
+		if (!$key and !$value)
+		{
+			throw new \Exception('"key" and "value" are invalid !', 16);
+		}
 		$_SESSION[self::$_key][$key] = $value;
 	}
 	public static function has($key)
@@ -42,6 +46,10 @@ class Session
 	{
 		self::start();
 		unset($_SESSION[self::$_key][$key]);
+	}
+	public static function get_key()
+	{
+		return session_id();
 	}
 }
 

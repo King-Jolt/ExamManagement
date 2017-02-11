@@ -3,8 +3,10 @@
 namespace App\System;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/View.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Library\View;
+use App\System\System;
 
 /*
  * 
@@ -32,14 +34,21 @@ abstract class Controller
 			$this->on_post();
 		}
 		$this->main();
-		$this->output($this->_get());
+		$this->send_response();
 	}
 	private function _get()
 	{
 		$html = '';
 		foreach ($this->views as $view)
 		{
-			$html .= $view->get();
+			try
+			{
+				$html .= $view->get();
+			}
+			catch (\Exception $e)
+			{
+				$html .= System::get_exception_msg($e);
+			}
 		}
 		return $html;
 	}
@@ -55,31 +64,41 @@ abstract class Controller
 	abstract protected function main();
 	final public function load_view($file, $data = array(), $put_to_stack = TRUE)
 	{
-		try
+		$view = new View($file, $data);
+		if ($put_to_stack === TRUE)
 		{
-			$view = new View($file, $data);
-			if ($put_to_stack === TRUE)
+			// Push view to stack
+			array_push($this->views, $view);
+			return $put_to_stack;
+		}
+		else
+		{
+			// Return html string
+			try
 			{
-				// Push view to stack
-				array_push($this->views, $view);
-				return $put_to_stack;
-			}
-			else
-			{
-				// Return html string
 				return $view->get();
 			}
-			
-		}
-		catch (\Exception $e)
-		{
-			echo $e->getMessage();
-			return FALSE;
+			catch (\Exception $e)
+			{
+				return System::get_exception_msg($e);
+			}
 		}
 	}
-	final protected function interrupt()
+	final protected function send_response()
 	{
 		$this->output($this->_get());
+	}
+	final protected function error($err)
+	{
+		if ($err instanceof \Exception)
+		{
+			echo System::get_exception_msg($err);
+		}
+		else
+		{
+			echo $err;
+		}
+		exit;
 	}
 	protected function output($html)
 	{

@@ -13,7 +13,7 @@ class Model
 		}
 		else
 		{
-			throw new \Exception('Construct parameter is not Controller Object !');
+			throw new \Exception('Construct parameter is not Controller Object !', 2);
 		}
 	}
 	public function controller()
