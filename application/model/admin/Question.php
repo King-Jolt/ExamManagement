@@ -3,15 +3,13 @@
 namespace App\Model\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Model.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Question_Table.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/View_Question.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/table/Question_Table.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/paper/View_Question.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Model;
 use App\Model\Admin\Question_Table;
 use App\Model\Admin\View_Question;
-use App\Model\Admin\GetData;
 use App\System\System;
 
 class Question extends Model
@@ -34,16 +32,16 @@ class Question extends Model
 		$view = new View_Question($this->exam_id);
 		$data = array(
 			'title' => 'Xem các câu hỏi',
-			'content' => $this->controller()->load_view('application/view/admin/view_question.php', array('view' => $view->get()), FALSE)
+			'content' => $view->get()
 		);
-		$this->controller()->load_view('application/view/admin/question.php', $data);
+		$this->controller()->load_view('application/view/admin/question/content.php', $data);
 	}
 	private function _add_button()
 	{
 		$url = array(
-			'link' => '?' . http_build_query(array_merge($_GET, array('add-question' => 'link'))),
-			'mchoice' => '?' . http_build_query(array_merge($_GET, array('add-question' => 'multiple-choice'))),
-			'fill' => '?' . http_build_query(array_merge($_GET, array('add-question' => 'fill'))),
+			'link' => '?' . http_build_query(array_merge($_GET, array('action' => 'add', 'type' => 'link'))),
+			'mchoice' => '?' . http_build_query(array_merge($_GET, array('action' => 'add', 'type' => 'multiple-choice'))),
+			'fill' => '?' . http_build_query(array_merge($_GET, array('action' => 'add', 'type' => 'fill'))),
 		);
 		$btn = <<<EOF
 		<div class="form-group">
@@ -61,14 +59,14 @@ EOF;
 	}
 	public function manage()
 	{
-		$q_table = new Question_Table($this->exam_id);
+		$table = new Question_Table($this->exam_id);
 		$data = array(
 			'title' => 'Quản lý các câu hỏi',
 			'add' => $this->_add_button(),
-			'content' => $q_table->get(),
+			'content' => $table->get(),
 			'msg' => System::get_msg()
 		);
-		$this->controller()->load_view('application/view/admin/question.php', $data);
+		$this->controller()->load_view('application/view/admin/question/content.php', $data);
 	}
 	public function add($type)
 	{
@@ -81,7 +79,7 @@ EOF;
 					'title' => 'Thêm câu ghép nối',
 					'action' => 'add-question', 'type' => 'link'
 				);
-				$form = $this->controller()->load_view('application/view/admin/question_type/link.php', $data, FALSE);
+				$form = $this->controller()->load_view('application/view/admin/question/add_form/link.php', $data, FALSE);
 				break;
 			}
 			case 'multiple-choice':
@@ -90,7 +88,7 @@ EOF;
 					'title' => 'Thêm câu chọn đáp án',
 					'action' => 'add-question', 'type' => 'multiple-choice'
 				);
-				$form = $this->controller()->load_view('application/view/admin/question_type/multiple_choice.php', $data, FALSE);
+				$form = $this->controller()->load_view('application/view/admin/question/add_form/multiple_choice.php', $data, FALSE);
 				break;
 			}
 		} 
@@ -99,7 +97,7 @@ EOF;
 			'content' => $form
 		);
 		$this->controller()->load_view('application/view/admin/ckeditor.php'); // use CKEditor for Input
-		$this->controller()->load_view('application/view/admin/question.php', $data);
+		$this->controller()->load_view('application/view/admin/question/content.php', $data);
 	}
 }
 

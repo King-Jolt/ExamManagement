@@ -19,8 +19,21 @@
 							</div>
 						</div>
 					</div>
-					<div class="panel-footer text-right">
-						<button type="submit" class="btn btn-primary" name="btn-action" value="login"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
+					<div class="panel-footer">
+						<div class="form-inline">
+							<div class="input-group">
+								<span class="input-group-addon"> Bộ môn </span>
+								<select class="form-control" name="course">
+									<option value="0"> -- Chọn bộ môn -- </option>
+									<?php foreach($course_data as $c) { ?>
+									<option value="<?php echo $c->id ?>"> <?php echo $c->name ?> </option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="pull-right">
+								<button type="submit" class="btn btn-primary" name="btn-action" value="login"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</div>

@@ -61,10 +61,13 @@ class System
 	{
 		self::redirect('/system/error/404.php', TRUE, 404);
 	}
+	/*
 	public static function generate_uniqid()
 	{
 		return uniqid() . sprintf('%02x', rand(1, 255));
 	}
+	 * 
+	 */
 	public static function alert($type, $msg, $auto_close)
 	{
 		$title = ucfirst($type);

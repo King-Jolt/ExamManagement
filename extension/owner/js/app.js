@@ -7,9 +7,11 @@
 })();
 
 $(document).ready(function(){
+	/*
 	$(this).on('click', '.btn-collapse', function(){
 		$(this).siblings('.collapse').collapse('toggle');
 	});
+	*/
 	$('body').tooltip({
 		selector: 'button[title], a[title]',
 		container: 'body'

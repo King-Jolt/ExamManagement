@@ -13,7 +13,7 @@ use App\System\System;
 class Auth
 {
 	private static $SQL_QueryObj = NULL; // SQL check from Database
-	private static $URI_redirect = array('success' => '', 'fail' => ''); // default redirect to current
+	private static $URI_redirect = array('success' => '', 'auth' => ''); // default redirect to current
 	private static $Key = '__auth__'; // default key
 	private static $Fail = 'Sai tên tài khoản hoặc mật khẩu'; // Fail Message
 	public static function set_Key($key)
@@ -28,9 +28,9 @@ class Auth
 	{
 		self::$URI_redirect['success'] = $uri;
 	}
-	public static function redirect_Fail($uri)
+	public static function redirect_Auth($uri)
 	{
-		self::$URI_redirect['fail'] = $uri;
+		self::$URI_redirect['auth'] = $uri;
 	}
 	public static function attempt()
 	{
@@ -56,13 +56,27 @@ class Auth
 		{
 			if (self::$URI_redirect['success'])
 			{
-				System::redirect(self::$URI_redirect['success']);
+				System::redirect(self::$URI_redirect['success'], FALSE);
 			}
 		}	
-		elseif (self::$URI_redirect['fail'])
+		elseif (self::$URI_redirect['auth'])
 		{
-			System::redirect(self::$URI_redirect['fail']);
+			System::redirect(self::$URI_redirect['auth'], FALSE);
 		}
+	}
+	public static function get()
+	{
+		$ret = Session::get(self::$Key);
+		if (is_object($ret))
+		{
+			return clone $ret;
+		}
+		return $ret;
+	}
+	public static function remove()
+	{
+		Session::remove(self::$Key);
+		self::validate();
 	}
 }
 

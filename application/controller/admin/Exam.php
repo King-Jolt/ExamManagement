@@ -3,108 +3,62 @@
 namespace App\Controller\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/DML.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Question.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/table/Exam_Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\Controller\Admin\Admin;
-use App\Model\Admin\DML;
-use App\Model\Admin\Question;
+use App\Model\Admin\Table\Exam_Table;
 use App\System\System;
 
 class Exam extends Admin
 {
-	private $selected_id = NULL;
-	private $question = NULL;
-	private $DML = NULL;
-	public function __construct()
+	protected $category_id = NULL;
+	protected function on_post()
 	{
-		try
+		$btn = System::input_post('action');
+		switch ($btn)
 		{
-			$this->DML = new DML();
-			$this->question = new Question($this);
-		}
-		catch (\Exception $e)
-		{
-			$this->error($e);
-		}
-		parent::__construct();
+			case 'add':
+			{
+				$title = System::input_post('title');
+				$this->DML->insert_Exam($title, $this->category_id);
+				System::redirect();
+				break;
+			}
+		}		
 	}
 	protected function on_get()
 	{
-		$this->selected_id = System::input_get('id');
-		$this->question->exam_ID($this->selected_id);
-		if (($id = System::input_get('delete')))
+		$this->category_id = $this->request_get('category_id'); 
+		$request = System::input_get('action');
+		if ($request)
 		{
-			$this->DML->delete_Question($id);
-			unset($_GET['delete']);
-			System::redirect();
-		}
-		elseif (($type = System::input_get('add-question')))
-		{
-			$this->question->add($type);
-		}
-		elseif (($id = System::input_get('get_question')))
-		{
-			// code to get question
-		}
-		elseif (($action = System::input_get('action')))
-		{
-			switch ($action)
+			$exam_id = $this->request_get('id');
+			switch ($request)
 			{
-				case 'preview':
+				case 'shuffle':
 				{
-					$this->question->preview();
-					$this->interrupt();
-					exit;
-				}
-				case 'view':
-				{
-					$this->question->view();
+					$this->DML->shuffle_Exam($exam_id);
 					break;
 				}
-				case 'manage':
+				case 'delete':
 				{
-					$this->question->manage();
-					break;
-				}
-				default:
-				{
-					System::show_404();
-				}
-			}
-		}
-	}
-	protected function on_post()
-	{
-		if (($type = System::input_post('add-question')))
-		{
-			$data = System::input_post('q');
-			switch ($type)
-			{
-				case 'link':
-				{
-					$this->DML->insert_LinkQuestion($this->selected_id, $data);
-					break;
-				}
-				case 'multiple-choice':
-				{
-					$this->DML->insert_MultipleChoiceQuestion($this->selected_id, $data);
-					break;
-				}
-				case 'fill':
-				{
+					$this->DML->delete_Exam($exam_id);
 					break;
 				}
 			}
-			unset($_GET['add-question']);
+			unset($_GET['action'], $_GET['id']);
 			System::redirect();
 		}
 	}
 	protected function main()
 	{
-		//
-	}
+		$ex_table = new Exam_table($this->category_id);
+		$this->load_view('application/view/admin/exam/table.php', array(
+			'msg' => System::get_msg(),
+			'table' => $ex_table->get()
+		));
+	}	
 }
 
 ?>

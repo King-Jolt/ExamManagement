@@ -88,17 +88,23 @@ abstract class Controller
 	{
 		$this->output($this->_get());
 	}
-	final protected function error($err)
+	final protected function error($e)
 	{
-		if ($err instanceof \Exception)
+		if ($e instanceof \Exception)
 		{
-			echo System::get_exception_msg($err);
+			$this->output(System::get_exception_msg($e));
 		}
-		else
-		{
-			echo $err;
-		}
+		$this->output($e);
+		http_response_code(500);
 		exit;
+	}
+	final protected function request_get($attr)
+	{
+		return System::input_get($attr);
+	}
+	final protected function request_post($attr)
+	{
+		return System::input_post($attr);
 	}
 	protected function output($html)
 	{

@@ -51,7 +51,7 @@ class Table
 		$head = '';
 		$body = '';
 		$n_start = ($this->_page - 1) * $this->_page_size;
-		$n_end = $n_start + $this->_page_size;		
+		$n_end = $n_start + $this->_page_size;
 		if ($this->arr_title)
 		{
 			foreach ($this->arr_title as $str)
@@ -65,6 +65,7 @@ class Table
 			{
 				$result = $this->sql_query->limit($this->_page_size, $n_start)->execute();
 				$this->_total = $result->num_rows();
+				$page_max = ceil($this->_total / $this->_page_size);
 				if ($this->_total)
 				{
 					if ($n_start >= 0 and $n_start < $this->_total)
@@ -96,7 +97,12 @@ class Table
 			}
 			catch (\Exception $ex)
 			{
-				return System::get_exception_msg($ex);
+				$last = '?' . http_build_query(array_merge($_GET, array('page' => $page_max)));
+				return <<<EOF
+				<p>
+					<a href="$last" class="btn btn-primary"><strong> Bấm để chuyển tới trang cuối </strong></a>
+				</p>
+EOF;
 			}
 		}
 		// Return html

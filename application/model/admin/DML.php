@@ -17,11 +17,44 @@ class DML
 	{
 		$this->connect = new Mysql();
 	}
-	public function insert_Exam($title)
+	private function generate_id()
+	{
+		$result = $this->connect->raw_query('SELECT generate_uid() AS uid');
+		return $result->fetch_object()->uid;
+	}
+	public function insert_Category($name, $user_id)
 	{
 		try
 		{
-			$this->connect->query('INSERT INTO exam(id, title) VALUES(?, ?)', array(System::generate_uniqid(), $title));
+			$this->connect->query('INSERT INTO category(name, user_id, share) VALUES(?, ?, ?)', array(
+				$name, $user_id, 0
+			));
+			System::put_msg('success', "Đã thêm mới danh mục '<em>$name</em>'");
+		}
+		catch (\Exception $e)
+		{
+			System::put_msg('warning', $e, FALSE);
+		}
+	}
+	public function delete_Category($id)
+	{
+		try
+		{
+			$this->connect->query('DELETE FROM category WHERE category.id = ?', array($id));
+			System::put_msg('success', 'Đã xóa một danh mục !');
+		}
+		catch (\Exception $e)
+		{
+			System::put_msg('warning', $e, FALSE);
+		}
+	}
+	public function insert_Exam($title, $category_id)
+	{
+		try
+		{
+			$this->connect->query('INSERT INTO exam(category_id, title, header, footer) VALUES(?, ?, ?, ?)', array(
+				$category_id, $title, '<strong> Exam Header </strong>', '<em> Exam Footer </em>'
+			));
 			System::put_msg('success', "Đã thêm mới đề kiểm tra \"$title\" !");
 		}
 		catch (\Exception $e)
@@ -58,7 +91,7 @@ class DML
 		try
 		{
 			$this->connect->begin();
-			$id = System::generate_uniqid();
+			$id = $this->generate_id();
 			$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type) VALUES(?, ?, ?, ?, ?, ?, ?)', array(
 				$id,
 				$data['q'],
@@ -70,7 +103,7 @@ class DML
 			));
 			foreach ($data['b'] as $index => $b_content)
 			{
-				$b_id = System::generate_uniqid();
+				$b_id = $this->generate_id();
 				$this->connect->query('INSERT INTO _link_option_b(id, question_id, content) VALUES(?, ?, ?)', array(
 					$b_id,
 					$id,
@@ -78,7 +111,7 @@ class DML
 				));
 				if (isset($data['a'][$index]))
 				{
-					$a_id = System::generate_uniqid();
+					$a_id = $this->generate_id();
 					$this->connect->query('INSERT INTO _link_option_a(id, option_b, question_id, content) VALUES(?, ?, ?, ?)', array(
 						$a_id,
 						$b_id,

@@ -13,10 +13,17 @@ class GetData
 		'multiple-choice' => 2,
 		'fill' => 4
 	);
-	public static function list_Exam()
+	public static function list_Category($user_id)
 	{
-		$query = 'SELECT * FROM list_exam WHERE 1 ';
-		return new Sql_QueryCommand($query);
+		$query = 'SELECT list_category.* FROM list_category WHERE list_category.user_id = ?';
+		$param = array($user_id);
+		return new Sql_QueryCommand($query, $param);
+	}
+	public static function list_Exam($category_id)
+	{
+		$query = 'SELECT list_exam.* FROM list_exam WHERE category_id = ?';
+		$param = array($category_id);
+		return new Sql_QueryCommand($query, $param);
 	}
 	public static function list_Question($exam_id)
 	{

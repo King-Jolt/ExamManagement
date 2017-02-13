@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Controller.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/View_Question.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/paper/View_Question.php';
 
 use App\System\Controller;
 use App\System\System;
@@ -15,7 +15,7 @@ class Preview extends Controller
 	private $id = 0;
 	protected function on_get()
 	{
-		$this->id = System::input_get('id'); 
+		$this->id = System::input_get('exam_id'); 
 	}
 	protected function main()
 	{
@@ -23,11 +23,11 @@ class Preview extends Controller
 		$data = array(
 			'content' => $view->get()
 		);
-		$this->load_view('application/view/admin/preview_exam.php', $data);
+		$this->load_view('application/view/admin/question/preview.php', $data);
 		$this->send_response();
 		exit;
 	}
-	final protected function output($html)
+	protected function output($html)
 	{
 		$header_data = array('title' => 'Ứng dụng quản lý bài kiểm tra');
 		$footer_data = NULL;

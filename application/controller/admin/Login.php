@@ -23,14 +23,15 @@ class Login extends Controller
 	}
 	protected function on_post()
 	{
-		$btn_action = System::input_post('btn-action');
+		$btn_action = $this->request_post('btn-action');
 		switch ($btn_action)
 		{
 			case 'login':
 			{
-				$user = System::input_post('user');
-				$pass = System::input_post('pass');
-				Auth::SQL_Check(new Sql_QueryCommand('SELECT * FROM user WHERE user = ? AND pass = SHA1(?)', array($user, $pass)));
+				$user = $this->request_post('user');
+				$pass = $this->request_post('pass');
+				$course_id = $this->request_post('course');
+				Auth::SQL_Check(new Sql_QueryCommand('SELECT * FROM user WHERE user = ? AND pass = SHA1(?) AND course_id = ?', array($user, $pass, $course_id)));
 				try
 				{
 					Auth::attempt();
@@ -47,9 +48,21 @@ class Login extends Controller
 	}
 	protected function main()
 	{
+		$query = new Sql_QueryCommand('SELECT course.* FROM course');
+		$c_data = '';
+		try
+		{
+			$c_data = $query->execute()->get_data();
+		}
+		catch (\Exception $e)
+		{
+			$this->error($e);
+		}
 		$path = '/application/view/public/login.php';
-		$this->load_view($path, array('msg' => System::get_msg()));
-		
+		$this->load_view($path, array(
+			'course_data' => $c_data,
+			'msg' => System::get_msg()
+		));
 	}
 	protected function output($html)
 	{
