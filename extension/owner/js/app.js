@@ -7,11 +7,15 @@
 })();
 
 $(document).ready(function(){
-	/*
-	$(this).on('click', '.btn-collapse', function(){
-		$(this).siblings('.collapse').collapse('toggle');
+	$('[data-toggle="popover"]').popover({
+		trigger: 'hover'
 	});
-	*/
+	$('.dropdown').on('show.bs.dropdown', function() {
+		$(this).find('.dropdown-menu').first().stop(true, true).slideDown(200);
+	});
+	$('.dropdown').on('hide.bs.dropdown', function() {
+		$(this).find('.dropdown-menu').first().stop(true, true).slideUp(200);
+	});
 	$('body').tooltip({
 		selector: 'button[title], a[title]',
 		container: 'body'

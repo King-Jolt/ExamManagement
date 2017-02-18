@@ -37,6 +37,7 @@ class Mysql extends \mysqli
 	}
 	private function _stmt_get_type($value)
 	{
+		if ($value === NULL) return 's';
 		$type = array('i', 'd', 's');
 		$get_type = substr(gettype($value), 0, 1);
 		$key = array_search($get_type, $type);
@@ -117,7 +118,7 @@ class Mysql extends \mysqli
 			while ($i <= $n)
 			{
 				$index = $i - 1;
-				if (!isset($param[$index]))
+				if (!array_key_exists($index, $param))
 				{
 					throw new \Exception("Expected parameter $i for statement !", 2);
 				}

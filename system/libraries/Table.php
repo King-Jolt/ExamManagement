@@ -3,8 +3,10 @@
 namespace App\System\Library;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Pagination.php';
 
 use App\System\System;
+use App\System\Library\Pagination;
 
 class Table
 {
@@ -13,7 +15,7 @@ class Table
 	protected $sql_query = NULL;
 	
 	private $_page = 1;
-	private $_page_size = 15;
+	private $_page_size = 10;
 	private $_use_db = TRUE;
 	private $_total = 0;
 	
@@ -116,6 +118,15 @@ EOF;
 			</tbody>
 		</table>
 EOF;
+		$pager = new Pagination($this->_total, $this->_page_size, $this->_page);
+		try
+		{
+			$html .= $pager->get();
+		}
+		catch (\Exception $e)
+		{
+			$html .= System::get_exception_msg($e);
+		}
 		return $html;
 	}
 }

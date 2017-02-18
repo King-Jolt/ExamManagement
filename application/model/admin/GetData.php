@@ -32,25 +32,22 @@ class GetData
 		$param = array($exam_id);
 		return new Sql_QueryCommand($query, $param);
 	}
-	public static function get_Question($id, $type)
+	public static function get_Question($exam_id, $type)
 	{
 		switch ($type)
 		{
 			case self::$types['link']:
 			{
-				return new Sql_QueryCommand('CALL link_question(?)', array($id));
+				return new Sql_QueryCommand('CALL list_link_question_by_exam_id(?)', array($exam_id));
 			}
 			case self::$types['multiple-choice']:
 			{
-				return new Sql_QueryCommand('CALL multiple_choice_question(?)', array($id));
+				return new Sql_QueryCommand('CALL list_multiple_choice_question_by_exam_id(?)', array($exam_id));
 			}
-			/*
 			case self::$types['fill']:
 			{
-				//
+				break;
 			}
-			 * 
-			 */
 		}
 	} 
 }

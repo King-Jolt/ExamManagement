@@ -30,7 +30,7 @@ class Category_Table extends Table
 			<td><a href="$exam"><span class="glyphicon glyphicon-file"></span> $data->name </a></td>
 			<td> $data->n_exam </td>
 			<td>
-				<a href="$delete" class="be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a>
+				<a href="$delete" class="btn btn-primary btn-xs be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a>
 			</td>
 		</tr>
 EOF;

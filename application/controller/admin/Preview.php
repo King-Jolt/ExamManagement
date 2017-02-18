@@ -2,15 +2,14 @@
 
 namespace App\Controller\Admin;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Controller.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/paper/View_Question.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\System\Controller;
-use App\System\System;
 use App\Model\Admin\View_Question;
+use App\System\System;
 
-class Preview extends Controller
+class Preview extends Admin
 {
 	private $id = 0;
 	protected function on_get()

@@ -17,7 +17,7 @@ class Exam_Table extends Table
 		parent::__construct();
 		$this->sql_query = GetData::list_Exam($id);
 		$this->arr_title = array(
-			'No.', 'Đề kiểm tra', 'Số câu hỏi', ''
+			'No.', 'Đề kiểm tra', 'Số câu hỏi', 'TT', ''
 		);
 	}
 	public function row($data, $index)
@@ -29,23 +29,28 @@ class Exam_Table extends Table
 		$manage = Route::current_path() . '/question.php?' . http_build_query($base);
 		$view = Route::current_path() . '/question.php?' . http_build_query($base + array('action' => 'view'));
 		$preview = Route::current_path() . '/preview.php?' . http_build_query($base);
+		$share = '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
 		$shuffle = '?' . http_build_query(array_merge($_GET, array('action' => 'shuffle', 'id' => $data->id)));
 		$delete = '?' . http_build_query(array_merge($_GET, array('action' => 'delete', 'id' => $data->id)));
+		$collect = $data->share == 1 ? '<span class="glyphicon glyphicon-download-alt"></span>' : '';
 		return <<<EOF
 		<tr>
 			<td> $index </td>
 			<td><a href="$manage"><span class="glyphicon glyphicon-paperclip"></span> $data->title </a></td>
 			<td> $data->n_question </td>
+			<td> $collect </td>
 			<td>
 				<div class="dropdown">
-  					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><span class="caret"></span></button>
+  					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;<span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li class="dropdown-header"> Danh mục tùy chọn <span class="caret"></span></li>
 						<li class="divider"></li>
+						<li><a href="$share"><span class="glyphicon glyphicon-share"></span> Chia sẻ </a></li>
+						<li><a href="$shuffle"><span class="glyphicon glyphicon-copy"></span> Sao chép </a></li>
 						<li><a href="$shuffle"><span class="glyphicon glyphicon-refresh"></span> Xáo trộn </a></li>
 						<li><a href="$view"><span class="glyphicon glyphicon-eye-open"></span> Xem </a></li>
 						<li><a href="$preview" target="_blank"><span class="glyphicon glyphicon-list-alt"></span> Xuất bản </a></li>
-						<li><a href="$delete" class="be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a></li>
+						<li><a href="$delete" class="be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a></li>
 					</ul>
 				</div>
 			</td>

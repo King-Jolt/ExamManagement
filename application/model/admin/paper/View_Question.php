@@ -14,32 +14,42 @@ class View_Question
 	{
 		$this->_exam_id = $exam_id;
 	}
-	private function _get_link($question, $show_answer = FALSE)
+	private function _get_link($question_obj, $link_result)
 	{			
 		$head = <<<EOF
 		<thead>
-			<th> $question->a_title </th>
+			<th> $question_obj->a_title </th>
 			<th> Chọn đáp án </th>
-			<th> $question->b_title </th>
-		</thead>		
+			<th> $question_obj->b_title </th>
+		</thead>
 EOF;
 		$body = '<tbody>';
 		try
 		{
-			$result = GetData::get_Question($question->id, GetData::$types['link'])->execute();
-			if (is_object($result))
+			if (is_object($link_result))
 			{
-				foreach ($result->get_data() as $row)
+				while ($link_result->valid())
 				{
-					$a = $row->a_position;
-					$b = chr($row->b_position + 64);
-					$fill = $row->a_content ? '.....' : NULL;
+					$result = $link_result->current();
+					if ($result->question_id != $question_obj->id)
+					{
+						break;
+					}
+					$link_result->next();
+					$a = $result->a_mark;
+					$b = chr($result->b_mark + 64);
+					$answer = '';
+					if ($result->a_content)
+					{
+						$ab = chr($result->answer + 64);
+						$answer = "answer=\"$ab\"";
+					}
 					$body .= <<<EOF
-					<tr>
-						<td> $a. $row->a_content </td>
-						<td> $fill </td>
-						<td> $b. $row->b_content </td>
-					</tr>
+						<tr>
+							<td class="A"> $a. $result->a_content </td>
+							<td class="B" $answer> </td>
+							<td class="C"> $b. $result->b_content </td>
+						</tr>
 EOF;
 				}
 			}
@@ -58,21 +68,26 @@ EOF;
 EOF;
 		return $html;
 	}
-	private function _get_multiple_choice($question, $show_answer = FALSE)
+	private function _get_multiple_choice($question_obj, $multiple_choice_result)
 	{
 		$html = '';
 		try
 		{
-			$result = GetData::get_Question($question->id, GetData::$types['multiple-choice'])->execute();
-			if (is_object($result))
+			if (is_object($multiple_choice_result))
 			{
 				$list = '<ol type="A" class="multiple-choice">';
-				foreach ($result->get_data() as $row)
+				while ($multiple_choice_result->valid())
 				{
-					$list .= "<li><span class=\"choice\"> $row->content </span></li>";
+					$result = $multiple_choice_result->current();
+					if ($result->question_id != $question_obj->id)
+					{
+						break;
+					}
+					$multiple_choice_result->next();
+					$list .= "<li><span class=\"choice\" answer=\"$result->answer\"> $result->content </span></li>";
+					$html = $list;
 				}
 				$list .= '</ol>';
-				$html = $list;
 			}
 		}
 		catch (\Exception $e)
@@ -86,36 +101,34 @@ EOF;
 		try
 		{
 			$html = '<div class="question-preview"><ul>';
-			$result = GetData::list_Question($this->_exam_id)->execute();
+			$question_result = GetData::list_Question($this->_exam_id)->execute()->get_data();
+			$link = GetData::get_Question($this->_exam_id, GetData::$types['link'])->execute()->get_data();
+			$multiple_choice = GetData::get_Question($this->_exam_id, GetData::$types['multiple-choice'])->execute()->get_data();
 			$no = 1;
-			foreach ($result->get_data() as $question)
+			foreach ($question_result as $question)
 			{
 				$data = '';
-				switch ($question->type)
+				if ($question->type == GetData::$types['link'] and $link->valid() and $link->current()->question_id = $question->id)
 				{
-					case GetData::$types['link']:
-					{
-						$data = $this->_get_link($question);
-						break;
-					}
-					case GetData::$types['multiple-choice']:
-					{
-						$data = $this->_get_multiple_choice($question);
-						break;
-					}
-					case GetData::$types['fill']:
-					{
-						$data = '';
-						break;
-					}
+					$data = $this->_get_link($question, $link);
 				}
+				else if ($question->type == GetData::$types['multiple-choice'] and $multiple_choice->valid() and $multiple_choice->current()->question_id = $question->id)
+				{
+					$data = $this->_get_multiple_choice($question, $multiple_choice);
+				}
+				 /*
+				if (GetData::$types['fill'])
+				{
+					$data = '';
+					break;
+				}
+				  * 
+				  */
 				$score = $question->score ? '(' . sprintf('%.1f', $question->score) . ' điểm)  ' : '';
 				$html .= <<<EOF
 				<li>
-					<div>
-						<span style="float: left"><strong> Câu $no $score:&nbsp;</strong></span> $question->content
-						$data
-					</div>
+					<strong> Câu $no $score:</strong>&nbsp; $question->content
+					$data
 				</li>
 EOF;
 				$no++;
@@ -125,7 +138,7 @@ EOF;
 		}
 		catch (\Exception $e)
 		{
-			echo $e->getMessage();
+			return '<div>' . $e->getMessage() . '</div>';
 		}
 	}
 }

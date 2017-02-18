@@ -38,6 +38,7 @@ class Question extends Admin
 				case 'add':
 				{
 					$this->question->add($this->request_get('type'));
+					$this->nav->add('Thêm câu hỏi', '');
 					break;
 				}
 				case 'delete':
@@ -48,7 +49,12 @@ class Question extends Admin
 				}
 				case 'view':
 				{
-					$this->question->view();
+					$this->question->view(TRUE);
+					break;
+				}
+				case 'view_answer':
+				{
+					break;
 				}
 			}
 		}
@@ -56,44 +62,6 @@ class Question extends Admin
 		{
 			$this->question->manage();
 		}
-		/*
-		if (($id = System::input_get('delete')))
-		{
-			$this->DML->delete_Question($id);
-			unset($_GET['delete']);
-			System::redirect();
-		}
-		elseif (($type = System::input_get('add-question')))
-		{
-			$this->question->add($type);
-		}
-		elseif (($action = System::input_get('action')))
-		{
-			switch ($action)
-			{
-				case 'preview':
-				{
-					$this->question->preview();
-					$this->interrupt();
-					exit;
-				}
-				case 'view':
-				{
-					$this->question->view();
-					break;
-				}
-				case 'manage':
-				{
-				}
-				default:
-				{
-					$this->question->manage();
-					break;
-				}
-			}
-		}
-		 * 
-		 */
 	}
 	protected function on_post()
 	{
@@ -123,7 +91,7 @@ class Question extends Admin
 	}
 	protected function main()
 	{
-		//
+		$this->menu['1']['active'] = 'active';
 	}
 }
 

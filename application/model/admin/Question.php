@@ -27,11 +27,26 @@ class Question extends Model
 		);
 		$this->controller()->load_view('application/view/admin/preview_exam.php', $data);
 	}
-	public function view()
+	public function view($option = FALSE)
 	{
 		$view = new View_Question($this->exam_id);
 		$data = array(
 			'title' => 'Xem các câu hỏi',
+			'content' => $view->get()
+		);
+		if ($option)
+		{
+			$data['ans_btn'] = <<<EOF
+			<a href="javascript:void(0)" id="view-answer" class="btn btn-primary btn-xs" data-toggle="popover" data-content="Bấm vào đây để xem đáp án" data-click="show"><span class="glyphicon glyphicon-comment"></span>&nbsp;Xem đáp án </a>
+EOF;
+		}
+		$this->controller()->load_view('application/view/admin/question/content.php', $data);
+	}
+	public function view_with_answer()
+	{
+		$view = new Question($this->exam_id);
+		$data = array(
+			'title' => 'Xem đề thi với đáp án',
 			'content' => $view->get()
 		);
 		$this->controller()->load_view('application/view/admin/question/content.php', $data);

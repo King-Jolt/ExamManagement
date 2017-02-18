@@ -43,7 +43,7 @@ abstract class Admin extends Controller
 	protected $menu = array(
 		'1' => array(
 			'href' => '/index.php',
-			'active' => 'active' // default
+			'active' => '' // default
 		),
 		'2' => array(
 			'href' => '#',
@@ -52,16 +52,17 @@ abstract class Admin extends Controller
 	);
 	protected function load_nav()
 	{
+		$this->nav->add('Danh sách danh mục', Route::current_path() . '/index.php');
 		$query = array();
 		if ($id = $this->request_get('category_id'))
 		{
 			$query += array('category_id' => $id);
-			$this->nav->add('Danh mục', Route::current_path() . '/exam.php?' . http_build_query($query));
-		}
-		if ($id = $this->request_get('exam_id'))
-		{
-			$query += array('exam_id' => $id);
-			$this->nav->add('Đề thi', Route::current_path() . '/question.php?' . http_build_query($query));
+			$this->nav->add('Danh sách đề thi', Route::current_path() . '/exam.php?' . http_build_query($query));
+			if ($id = $this->request_get('exam_id'))
+			{
+				$query += array('exam_id' => $id);
+				$this->nav->add('Danh sách câu hỏi', Route::current_path() . '/question.php?' . http_build_query($query));
+			}
 		}
 	}
 	protected function output($html)

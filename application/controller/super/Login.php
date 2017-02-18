@@ -52,12 +52,6 @@ class Login extends Controller
 			'msg' => System::get_msg()
 		));
 	}
-	protected function output($html)
-	{
-		echo $this->load_view('application/view/super/template/header.php', array('title' => 'Đăng nhập hệ thống'), FALSE);
-		echo $html;
-		echo $this->load_view('application/view/super/template/footer.php', NULL, FALSE);
-	}
 }
 
 ?>

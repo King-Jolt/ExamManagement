@@ -2,6 +2,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading"> <?php self::put($title) ?> </div>
 	<div class="panel-body">
+		<?php self::put($ans_btn) ?>
 		<?php self::put($add) ?>
 		<?php self::put($content) ?>
 	</div>

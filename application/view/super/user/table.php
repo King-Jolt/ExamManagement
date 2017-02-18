@@ -7,14 +7,45 @@
 <div id="add" class="collapse">
 	<form method="post">
 		<div class="form-inline form-group">
-			<input type="text" name="user" placeholder="Nhập tên tài khoản" class="form-control" />
+			<label>
+				<p> Tên tài khoản </p>
+				<input type="text" name="user" placeholder="Nhập tên tài khoản" class="form-control" />
+			</label>
 		</div>
 		<div class="form-inline form-group">
-			<input type="text" name="name" placeholder="Nhập tên giáo viên" class="form-control" />
+			<label>
+				<p> Họ tên đầy đủ của giáo viên </p>
+				<input type="text" name="name" placeholder="Nhập tên giáo viên" class="form-control" />
+			</label>
 		</div>
-		<button type="submit" class="btn btn-primary" name="action" value="add" title="Thêm mới"> Xác nhận </button>
+		<button type="submit" class="btn btn-primary" name="action" value="add"><span class="glyphicon glyphicon-ok"></span>&nbsp; Xác nhận </button>
 	</form>
 </div>
 <hr />
 <?php self::put($msg) ?>
 <?php self::put($table) ?>
+<script>
+	$('#add').on('shown.bs.collapse', function(){
+		$(this).find('input').first().focus();
+	});
+	$.validator.addMethod(
+		"regex",
+		function(value, element, regexp) {
+			var re = new RegExp(regexp);
+			return this.optional(element) || re.test(value);
+		},
+		"Please check your input."
+	);
+	$('#add form').validate({
+		rules: {
+			user: {
+				required: true,
+				minlength: 4
+			},
+			name: {
+				required: true
+			}
+		},
+		errorClass: 'text-danger'
+	});
+</script>

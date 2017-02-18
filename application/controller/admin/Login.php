@@ -58,17 +58,11 @@ class Login extends Controller
 		{
 			$this->error($e);
 		}
-		$path = '/application/view/public/login.php';
+		$path = '/application/view/admin/login.php';
 		$this->load_view($path, array(
 			'course_data' => $c_data,
 			'msg' => System::get_msg()
 		));
-	}
-	protected function output($html)
-	{
-		echo $this->load_view('application/view/public/template/header.php', array('title' => 'Đăng nhập hệ thống'), FALSE);
-		echo $html;
-		echo $this->load_view('application/view/public/template/footer.php', NULL, FALSE);
 	}
 }
 

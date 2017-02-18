@@ -36,6 +36,11 @@ class Exam extends Admin
 			$exam_id = $this->request_get('id');
 			switch ($request)
 			{
+				case 'share':
+				{
+					$this->DML->share_Exam($exam_id, TRUE);
+					break;
+				}
 				case 'shuffle':
 				{
 					$this->DML->shuffle_Exam($exam_id);
@@ -53,6 +58,7 @@ class Exam extends Admin
 	}
 	protected function main()
 	{
+		$this->menu['1']['active'] = 'active';
 		$ex_table = new Exam_table($this->category_id);
 		$this->load_view('application/view/admin/exam/table.php', array(
 			'msg' => System::get_msg(),

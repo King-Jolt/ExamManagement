@@ -9,28 +9,20 @@ use App\System\System;
 class Navigation
 {
 	private $data = array();
-	public function __construct()
-	{
-		array_push($this->data, (object)array(
-			'title' => 'Home',
-			'uri' => System::get_config('base_url'),
-			'active' => FALSE
-		));
-	}
-	public function add($title, $uri, $active = FALSE)
+	public function add($title, $uri)
 	{
 		array_push($this->data, (object)array(
 			'title' => $title,
-			'uri' => $uri,
-			'active' => $active
+			'uri' => $uri
 		));
 	}
 	public function get()
 	{
 		$html = '<ol class="breadcrumb">';
+		$n = count($this->data) - 1;
 		foreach ($this->data as $index => $value)
 		{
-			if ($value->active)
+			if ($index == $n)
 			{
 				$html .= "<li class=\"active\"> $value->title </li>"; 
 			}

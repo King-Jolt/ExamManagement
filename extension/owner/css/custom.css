@@ -1,3 +1,28 @@
+.no-border-radius, .no-border-radius *
+{
+	border-radius: 0px !important;
+}
+
+a:hover
+{
+	text-decoration: none;
+}
+
+html, body
+{
+	height: 100%;
+}
+
+body
+{
+	padding-top: 50px;
+}
+
+.no-border
+{
+	border: 0 !important;
+}
+
 .no-padding
 {
 	padding: 0px;
@@ -10,7 +35,7 @@
 
 .inner-content
 {
-	padding: 5px 10px 25px 25px;
+	padding: 15px;
 }
 
 .top-15
@@ -28,18 +53,28 @@
 	vertical-align: middle;
 }
 
+/* side bar { */
+
 .sidebar
 {
-	background-color: #f5f5f5;
+	position: fixed;
+	top: 52px;
+	bottom: 0px;
+	width: inherit;
+	background-color: #f8f8f8;
+	box-shadow: 0 1px 5px silver;
 }
 
-@media (min-width: 768px)
+.sidebar .footer
 {
-	.modal.ckeditor .modal-dialog
-	{
-		width: 50%;
-	}
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
+	padding: 20px;
+	text-align: center;
 }
+
+/* } end */
 
 .table tbody tr td
 {
@@ -56,3 +91,8 @@
 	content: "\2009";
 }
 
+.breadcrumb > li + li:before
+{
+	content:"\00bb";
+	color: inherit;
+}

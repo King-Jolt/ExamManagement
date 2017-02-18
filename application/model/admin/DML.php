@@ -26,8 +26,8 @@ class DML
 	{
 		try
 		{
-			$this->connect->query('INSERT INTO category(name, user_id, share) VALUES(?, ?, ?)', array(
-				$name, $user_id, 0
+			$this->connect->query('INSERT INTO category(name, user_id) VALUES(?, ?)', array(
+				$name, $user_id
 			));
 			System::put_msg('success', "Đã thêm mới danh mục '<em>$name</em>'");
 		}
@@ -56,6 +56,24 @@ class DML
 				$category_id, $title, '<strong> Exam Header </strong>', '<em> Exam Footer </em>'
 			));
 			System::put_msg('success', "Đã thêm mới đề kiểm tra \"$title\" !");
+		}
+		catch (\Exception $e)
+		{
+			System::put_msg('warning', $e, FALSE);
+		}
+	}
+	public function share_Exam($id, $share = TRUE)
+	{
+		try
+		{
+			$this->connect->query('UPDATE exam SET share = ? WHERE exam.id = ?', array(
+				$share === TRUE ? 1 : 0,
+				$id
+			));
+			System::put_msg('success',
+				"Đề thi này đang ở trạng thái đề thi chung <br />
+				các giáo viên có thể gửi các câu hỏi của họ vào đây nhưng chỉ có bạn mới có thể xem được các câu hỏi đã được gửi vào đây.",
+			FALSE);
 		}
 		catch (\Exception $e)
 		{
@@ -91,9 +109,9 @@ class DML
 		try
 		{
 			$this->connect->begin();
-			$id = $this->generate_id();
+			$q_id = $this->generate_id();
 			$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type) VALUES(?, ?, ?, ?, ?, ?, ?)', array(
-				$id,
+				$q_id,
 				$data['q'],
 				$exam_id,
 				$data['title']['a'],
@@ -103,22 +121,11 @@ class DML
 			));
 			foreach ($data['b'] as $index => $b_content)
 			{
-				$b_id = $this->generate_id();
-				$this->connect->query('INSERT INTO _link_option_b(id, question_id, content) VALUES(?, ?, ?)', array(
-					$b_id,
-					$id,
+				$this->connect->query('INSERT INTO _link_option(question_id, a_content, b_content) VALUES(?, ?, ?)', array(
+					$q_id,
+					isset($data['a'][$index]) ? $a_content = $data['a'][$index] : NULL,
 					$b_content
 				));
-				if (isset($data['a'][$index]))
-				{
-					$a_id = $this->generate_id();
-					$this->connect->query('INSERT INTO _link_option_a(id, option_b, question_id, content) VALUES(?, ?, ?, ?)', array(
-						$a_id,
-						$b_id,
-						$id,
-						$data['a'][$index]
-					));
-				}
 			}
 			$this->connect->commit();
 			System::put_msg('success', 'Đã thêm mới một câu hỏi !');
@@ -134,9 +141,9 @@ class DML
 		try
 		{
 			$this->connect->begin();
-			$id = System::generate_uniqid();
+			$q_id = $this->generate_id();
 			$this->connect->query('INSERT question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
-				$id,
+				$q_id,
 				$data['q'],
 				$exam_id,
 				$data['score'],
@@ -148,9 +155,8 @@ class DML
 				{
 					throw new \Exception('Lỗi dữ liệu nhập', 2);
 				}
-				$this->connect->query('INSERT _multiple_choice(id, question_id, content, answer) VALUES(?, ?, ?, ?)', array(
-					System::generate_uniqid(),
-					$id,
+				$this->connect->query('INSERT _multiple_choice(question_id, content, answer) VALUES(?, ?, ?)', array(
+					$q_id,
 					$content,
 					intval($data['bool'][$index])
 				));

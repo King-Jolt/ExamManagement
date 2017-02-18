@@ -25,7 +25,7 @@ class Question_Table extends Table
 			<td><a href=""><span class="glyphicon glyphicon-question-sign"></span> Câu $index </a></td>
 			<td> $data->content </td>
 			<td>
-				<a href="$delete" class="be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a> &nbsp;
+				<a href="$delete" class="btn btn-primary btn-xs be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a> &nbsp;
 			</td>
 		</tr>
 EOF;

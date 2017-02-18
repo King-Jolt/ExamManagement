@@ -27,7 +27,7 @@ class User_Table extends Table
 			<td> $data->user </td>
 			<td> $data->name </td>
 			<td> $data->n_category </td>
-			<td><a href="$delete" class="be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a> &nbsp; </td>
+			<td><a href="$delete" class="btn btn-primary btn-xs be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a> &nbsp; </td>
 		</tr>
 EOF;
 	}
