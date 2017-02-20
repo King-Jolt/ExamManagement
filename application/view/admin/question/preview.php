@@ -5,6 +5,7 @@
 		min-height: 297mm;
 		border: 1px solid black;
 		margin: auto;
+		padding-top: 0px;
 	}
 </style>
 

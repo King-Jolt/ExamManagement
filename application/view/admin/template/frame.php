@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-xs-12 no-padding">
+		<div class="col-xs-12 no-padding" id="main-navbar">
 			<nav class="navbar navbar-default navbar-fixed-top no-margin no-border-radius">
 				<div class="container-fluid">
 					<div class="navbar-header">
@@ -23,7 +23,13 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-3 no-padding">
-			<div class="sidebar">
+			<div class="sidebar" id="main-sidebar">
+				<div class="heading">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Tìm kiếm &quot;Danh mục; Đề thi&quot;" />
+						<span class="input-group-btn"><button class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button></span>
+					</div>
+				</div>
 				<div style="/* overflow: auto; height: 80%; */">
 					<div class="list-group no-border-radius">
 						<a href="/admin/exam2.php" class="list-group-item <?php self::put($menu['2']['active']) ?>"><span class="glyphicon glyphicon-home"></span>&nbsp; Trang chủ </a>
@@ -31,7 +37,7 @@
 						<a href="#" class="list-group-item <?php self::put($menu['3']['active']) ?>"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; Thông tin </a>
 					</div>
 					<div class="footer text-muted">
-						© Copyright by <a href="https://github.com/scila1996"> scila1996 </a>
+						© Copyright by <strong> scila1996 </strong> - <a href="https://github.com/scila1996/ExamManagement" target="_blank"> GitHub </a>
 					</div>
 				</div>
 			</div>

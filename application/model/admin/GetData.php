@@ -19,6 +19,12 @@ class GetData
 		$param = array($user_id);
 		return new Sql_QueryCommand($query, $param);
 	}
+	public static function get_Exam($exam_id)
+	{
+		$query = 'SELECT exam.* FROM exam WHERE exam.id = ?';
+		$param = array($exam_id);
+		return new Sql_QueryCommand($query, $param);
+	}
 	public static function list_Exam($category_id)
 	{
 		$query = 'SELECT list_exam.* FROM list_exam WHERE category_id = ?';
@@ -32,24 +38,14 @@ class GetData
 		$param = array($exam_id);
 		return new Sql_QueryCommand($query, $param);
 	}
-	public static function get_Question($exam_id, $type)
+	public static function get_Question($exam_id)
 	{
-		switch ($type)
-		{
-			case self::$types['link']:
-			{
-				return new Sql_QueryCommand('CALL list_link_question_by_exam_id(?)', array($exam_id));
-			}
-			case self::$types['multiple-choice']:
-			{
-				return new Sql_QueryCommand('CALL list_multiple_choice_question_by_exam_id(?)', array($exam_id));
-			}
-			case self::$types['fill']:
-			{
-				break;
-			}
-		}
-	} 
+		return new Sql_QueryCommand('CALL list_question_by_exam(?)', array($exam_id));
+	}
+	public static function get_SharedExam($course_id)
+	{
+		return new Sql_QueryCommand('CALL list_shared_question_in_exam(?)', array($course_id));
+	}
 }
 
 ?>

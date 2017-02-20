@@ -99,12 +99,7 @@ class Table
 			}
 			catch (\Exception $ex)
 			{
-				$last = '?' . http_build_query(array_merge($_GET, array('page' => $page_max)));
-				return <<<EOF
-				<p>
-					<a href="$last" class="btn btn-primary"><strong> Bấm để chuyển tới trang cuối </strong></a>
-				</p>
-EOF;
+				return System::get_exception_msg($ex);
 			}
 		}
 		// Return html

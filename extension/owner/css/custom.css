@@ -48,21 +48,22 @@ body
 	margin-top: 25px;
 }
 
-#input-table td, #input-table th
-{
-	vertical-align: middle;
-}
-
 /* side bar { */
 
 .sidebar
 {
+	transition: top 0.2s;
 	position: fixed;
-	top: 52px;
+	top: 51px;
 	bottom: 0px;
 	width: inherit;
 	background-color: #f8f8f8;
 	box-shadow: 0 1px 5px silver;
+}
+
+.sidebar .heading
+{
+	padding: 15px;
 }
 
 .sidebar .footer

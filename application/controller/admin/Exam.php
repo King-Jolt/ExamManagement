@@ -13,29 +13,44 @@ use App\System\System;
 class Exam extends Admin
 {
 	protected $category_id = NULL;
+	protected $view_table = TRUE;
 	protected function on_post()
 	{
-		$btn = System::input_post('action');
+		$btn = $this->request_post('action');
 		switch ($btn)
 		{
 			case 'add':
 			{
-				$title = System::input_post('title');
-				$this->DML->insert_Exam($title, $this->category_id);
+				$this->DML->insert_Exam(
+					$this->request_post('title'),
+					$this->request_post('date'),
+					$this->category_id
+				);
 				System::redirect();
 				break;
 			}
-		}		
+		}
 	}
 	protected function on_get()
 	{
 		$this->category_id = $this->request_get('category_id'); 
-		$request = System::input_get('action');
+		$request = $this->request_get('action');
 		if ($request)
 		{
 			$exam_id = $this->request_get('id');
 			switch ($request)
 			{
+				case 'copy':
+				{
+					$this->DML->copy_Exam($exam_id);
+					break;
+				}
+				case 'select_to':
+				{
+					$this->view_table = FALSE;
+					$this->load_view('/application/view/admin/exam/copy_from_share.php');
+					return;
+				}
 				case 'share':
 				{
 					$this->DML->share_Exam($exam_id, TRUE);
@@ -59,11 +74,14 @@ class Exam extends Admin
 	protected function main()
 	{
 		$this->menu['1']['active'] = 'active';
-		$ex_table = new Exam_table($this->category_id);
-		$this->load_view('application/view/admin/exam/table.php', array(
-			'msg' => System::get_msg(),
-			'table' => $ex_table->get()
-		));
+		if ($this->view_table)
+		{
+			$ex_table = new Exam_table($this->category_id);
+			$this->load_view('application/view/admin/exam/table.php', array(
+				'msg' => System::get_msg(),
+				'table' => $ex_table->get()
+			));
+		}
 	}	
 }
 

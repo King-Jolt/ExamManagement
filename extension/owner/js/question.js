@@ -5,7 +5,7 @@ function q_view(){
 	ol.each(function(){
 		var li = $(this).children('li');
 		var col = '';
-		if ((li.length / 2) == 0)
+		if (!(li.length & 1))
 		{
 			var n = 0;
 			li.each(function(){

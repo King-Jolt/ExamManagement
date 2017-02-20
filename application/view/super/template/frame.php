@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-xs-12 no-padding">
-			<nav class="navbar navbar-inverse navbar-fixed-top no-margin no-border-radius">
+		<div class="col-xs-12 no-padding" id="main-navbar">
+			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse no-margin no-border-radius">
 				<div class="container-fluid">
 					<div class="navbar-header">
 						<a class="navbar-brand"><strong> Phần mềm quản lý đề thi </strong></a>
@@ -23,14 +23,20 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-3 no-padding">
-			<div class="sidebar">
-				<div class="list-group no-border-radius">				
-					<a href="/admin/index.php" class="list-group-item active">
-						<span class="glyphicon glyphicon-book"></span>&nbsp; Danh sách bộ môn
-					</a>			
+			<div class="sidebar" id="main-sidebar">
+				<div class="heading">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Tìm kiếm &quot;Danh mục; Đề thi&quot;" />
+						<span class="input-group-btn"><button class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button></span>
+					</div>
 				</div>
-				<div class="footer text-muted">
-					© Copyright by <a href="https://github.com/scila1996"> scila1996 </a>
+				<div style="/* overflow: auto; height: 80%; */">
+					<div class="list-group no-border-radius">
+						<a href="/super/index.php" class="list-group-item active"><span class="glyphicon glyphicon-book"></span>&nbsp; Danh sách bộ môn</a>
+					</div>
+					<div class="footer text-muted">
+						© Copyright by <strong> scila1996 </strong> - <a href="https://github.com/scila1996/ExamManagement" target="_blank"> GitHub </a>
+					</div>
 				</div>
 			</div>
 		</div>
