@@ -7,45 +7,11 @@ a:hover
 {
 	text-decoration: none;
 }
+/* frame css */
 
-html, body
+.nowrap
 {
-	height: 100%;
-}
-
-body
-{
-	padding-top: 50px;
-}
-
-.no-border
-{
-	border: 0 !important;
-}
-
-.no-padding
-{
-	padding: 0px;
-}
-
-.no-margin
-{
-	margin: 0px;
-}
-
-.inner-content
-{
-	padding: 15px;
-}
-
-.top-15
-{
-	margin-top: 15px;
-}
-
-.top-25
-{
-	margin-top: 25px;
+	white-space: nowrap;
 }
 
 /* side bar { */
@@ -76,6 +42,39 @@ body
 }
 
 /* } end */
+
+
+/* end frame css */
+
+.no-border
+{
+	border: 0 !important;
+}
+
+.no-padding
+{
+	padding: 0px;
+}
+
+.no-margin
+{
+	margin: 0px;
+}
+
+.inner-content
+{
+	padding: 15px;
+}
+
+.top-15
+{
+	margin-top: 15px;
+}
+
+.top-25
+{
+	margin-top: 25px;
+}
 
 .table tbody tr td
 {

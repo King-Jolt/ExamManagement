@@ -62,9 +62,9 @@ abstract class Controller
 	}
 	// Implement this method
 	abstract protected function main();
-	final public function load_view($file, $data = array(), $put_to_stack = TRUE)
+	final protected function load_view($file, $data = array(), $put_to_stack = TRUE)
 	{
-		$view = new View($file, $data);
+		$view = $file instanceof View ? $file : new View($file, $data);
 		if ($put_to_stack === TRUE)
 		{
 			// Push view to stack

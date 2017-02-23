@@ -20,7 +20,7 @@ class Preview extends Admin
 	{
 		$view = new View_Question($this->id);
 		$data = array(
-			'content' => $view->get()
+			'content' => $view->get(TRUE)
 		);
 		$this->load_view('application/view/admin/question/preview.php', $data);
 		$this->send_response();

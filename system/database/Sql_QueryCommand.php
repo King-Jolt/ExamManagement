@@ -34,6 +34,10 @@ class Sql_QueryCommand
 		}
 		return $query;
 	}
+	public function get_Param()
+	{
+		return $this->_parameter;
+	}
 	public function execute()
 	{
 		$connect = new Mysql();

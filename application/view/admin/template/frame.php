@@ -1,3 +1,9 @@
+<style>
+	body
+	{
+		padding-top: 50px;
+	}
+</style>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-xs-12 no-padding" id="main-navbar">
@@ -27,13 +33,13 @@
 				<div class="heading">
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="Tìm kiếm &quot;Danh mục; Đề thi&quot;" />
-						<span class="input-group-btn"><button class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button></span>
+						<span class="input-group-btn"><button class="btn btn-primary" onclick="$.alert({title: 'Thông báo', content: 'Chức năng đang được hoàn thiện'})"><span class="glyphicon glyphicon-search"></span></button></span>
 					</div>
 				</div>
 				<div style="/* overflow: auto; height: 80%; */">
 					<div class="list-group no-border-radius">
-						<a href="/admin/exam2.php" class="list-group-item <?php self::put($menu['2']['active']) ?>"><span class="glyphicon glyphicon-home"></span>&nbsp; Trang chủ </a>
-						<a href="/admin/index.php" class="list-group-item <?php self::put($menu['1']['active']) ?>"><span class="glyphicon glyphicon-th-list"></span>&nbsp; Danh mục bài kiểm tra </a>
+						<a href="/index.php" class="list-group-item <?php self::put($menu['1']['active']) ?>"><span class="glyphicon glyphicon-home"></span>&nbsp; Trang chủ </a>
+						<a href="/admin/index.php" class="list-group-item <?php self::put($menu['2']['active']) ?>"><span class="glyphicon glyphicon-th-list"></span>&nbsp; Danh mục bài kiểm tra </a>
 						<a href="#" class="list-group-item <?php self::put($menu['3']['active']) ?>"><span class="glyphicon glyphicon-info-sign"></span>&nbsp; Thông tin </a>
 					</div>
 					<div class="footer text-muted">

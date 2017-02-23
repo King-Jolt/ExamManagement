@@ -47,7 +47,7 @@ class Category extends Admin
 	}
 	protected function main()
 	{
-		$this->menu['1']['active'] = 'active';
+		$this->menu['2']['active'] = 'active';
 		$cat_table = new Category_Table($this->user->id);
 		$this->load_view('/application/view/admin/category/table.php', array(
 			'msg' => System::get_msg(),

@@ -15,13 +15,13 @@ function q_view(){
 					n = w;
 				}
 			});
-			if (n < (w / 3))
-			{
-				col = 'col-2';
-			}
-			else if (n < (w / 5))
+			if (n < (w / 5))
 			{
 				col = 'col-4';
+			}
+			else if (n < (w / 3))
+			{
+				col = 'col-2';
 			}
 			$(this).addClass(col);
 		}
@@ -34,11 +34,17 @@ var obj_q = new (function(){
 		$('.question-preview .link-table [answer]').each(function(){
 			$(this).html('<span style="color: red; font-weight: bold">' + $(this).attr('answer') + '</span>');
 		});
+		$('.question-preview [data-fill]').each(function(index){
+			$(this).html(''.concat('[', ++index, '] <strong style="color: red">', $(this).attr('data-fill'), '</strong>'));
+		});
 	};
 	this.qa_hide = function() {
 		$('.question-preview .multiple-choice .choice[answer="1"]').css({'color': '', 'font-weight': ''});
 		$('.question-preview .link-table [answer]').each(function(){
 			$(this).html('.....');
+		});
+		$('.question-preview [data-fill]').each(function(index){
+			$(this).text(''.concat('[', ++index, '] ', $(this).attr('data-fill').replace(/.?/g, '..')));
 		});
 	};
 })();

@@ -17,7 +17,7 @@ class Exam_Table extends Table
 		parent::__construct();
 		$this->sql_query = GetData::list_Exam($id);
 		$this->arr_title = array(
-			'No.', 'Đề kiểm tra', 'Số câu hỏi', 'Ngày thi', 'TT', ''
+			'No.', 'Đề kiểm tra', 'Số câu hỏi', 'Ngày thi', 'Chia sẻ', ''
 		);
 	}
 	public function row($data, $index)
@@ -34,7 +34,8 @@ class Exam_Table extends Table
 		$share = '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
 		$shuffle = '?' . http_build_query(array_merge($_GET, array('action' => 'shuffle', 'id' => $data->id)));
 		$delete = '?' . http_build_query(array_merge($_GET, array('action' => 'delete', 'id' => $data->id)));
-		$collect = $data->share == 1 ? '<span class="glyphicon glyphicon-download-alt"></span>' : '';
+		$un_share = '?' . http_build_query(array_merge($_GET, array('action' => 'private', 'id' => $data->id)));
+		$collect = $data->share == 1 ? "<a href=\"$un_share\" class=\"btn btn-info btn-xs\"> Bỏ chia sẻ </a>" : '<strong class="text-info">Not Share</strong>';
 		$date = ($date = strtotime($data->date)) ? date("d/m/Y - H:i:s", $date) : 'Không có ngày thi';
 		return <<<EOF
 		<tr>

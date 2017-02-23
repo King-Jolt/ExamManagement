@@ -1,41 +1,58 @@
-.question-preview
+.exam-wrap
 {
 	font-family: "Times New Roman";
 	font-size: 13pt;
-	size: A4;
 }
 
-.question-preview ul > li
+.exam-wrap .header
 {
-	margin-top: 15px;
+	margin: 0.5cm 0 1cm;
+}
+
+.exam-wrap .footer
+{
+	float: left;
+	text-align: center;
+	width: 100%;
+	margin: 1cm 0 1cm;
+}
+
+.exam-wrap .question-preview ul > li
+{
+	margin-top: 0.3cm;
 	list-style-type: none;
 
 }
 
-.question-preview .link-table
+.exam-wrap .question-preview .link-table
 {
 	width: 90%;
 	margin-left: 10%;
 }
 
-.question-preview .link-table td:first-child, .question-preview .link-table th:first-child
+.exam-wrap .question-preview .link-table td:first-child, .question-preview .link-table th:first-child
 {
 	width: 30%;
 }
 
-.question-preview .link-table td, .question-preview .link-table th
+.exam-wrap .question-preview .link-table td, .question-preview .link-table th
 {
 	vertical-align: top;
 	padding-top: 5px;
 }
 
-ol.multiple-choice.col-2 li
+.exam-wrap ol.multiple-choice
+{
+	margin-top: 0.2cm;
+}
+
+.exam-wrap ol.multiple-choice.col-2 li
 {
 	width: 50%;
 	float: left;
 }
 
-ol.multiple-choice.col-4 li
+.exam-wrap ol.multiple-choice.col-4 li
 {
 	width: 25%;
 	float: left;

@@ -4,16 +4,24 @@ namespace App\Controller\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/table/Exam_Table.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Model_Exam.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\Controller\Admin\Admin;
 use App\Model\Admin\Table\Exam_Table;
+use App\Model\Admin\Model_Exam;
 use App\System\System;
 
 class Exam extends Admin
 {
 	protected $category_id = NULL;
 	protected $view_table = TRUE;
+	protected $model_exam;
+	public function __construct()
+	{
+		$this->model_exam = new Model_Exam();
+		parent::__construct();
+	}
 	protected function on_post()
 	{
 		$btn = $this->request_post('action');
@@ -24,8 +32,20 @@ class Exam extends Admin
 				$this->DML->insert_Exam(
 					$this->request_post('title'),
 					$this->request_post('date'),
-					$this->category_id
+					$this->category_id,
+					$this->request_post('header'),
+					$this->request_post('footer')
 				);
+				System::redirect();
+				break;
+			}
+			case 'select_to':
+			{
+				$this->DML->copy_Shared(
+					$this->request_post('q'),
+					$this->request_get('id')
+				);
+				unset($_GET['action'], $_GET['id']);
 				System::redirect();
 				break;
 			}
@@ -48,12 +68,19 @@ class Exam extends Admin
 				case 'select_to':
 				{
 					$this->view_table = FALSE;
-					$this->load_view('/application/view/admin/exam/copy_from_share.php');
+					$this->load_view(
+						$this->model_exam->select_Exam($exam_id)->list_Shared($this->user->course_id)
+					);
 					return;
 				}
 				case 'share':
 				{
 					$this->DML->share_Exam($exam_id, TRUE);
+					break;
+				}
+				case 'private':
+				{
+					$this->DML->share_Exam($exam_id, FALSE);
 					break;
 				}
 				case 'shuffle':
@@ -73,7 +100,7 @@ class Exam extends Admin
 	}
 	protected function main()
 	{
-		$this->menu['1']['active'] = 'active';
+		$this->menu['2']['active'] = 'active';
 		if ($this->view_table)
 		{
 			$ex_table = new Exam_table($this->category_id);
@@ -81,6 +108,7 @@ class Exam extends Admin
 				'msg' => System::get_msg(),
 				'table' => $ex_table->get()
 			));
+			$this->load_view('application/view/admin/ckeditor.php'); // use CKEditor for Input
 		}
 	}	
 }

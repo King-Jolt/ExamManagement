@@ -70,11 +70,24 @@ EOF;
 		$html .= '</ol>';
 		return $html;
 	}
-	public function get()
+	public function get($full_view = FALSE)
 	{
 		try
 		{
-			$html = '<div class="question-preview"><ul>';
+			$exam_data = GetData::get_Exam($this->_exam_id)->execute()->first();
+			if (!$exam_data)
+			{
+				throw new \Exception('Lỗi ! Đề thi không tồn tại');
+			}
+			$header = '';
+			$html = '';
+			$footer = '';
+			if ($full_view)
+			{
+				$header .= "<div class=\"header\"> $exam_data->header </div>";
+				$footer .= "<div class=\"footer\"> $exam_data->footer </div>";
+			}
+			$html .= '<div class="question-preview"><ul>';
 			$question_result = GetData::get_Question($this->_exam_id)->execute()->get_data();
 			$no = 1;
 			while ($question_result->valid() and $question = $question_result->current())
@@ -95,9 +108,12 @@ EOF;
 						$data = $this->_get_multiple_choice($id, $question_result);
 						break;
 					}
+					case GetData::$types['fill']:
+					{
+						$data = '';
+					}
 					default:
 					{
-						//throw new \Exception('error');
 						$question_result->next();
 					}
 				}
@@ -110,7 +126,13 @@ EOF;
 				$no++;
 			}
 			$html .= '</ul></div>';
-			return $html;
+			return <<<EOF
+			<div class="exam-wrap">
+				$header
+				$html
+				$footer
+			</div>
+EOF;
 		}
 		catch (\Exception $e)
 		{

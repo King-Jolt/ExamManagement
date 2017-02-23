@@ -14,15 +14,24 @@
 		</div>
 	</div>
 </div>
+<style>
+	@media (min-width: 768px)
+	{
+		.modal-dialog
+		{
+			width: 50%;
+		}
+	}
+</style>
 <script>
 $(document).ready(function(){
-	CKEDITOR.config.height = 120;
+	/*CKEDITOR.config.width = '205mm';*/
+	CKEDITOR.config.height = 200;
 	CKEDITOR.config.htmlEncodeOutput = false;
 	CKEDITOR.config.entities = false;
 	CKEDITOR.config.autoParagraph = false;
 	CKEDITOR.config.showProcessingMessages = false;
 	CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
-	//CKEDITOR.config.mathJaxLib = '/extension/mathjax/MathJax.js?config=TeX-MML-AM_CHTML';
 	CKEDITOR.config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML';
 	CKEDITOR.config.mathJaxClass = 'equation';
 	CKEDITOR.replace('ckinput');
@@ -40,7 +49,7 @@ $(document).ready(function(){
 			return obj;
 		};
 	})();
-	$('form').on('dblclick', 'input[name]:not([type="number"])', function(){
+	$('form').on('dblclick', 'input.use-ckeditor', function(){
 		field.save($(this));
 		CKEDITOR.instances['ckinput'].setData($(this).val());
 		$('#ck-modal-input').modal();
@@ -49,7 +58,8 @@ $(document).ready(function(){
 		CKEDITOR.instances['ckinput'].focus();
 	});
 	$('#ck-modal-input .save').click(function(){
-		field.get().val(CKEDITOR.instances['ckinput'].getData());
+		var data = (CKEDITOR.instances['ckinput'].getData()).replace(/\t*/igm, '');
+		field.get().val(data);
 	});
 });
 </script>

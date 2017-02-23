@@ -1,28 +1,8 @@
-<!--
-<ul class="my-treeview">
-	<li> 1
-		<ul>
-			<li> 1
-				<ul>
-					<li> 1 </li>
-					<li> 1 </li>
-				</ul>
-			</li>
-		</ul>
-	</li>
-	<li> 3
-		<ul>
-			<li> 1 </li>
-			<li> 2 </li>
-			<li> 1
-				<ul>
-					<li> 1 </li>
-					<li> 1 </li>
-				</ul>
-			</li>
-		</ul>
-	</li>
-</ul>
+<p> Danh sách câu hỏi được chia sẻ </p>
+<form method="post">
+<?php self::put($data) ?>
+<button type="submit" class="btn btn-primary" name="action" value="select_to"> Cho vào kho </button>
+</form>
 <script>
 	$(document).ready(function(){
 		$.fn.extend({
@@ -32,19 +12,36 @@
 					collapse: 'glyphicon-chevron-right',
 					expand: 'glyphicon-chevron-down'
 				};
-				$('<button class="btn btn-default btn-xs collapse-tv"><span class="icon-tv glyphicon glyphicon-chevron-right"></span></button>').prependTo($(this).find('li:has(ul)'));
-				$(this).on('click', 'button.collapse-tv', function(){
+				/*if ($(this).hasClass('tv-checkbox'))
+				{
+					$('<input type="checkbox" class="tv-item-checkbox" />').prependTo($(this).find('li'));
+				}
+				*/
+				$('<span class="collapse-tv"><span class="icon-tv glyphicon glyphicon-chevron-right"></span></span>').prependTo($(this).find('li:has(ul)'));
+				$(this).on('click', 'span.collapse-tv', function(){
 					$(this).parent('li').find('ul:lt(1)').removeClass('collapse');
 					$(this).removeClass('collapse-tv');
 					$(this).addClass('expand-tv');
 					$(this).find('.icon-tv').removeClass(icon.collapse).addClass(icon.expand);
 				});
-				$(this).on('click', 'button.expand-tv', function(){
+				$(this).on('click', 'span.expand-tv', function(){
 					$(this).parent('li').find('ul:lt(1)').addClass('collapse');
 					$(this).removeClass('expand-tv');
 					$(this).addClass('collapse-tv');
 					$(this).find('.icon-tv').removeClass(icon.expand).addClass(icon.collapse);
-					$(this).parent('li').find('button.expand-tv').trigger('click');
+					$(this).parent('li').find('span.expand-tv').trigger('click');
+				});
+				$(this).on('change', '.tv-item-checkbox', function(){
+					var c = $(this).is(':checked');
+					$(this).parent('li').first().find('.tv-item-checkbox').prop('checked', c);
+					/*$(this).parents('.my-treeview').find('.tv-item-checkbox').prop('checked', c);
+					if (c === true)
+					{
+						$(this).parents('.my-treeview').find('.tv-item-checkbox:not(:checked)').each(function(){
+							var p = $(this).parents('li:lt(1)').find('')
+							//$(this).prop('checked', true);
+						});
+					}*/
 				});
 			}
 		});
@@ -52,6 +49,10 @@
 	});
 </script>
 <style>
+	.my-treeview .tv-item-checkbox
+	{
+		margin-right: 5px;
+	}
 	.my-treeview li
 	{
 		list-style-type: none;
@@ -61,12 +62,10 @@
 	{
 		display: none;
 	}
-	.my-treeview button.expand-tv,
-	.my-treeview button.collapse-tv
+	.my-treeview span.expand-tv,
+	.my-treeview span.collapse-tv
 	{
-		margin-left: 5px;
+		margin-right: 5px;
 		color: #555;
 	}
 </style>
--->
-Đang trong quá trình hoàn thiện ...

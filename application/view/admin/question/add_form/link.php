@@ -3,7 +3,7 @@
 	<hr />
 	<div class="form-hint"></div>
 	<div class="form-group">
-		<input class="form-control qt" name="q[q]" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" autocomplete="off" />
+		<input class="form-control qt use-ckeditor" name="q[q]" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" autocomplete="off" />
 	</div>
 	<table class="table no-margin">
 		<thead>
@@ -26,10 +26,10 @@
 		<tbody>
 			<tr class="row-input">
 				<td>
-					<input class="form-control qa" name="q[a][]" autocomplete="off" />
+					<input class="form-control qa use-ckeditor" name="q[a][]" autocomplete="off" />
 				</td>
 				<td>
-					<input class="form-control qb" name="q[b][]" autocomplete="off" />
+					<input class="form-control qb use-ckeditor" name="q[b][]" autocomplete="off" />
 				</td>
 				<td>
 					<button class="btn btn-primary rm-row" type="button" disabled><span class="glyphicon glyphicon-trash"></span></button>

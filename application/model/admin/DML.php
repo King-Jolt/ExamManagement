@@ -4,10 +4,12 @@ namespace App\Model\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql_QueryCommand.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\Model\Admin\GetData;
 use App\System\Database\Mysql;
+use App\System\Database\Sql_QueryCommand;
 use App\System\System;
 
 class DML
@@ -20,7 +22,9 @@ class DML
 	private function generate_id()
 	{
 		$result = $this->connect->raw_query('SELECT generate_uid() AS uid');
-		return $result->fetch_object()->uid;
+		$uid = $result->fetch_object()->uid;
+		$result->free();
+		return $uid;
 	}
 	public function insert_Category($name, $user_id)
 	{
@@ -54,7 +58,7 @@ class DML
 		{
 			$id = $this->generate_id();
 			$this->connect->query('INSERT INTO exam(id, category_id, title, header, footer, date) VALUES(?, ?, ?, ?, ?, ?)', array(
-				$id, $category_id, $title, '<strong> Exam Header </strong>', '<em> Exam Footer </em>', $date
+				$id, $category_id, $title, $header, $footer, $date
 			));
 			System::put_msg('success', "Đã thêm mới đề kiểm tra \"$title\" !");
 			return $id;
@@ -118,7 +122,50 @@ class DML
 					}
 					break;
 				}
+				case GetData::$types['fill']:
+				{
+					$new_q_id = $this->generate_id();
+					$this->connect->query('INSERT INTO question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+						$new_q_id,
+						$row->q_content,
+						$dest_exam_id,
+						$row->q_score,
+						GetData::$types['fill']
+					));
+					$question_result->next();
+					break;
+				}
 			}
+		}
+	}
+	public function copy_Shared($arr_question, $exam_id)
+	{
+		try
+		{
+			$this->connect->begin();
+			foreach ($arr_question as $id)
+			{
+				$this->connect->query("INSERT INTO ref_question VALUES(?)", array($id));
+			}
+			$this->connect->commit();
+			$this->connect->begin();
+			$result = new Sql_QueryCommand('CALL list_question_from_ref()');
+			$result = $result->execute();
+			$this->_copy_Question(
+				$result,
+				$exam_id
+			);
+			$this->connect->query('TRUNCATE TABLE ref_question');
+			$this->connect->commit();
+			
+			System::put_msg('success', 'Đã sao chép thành công !');
+		}
+		catch (\Exception $e)
+		{
+			echo System::get_exception_msg($e);
+			$this->connect->rollback();
+			System::put_msg('warning', $e, FALSE);
+			exit;
 		}
 	}
 	public function copy_Exam($exam_id)
@@ -158,10 +205,10 @@ class DML
 				$share === TRUE ? 1 : 0,
 				$id
 			));
-			System::put_msg('success',
-				"Đề thi này đang ở trạng thái đề thi chung <br />
-				các giáo viên có thể gửi các câu hỏi của họ vào đây nhưng chỉ có bạn mới có thể xem được các câu hỏi đã được gửi vào đây.",
-			FALSE);
+			System::put_msg('success', "
+				Đề thi này đang được chia sẻ <br />
+				Các giáo viên khác có thể xem và copy các câu hỏi trong đề thi này
+			", FALSE);
 		}
 		catch (\Exception $e)
 		{
@@ -249,6 +296,28 @@ class DML
 					intval($data['bool'][$index])
 				));
 			}
+			$this->connect->commit();
+			System::put_msg('success', 'Đã thêm mới một câu hỏi !');
+		}
+		catch (\Exception $e)
+		{
+			$this->connect->rollback();
+			System::put_msg('warning', $e, FALSE);
+		}
+	}
+	public function insert_FillQuestion($exam_id, &$data)
+	{
+		try
+		{
+			$this->connect->begin();
+			$q_id = $this->generate_id();
+			$this->connect->query('INSERT INTO question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+				$q_id,
+				$data['q'],
+				$exam_id,
+				$data['score'],
+				GetData::$types['fill']
+			));
 			$this->connect->commit();
 			System::put_msg('success', 'Đã thêm mới một câu hỏi !');
 		}

@@ -3,7 +3,7 @@
 	<hr />
 	<div class="form-hint"></div>
 	<div class="form-group">
-		<input class="form-control qt" name="q[q]" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" />
+		<input class="form-control qt use-ckeditor" name="q[q]" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" autocomplete="off" />
 	</div>
 	<div class="form-group">
 		<div class="form-inline">

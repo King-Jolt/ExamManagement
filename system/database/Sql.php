@@ -55,7 +55,10 @@ class Mysql extends \mysqli
 	private function _get_num_rows()
 	{
 		$result = parent::query('SELECT FOUND_ROWS() AS total');
-		return $result ? $result->fetch_object()->total : 0;
+		if (!$result) return 0;
+		$num = $result->fetch_object()->total;
+		$result->free();
+		return $num;
 	}
 	private function _get_result_from_stmt($stmt)
 	{
@@ -79,7 +82,7 @@ class Mysql extends \mysqli
 			{
 				array_push($arr_ret, (object)($this->_array_copy($arr_bind_result)));
 			}
-			$total = $this->_get_num_rows();
+			$total = ($total = $this->_get_num_rows()) ? $total : $stmt->num_rows;
 			$stmt->free_result();
 			return new Sql_Result($arr_field, $arr_ret, $total);
 		}

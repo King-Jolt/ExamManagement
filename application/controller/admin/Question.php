@@ -3,11 +3,11 @@
 namespace App\Controller\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Question.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Model_Question.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\Controller\Admin\Admin;
-use App\Model\Admin\Question as Question_Model;
+use App\Model\Admin\Model_Question;
 use App\System\System;
 
 class Question extends Admin
@@ -16,20 +16,12 @@ class Question extends Admin
 	private $question = NULL;
 	public function __construct()
 	{
-		try
-		{
-			$this->question = new Question_Model($this);
-		}
-		catch (\Exception $e)
-		{
-			$this->error($e);
-		}
+		$this->exam_id = $this->request_get('exam_id');
+		$this->question = new Model_Question($this->exam_id);
 		parent::__construct();
 	}
 	protected function on_get()
 	{
-		$this->exam_id = $this->request_get('exam_id');
-		$this->question->exam_ID($this->exam_id);
 		$action = $this->request_get('action');
 		if ($action)
 		{
@@ -37,7 +29,8 @@ class Question extends Admin
 			{
 				case 'add':
 				{
-					$this->question->add($this->request_get('type'));
+					$this->load_view('application/view/admin/ckeditor.php'); // use CKEditor for Input
+					$this->load_view($this->question->add($this->request_get('type')));
 					$this->nav->add('Thêm câu hỏi', '');
 					break;
 				}
@@ -49,7 +42,7 @@ class Question extends Admin
 				}
 				case 'view':
 				{
-					$this->question->view(TRUE);
+					$this->load_view($this->question->view(TRUE));
 					break;
 				}
 				case 'view_answer':
@@ -60,7 +53,7 @@ class Question extends Admin
 		}
 		else
 		{
-			$this->question->manage();
+			$this->load_view($this->question->manage());
 		}
 	}
 	protected function on_post()
@@ -82,6 +75,8 @@ class Question extends Admin
 				}
 				case 'fill':
 				{
+					echo $data['q'] = $this->question->parse_FillQuestion($data['q']);
+					$this->DML->insert_FillQuestion($this->exam_id, $data);
 					break;
 				}
 			}
@@ -91,7 +86,7 @@ class Question extends Admin
 	}
 	protected function main()
 	{
-		$this->menu['1']['active'] = 'active';
+		$this->menu['2']['active'] = 'active';
 	}
 }
 

@@ -42,9 +42,9 @@ class GetData
 	{
 		return new Sql_QueryCommand('CALL list_question_by_exam(?)', array($exam_id));
 	}
-	public static function get_SharedExam($course_id)
+	public static function get_SharedExam($course_id, $except_exam_id)
 	{
-		return new Sql_QueryCommand('CALL list_shared_question_in_exam(?)', array($course_id));
+		return new Sql_QueryCommand('CALL list_shared_question_in_exam(?, ?)', array($course_id, $except_exam_id));
 	}
 }
 

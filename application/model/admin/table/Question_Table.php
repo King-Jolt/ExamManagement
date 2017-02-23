@@ -22,7 +22,7 @@ class Question_Table extends Table
 		$delete = '?' . http_build_query(array_merge($_GET + array('action' => 'delete', 'id' => $data->id)));
 		return <<<EOF
 		<tr>
-			<td><a href=""><span class="glyphicon glyphicon-question-sign"></span> Câu $index </a></td>
+			<td class="nowrap"><strong class="text-muted"> Câu $index </strong></td>
 			<td> $data->content </td>
 			<td>
 				<a href="$delete" class="btn btn-primary btn-xs be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a> &nbsp;
