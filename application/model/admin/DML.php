@@ -143,21 +143,21 @@ class DML
 		try
 		{
 			$this->connect->begin();
+			$temp_table = $this->connect->query('SELECT create_temp_table() AS temp_name')->first()->temp_name;
 			foreach ($arr_question as $id)
 			{
-				$this->connect->query("INSERT INTO ref_question VALUES(?)", array($id));
+				$this->connect->query("INSERT INTO $temp_table VALUES(?)", array($id));
 			}
 			$this->connect->commit();
+			$result = $this->connect->query('CALL list_question_from_ref()');
+			$this->connect->close();
+			$this->connect = new Mysql();
 			$this->connect->begin();
-			$result = new Sql_QueryCommand('CALL list_question_from_ref()');
-			$result = $result->execute();
 			$this->_copy_Question(
 				$result,
 				$exam_id
 			);
-			$this->connect->query('TRUNCATE TABLE ref_question');
 			$this->connect->commit();
-			
 			System::put_msg('success', 'Đã sao chép thành công !');
 		}
 		catch (\Exception $e)
@@ -205,10 +205,17 @@ class DML
 				$share === TRUE ? 1 : 0,
 				$id
 			));
-			System::put_msg('success', "
-				Đề thi này đang được chia sẻ <br />
-				Các giáo viên khác có thể xem và copy các câu hỏi trong đề thi này
-			", FALSE);
+			if ($share)
+			{
+				System::put_msg('success', "
+					Đề thi này đang được chia sẻ <br />
+					Các giáo viên khác có thể xem và copy các câu hỏi trong đề thi này
+				", FALSE);
+			}
+			else
+			{
+				System::put_msg('success', "Đã hủy chia sẻ đề thi này !");
+			}
 		}
 		catch (\Exception $e)
 		{

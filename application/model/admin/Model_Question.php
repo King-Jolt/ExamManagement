@@ -110,7 +110,7 @@ EOF;
 	}
 	public function parse_FillQuestion($content)
 	{
-		return preg_replace_callback('/(\[\s)([^\[\]]+)(\s\])/', function($m){
+		return preg_replace_callback('/(\[)([^\[\]]+)(\])/', function($m){
 			return "<span data-fill=\"$m[2]\">?</span>";
 		}, $content);
 	} 

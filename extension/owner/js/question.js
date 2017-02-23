@@ -15,7 +15,7 @@ function q_view(){
 					n = w;
 				}
 			});
-			if (n < (w / 5))
+			if (n < (w / 5) && li.length > 2)
 			{
 				col = 'col-4';
 			}

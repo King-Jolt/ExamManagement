@@ -31,7 +31,7 @@ class Exam extends Admin
 			{
 				$this->DML->insert_Exam(
 					$this->request_post('title'),
-					$this->request_post('date'),
+					$this->request_post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', $this->request_post('date'))->format('Y-m-d H:i:s') : NULL,
 					$this->category_id,
 					$this->request_post('header'),
 					$this->request_post('footer')

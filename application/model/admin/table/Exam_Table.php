@@ -22,6 +22,7 @@ class Exam_Table extends Table
 	}
 	public function row($data, $index)
 	{
+		setlocale(LC_ALL, 'vi_VN');
 		$base = array(
 			'category_id' => $_GET['category_id'],
 			'exam_id' => $data->id
@@ -31,23 +32,23 @@ class Exam_Table extends Table
 		$preview = Route::current_path() . '/preview.php?' . http_build_query($base);
 		$copy = '?' . http_build_query(array_merge($_GET, array('action' => 'copy', 'id' => $data->id)));
 		$select_to = '?' . http_build_query(array_merge($_GET, array('action' => 'select_to', 'id' => $data->id)));
-		$share = '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
+		$share = $data->share ? "javascript:$.alert({title: 'Thông báo', content: 'Đề thi này đang ở chế độ chia sẻ !', type: 'blue'})" : '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
 		$shuffle = '?' . http_build_query(array_merge($_GET, array('action' => 'shuffle', 'id' => $data->id)));
 		$delete = '?' . http_build_query(array_merge($_GET, array('action' => 'delete', 'id' => $data->id)));
 		$un_share = '?' . http_build_query(array_merge($_GET, array('action' => 'private', 'id' => $data->id)));
 		$collect = $data->share == 1 ? "<a href=\"$un_share\" class=\"btn btn-info btn-xs\"> Bỏ chia sẻ </a>" : '<strong class="text-info">Not Share</strong>';
-		$date = ($date = strtotime($data->date)) ? date("d/m/Y - H:i:s", $date) : 'Không có ngày thi';
+		$date = $data->date ? '<span class="glyphicon glyphicon-time"></span>&nbsp; ' . strftime("%A, %d %B %Y, %I:%M %p", strtotime($data->date)) : 'Không có ngày thi';
 		return <<<EOF
 		<tr>
 			<td> $index </td>
 			<td><a href="$manage"><span class="glyphicon glyphicon-paperclip"></span> $data->title </a></td>
 			<td> $data->n_question </td>
-			<td> $date </td>
+			<td class="text-info"> $date </td>
 			<td> $collect </td>
 			<td>
 				<div class="dropdown">
   					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;<span class="caret"></span></button>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu dropdown-menu-right">
 						<li class="dropdown-header"> Danh mục tùy chọn <span class="caret"></span></li>
 						<li class="divider"></li>
 						<li><a href="$share"><span class="glyphicon glyphicon-share"></span> Chia sẻ </a></li>
