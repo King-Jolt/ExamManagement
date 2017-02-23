@@ -53,7 +53,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `_link_option_trigger_insert` BEFORE INSERT ON `_link_option` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `_link_option_trigger_insert` BEFORE INSERT ON `_link_option` FOR EACH ROW BEGIN
     SET NEW.a_position = get_rand(), NEW.b_position = get_rand();
     IF NEW.a_content IS NULL THEN
         SET NEW.a_position = 255;
@@ -91,7 +91,7 @@ CREATE TABLE `_multiple_choice` (
 
 LOCK TABLES `_multiple_choice` WRITE;
 /*!40000 ALTER TABLE `_multiple_choice` DISABLE KEYS */;
-INSERT INTO `_multiple_choice` VALUES ('58aa34978731505','58aa34977a40aaf','<span class=\"equation\">\\(10 \\pi Hz\\)</span>','\0',123),('58aa34978731532','58aa34977a40aaf','<span class=\"equation\">\\(5 \\pi Hz\\)</span>','\0',86),('58aa34978731589','58aa34977a40aaf','<span class=\"equation\">\\(5 Hz\\)</span>','',64),('58aa349787ae576','58aa34977a40aaf','<span class=\"equation\">\\(10 Hz\\)</span>','\0',60),('58aa35b9d5f0937','58aa35b9d091826','<span class=\"equation\">\\({1 \\over 2\\pi} {\\sqrt{m \\over k}}\\)</span>','\0',110),('58aa35b9d66d9a6','58aa35b9d091826','<span class=\"equation\">\\(2\\pi {\\sqrt{k \\over m}}\\)</span>','\0',116),('58aa35b9d66d9b6','58aa35b9d091826','<span class=\"equation\">\\(2\\pi {\\sqrt{m \\over k}}\\)</span>','',248),('58aa35b9e7c35f5','58aa35b9d091826','<span class=\"equation\">\\({1 \\over 2\\pi} {\\sqrt{k \\over m}}\\)</span>','\0',133),('58aa36e055c6153','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = A \\omega\\)</span>','',172),('58aa36e05604a33','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = A \\omega^2\\)</span>','\0',208),('58aa36e05604a8e','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = A^2\\omega\\)</span>','\0',17),('58aa36e05604adb','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = 2A\\omega\\)</span>','\0',223),('58aa42457826e79','58aa424575775c6','<span class=\"equation\">\\(2^{11}\\)</span>','\0',49),('58aa42467e02f04','58aa424575775c6','<span class=\"equation\">\\(2^{12}\\)</span>','\0',85),('58aa4246816e007','58aa424575775c6','<span class=\"equation\">\\(2^{10}\\)</span>','',22),('58aa4246816e010','58aa424575775c6','<span class=\"equation\">\\(2^9\\)</span>','\0',110);
+INSERT INTO `_multiple_choice` VALUES ('58aa34978731505','58aa34977a40aaf','<span class=\"equation\">\\(10 \\pi Hz\\)</span>','\0',123),('58aa34978731532','58aa34977a40aaf','<span class=\"equation\">\\(5 \\pi Hz\\)</span>','\0',86),('58aa34978731589','58aa34977a40aaf','<span class=\"equation\">\\(5 Hz\\)</span>','',64),('58aa349787ae576','58aa34977a40aaf','<span class=\"equation\">\\(10 Hz\\)</span>','\0',60),('58aa35b9d5f0937','58aa35b9d091826','<span class=\"equation\">\\({1 \\over 2\\pi} {\\sqrt{m \\over k}}\\)</span>','\0',110),('58aa35b9d66d9a6','58aa35b9d091826','<span class=\"equation\">\\(2\\pi {\\sqrt{k \\over m}}\\)</span>','\0',116),('58aa35b9d66d9b6','58aa35b9d091826','<span class=\"equation\">\\(2\\pi {\\sqrt{m \\over k}}\\)</span>','',248),('58aa35b9e7c35f5','58aa35b9d091826','<span class=\"equation\">\\({1 \\over 2\\pi} {\\sqrt{k \\over m}}\\)</span>','\0',133),('58aa36e055c6153','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = A \\omega\\)</span>','',172),('58aa36e05604a33','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = A \\omega^2\\)</span>','\0',208),('58aa36e05604a8e','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = A^2\\omega\\)</span>','\0',17),('58aa36e05604adb','58aa36e04913ea9','<span class=\"equation\">\\(V_\\max = 2A\\omega\\)</span>','\0',223),('58aa42457826e79','58aa424575775c6','<span class=\"equation\">\\(2^{11}\\)</span>','\0',49),('58aa42467e02f04','58aa424575775c6','<span class=\"equation\">\\(2^{12}\\)</span>','\0',85),('58aa4246816e007','58aa424575775c6','<span class=\"equation\">\\(2^{10}\\)</span>','',22),('58aa4246816e010','58aa424575775c6','<span class=\"equation\">\\(2^9\\)</span>','\0',110),('58ae8d9cb6bd602','58ae8d9ca94fd01','dung','',83),('58ae8d9cb759a03','58ae8d9ca94fd01','sai','\0',110),('58ae8db0bb46b02','58ae8db0b21ef01','dung','\0',193),('58ae8db0bbe3003','58ae8db0b21ef01','sai','',54);
 /*!40000 ALTER TABLE `_multiple_choice` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -103,7 +103,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `_mul_choice_trigger_insert` BEFORE INSERT ON `_multiple_choice` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `_mul_choice_trigger_insert` BEFORE INSERT ON `_multiple_choice` FOR EACH ROW BEGIN
     SET NEW.position = get_rand();
     SET NEW.id = generate_uid();
 END */;;
@@ -146,7 +146,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `admin_trigger_insert` BEFORE INSERT ON `admin` FOR EACH ROW SET NEW.pass = SHA1(NEW.pass) */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `admin_trigger_insert` BEFORE INSERT ON `admin` FOR EACH ROW SET NEW.pass = SHA1(NEW.pass) */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -188,7 +188,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `cat_trigger_insert` BEFORE INSERT ON `category` FOR EACH ROW SET NEW.id = generate_uid() */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cat_trigger_insert` BEFORE INSERT ON `category` FOR EACH ROW SET NEW.id = generate_uid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -203,7 +203,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `cat_trigger_delete` BEFORE DELETE ON `category` FOR EACH ROW DELETE FROM exam WHERE exam.category_id = OLD.id */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cat_trigger_delete` BEFORE DELETE ON `category` FOR EACH ROW DELETE FROM exam WHERE exam.category_id = OLD.id */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -242,7 +242,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `course_trigger_insert` BEFORE INSERT ON `course` FOR EACH ROW SET NEW.id = generate_uid() */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `course_trigger_insert` BEFORE INSERT ON `course` FOR EACH ROW SET NEW.id = generate_uid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -263,7 +263,7 @@ CREATE TABLE `exam` (
   `header` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `footer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `share` bit(1) NOT NULL DEFAULT b'0',
-  `date` datetime NOT NULL,
+  `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
@@ -276,7 +276,7 @@ CREATE TABLE `exam` (
 
 LOCK TABLES `exam` WRITE;
 /*!40000 ALTER TABLE `exam` DISABLE KEYS */;
-INSERT INTO `exam` VALUES ('58aa3328cadc2c9','58aa29c8017eb44','Đề thi','<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\">			<tbody>				<tr>					<td style=\"text-align:center\"><strong>BỘ <u>GIÁO DỤC VÀ ĐÀO T</u>ẠO</strong></td>					<td>&nbsp;</td>					<td style=\"text-align:center\"><strong>KỲ THI TRUNG HỌC PHỔ THÔNG QUỐC GIA NĂM 2017</strong></td>				</tr>				<tr>					<td>&nbsp;</td>					<td>&nbsp;</td>					<td style=\"text-align:center\"><strong>Môn thi : TOÁN</strong></td>				</tr>				<tr>					<td style=\"text-align:center\"><strong>ĐỀ THI MINH HỌA</strong></td>					<td>&nbsp;</td>					<td style=\"text-align:center\"><em>Thời <u>gian làm bài: 120 phút, không kể thời gian phát</u> đề</em></td>				</tr>				<tr>					<td style=\"text-align:center\"><em>(Đề thi có 01 trang)</em></td>					<td>&nbsp;</td>					<td>&nbsp;</td>				</tr>			</tbody>	</table>','<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\">			<tbody>				<tr>					<td style=\"text-align:center\"><strong>---------------------------------------- HẾT&nbsp;----------------------------------------</strong></td>				</tr>				<tr>					<td style=\"text-align:center\"><em>Thí sinh không được phép sử dụng tài liệu</em></td>				</tr>			</tbody>	</table>​​​​​','','0000-00-00 00:00:00');
+INSERT INTO `exam` VALUES ('58aa3328cadc2c9','58aa29c8017eb44','Đề thi','<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\">			<tbody>				<tr>					<td style=\"text-align:center\"><strong>BỘ <u>GIÁO DỤC VÀ ĐÀO T</u>ẠO</strong></td>					<td>&nbsp;</td>					<td style=\"text-align:center\"><strong>KỲ THI TRUNG HỌC PHỔ THÔNG QUỐC GIA NĂM 2017</strong></td>				</tr>				<tr>					<td>&nbsp;</td>					<td>&nbsp;</td>					<td style=\"text-align:center\"><strong>Môn thi : TOÁN</strong></td>				</tr>				<tr>					<td style=\"text-align:center\"><strong>ĐỀ THI MINH HỌA</strong></td>					<td>&nbsp;</td>					<td style=\"text-align:center\"><em>Thời <u>gian làm bài: 120 phút, không kể thời gian phát</u> đề</em></td>				</tr>				<tr>					<td style=\"text-align:center\"><em>(Đề thi có 01 trang)</em></td>					<td>&nbsp;</td>					<td>&nbsp;</td>				</tr>			</tbody>	</table>','<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\">			<tbody>				<tr>					<td style=\"text-align:center\"><strong>---------------------------------------- HẾT&nbsp;----------------------------------------</strong></td>				</tr>				<tr>					<td style=\"text-align:center\"><em>Thí sinh không được phép sử dụng tài liệu</em></td>				</tr>			</tbody>	</table>​​​​​','',NULL),('58ae8d831a5df01','58aa29c8017eb44','123','<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\"><tbody><tr><td style=\"text-align:center\"><strong>BỘ <u>GIÁO DỤC VÀ ĐÀO T</u>ẠO</strong></td><td>&nbsp;</td><td style=\"text-align:center\"><strong>KỲ THI TRUNG HỌC PHỔ THÔNG QUỐC GIA NĂM 2017</strong></td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td style=\"text-align:center\"><strong>Môn thi : TOÁN</strong></td></tr><tr><td style=\"text-align:center\"><strong>ĐỀ THI MINH HỌA</strong></td><td>&nbsp;</td><td style=\"text-align:center\"><em>Thời <u>gian làm bài: 120 phút, không kể thời gian phát</u> đề</em></td></tr><tr><td style=\"text-align:center\"><em>(Đề thi có 01 trang)</em></td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>','<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\"><tbody><tr><td style=\"text-align:center\"><strong>---------------------------------------- HẾT&nbsp;----------------------------------------</strong></td></tr><tr><td style=\"text-align:center\"><em>Thí sinh không được phép sử dụng tài liệu</em></td></tr></tbody></table>​​​​​','\0','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `exam` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -288,7 +288,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `exam_trigger_delete` BEFORE DELETE ON `exam` FOR EACH ROW DELETE FROM question WHERE question.exam_id = OLD.id */;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `exam_trigger_delete` BEFORE DELETE ON `exam` FOR EACH ROW DELETE FROM question WHERE question.exam_id = OLD.id */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -411,7 +411,7 @@ CREATE TABLE `question` (
 
 LOCK TABLES `question` WRITE;
 /*!40000 ALTER TABLE `question` DISABLE KEYS */;
-INSERT INTO `question` VALUES ('58aa34977a40aaf','Một hệ dao động chịu tác dụng của ngoại lực tuần hoàn&nbsp;<span class=\"equation\">\\(F_n = F_n \\cos10 \\pi t\\)</span>&nbsp;thì xảy ra hiện tượng cộng hưởng. Tần số dao động riêng của hệ phải là','58aa3328cadc2c9',NULL,NULL,1,2,3574),('58aa35b9d091826','Một con lắc lò xo gồm lò xo có độ cứng k và hòn bi m gắn vào đầu lò xo, đầu kia của lò xo được treo vào một điểm cố định. Kích thước cho con lắc dao động điều hòa theo phương thẳng đứng. Chu kì là','58aa3328cadc2c9',NULL,NULL,1,2,2334),('58aa36e04913ea9','Biểu thức li độ của vật dao động điều hòa có dạng&nbsp;<span class=\"equation\">\\(x = Acos (\\omega + \\phi)\\)</span>, Vận tốc của vật có giá trị cực đại là','58aa3328cadc2c9',NULL,NULL,1,2,949),('58aa424575775c6','Nhờ khai triển nhị thức&nbsp;<span class=\"equation\">\\((1 + x)^{11}\\)</span>&nbsp;ta có giá trị&nbsp;<span class=\"equation\">\\(S = C_{11}^6 + C_{11}^7 + C_{11}^8 + C_{11}^9 + C_{11}^{10} + C_{11}^{11}\\)</span>&nbsp;bằng :','58aa3328cadc2c9',NULL,NULL,1,2,2744),('58adecb06789c01','Tổng diện tích của <span data-fill=\"hai\">?</span> hình vuông vẽ trên cạnh kề của một tam giác vuông bằng <span data-fill=\"diện tích\">?</span> hình vuông vẽ trên cạnh huyền của tam giác này.','58aa3328cadc2c9',NULL,NULL,0,4,3575),('58aded25058e901','Nếu một đường thẳng <span data-fill=\"song song\">?</span> với một cạnh của tam giác và cắt hai cạnh còn lại thì nó định ra trên hai cạnh đó những đoạn thẳng <span data-fill=\"tương ứng\">?</span> tỉ lệ.','58aa3328cadc2c9',NULL,NULL,0,4,3576),('58ae1ab31148001','Nối các cột A với cột B sao cho phù hợp !','58aa3328cadc2c9','Viết tắt','Tên đầy đủ',2,1,3577);
+INSERT INTO `question` VALUES ('58aa34977a40aaf','Một hệ dao động chịu tác dụng của ngoại lực tuần hoàn&nbsp;<span class=\"equation\">\\(F_n = F_n \\cos10 \\pi t\\)</span>&nbsp;thì xảy ra hiện tượng cộng hưởng. Tần số dao động riêng của hệ phải là','58aa3328cadc2c9',NULL,NULL,1,2,3574),('58aa35b9d091826','Một con lắc lò xo gồm lò xo có độ cứng k và hòn bi m gắn vào đầu lò xo, đầu kia của lò xo được treo vào một điểm cố định. Kích thước cho con lắc dao động điều hòa theo phương thẳng đứng. Chu kì là','58aa3328cadc2c9',NULL,NULL,1,2,2334),('58aa36e04913ea9','Biểu thức li độ của vật dao động điều hòa có dạng&nbsp;<span class=\"equation\">\\(x = Acos (\\omega + \\phi)\\)</span>, Vận tốc của vật có giá trị cực đại là','58aa3328cadc2c9',NULL,NULL,1,2,949),('58aa424575775c6','Nhờ khai triển nhị thức&nbsp;<span class=\"equation\">\\((1 + x)^{11}\\)</span>&nbsp;ta có giá trị&nbsp;<span class=\"equation\">\\(S = C_{11}^6 + C_{11}^7 + C_{11}^8 + C_{11}^9 + C_{11}^{10} + C_{11}^{11}\\)</span>&nbsp;bằng :','58aa3328cadc2c9',NULL,NULL,1,2,2744),('58adecb06789c01','Tổng diện tích của <span data-fill=\"hai\">?</span> hình vuông vẽ trên cạnh kề của một tam giác vuông bằng <span data-fill=\"diện tích\">?</span> hình vuông vẽ trên cạnh huyền của tam giác này.','58aa3328cadc2c9',NULL,NULL,0,4,3575),('58aded25058e901','Nếu một đường thẳng <span data-fill=\"song song\">?</span> với một cạnh của tam giác và cắt hai cạnh còn lại thì nó định ra trên hai cạnh đó những đoạn thẳng <span data-fill=\"tương ứng\">?</span> tỉ lệ.','58aa3328cadc2c9',NULL,NULL,0,4,3576),('58ae1ab31148001','Nối các cột A với cột B sao cho phù hợp !','58aa3328cadc2c9','Viết tắt','Tên đầy đủ',2,1,3577),('58ae8d9ca94fd01','12121','58ae8d831a5df01',NULL,NULL,0,2,347),('58ae8db0b21ef01','chon di','58ae8d831a5df01',NULL,NULL,0,2,348),('58ae906103ac001','Hai tam giác <span data-fill=\"bằng nhau\">?</span> thì <span data-fill=\"đồng dạng\">?</span> với nhau','58ae8d831a5df01',NULL,NULL,5,4,349);
 /*!40000 ALTER TABLE `question` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -423,7 +423,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `question_trigger_insert` BEFORE INSERT ON `question` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `question_trigger_insert` BEFORE INSERT ON `question` FOR EACH ROW BEGIN
 	DECLARE pos SMALLINT;
     SELECT IFNULL(MAX(question.position) + 1, RAND() * 5000)
     INTO pos FROM question
@@ -444,7 +444,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `question_trigger_delete` BEFORE DELETE ON `question` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `question_trigger_delete` BEFORE DELETE ON `question` FOR EACH ROW BEGIN
     DELETE FROM _link_option WHERE _link_option.question_id = OLD.id;
     DELETE FROM _multiple_choice WHERE _multiple_choice.question_id = OLD.id;
 END */;;
@@ -453,27 +453,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `ref_question`
---
-
-DROP TABLE IF EXISTS `ref_question`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ref_question` (
-  `question_id` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ref_question`
---
-
-LOCK TABLES `ref_question` WRITE;
-/*!40000 ALTER TABLE `ref_question` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ref_question` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `type_question`
@@ -537,7 +516,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `user_trigger_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `user_trigger_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
 SET NEW.id = generate_uid();
 SET NEW.pass = SHA1(NEW.pass);
 END */;;
@@ -550,6 +529,30 @@ DELIMITER ;
 --
 -- Dumping routines for database 'exam_management'
 --
+/*!50003 DROP FUNCTION IF EXISTS `create_temp_table` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `create_temp_table`() RETURNS varchar(64) CHARSET utf8mb4
+    NO SQL
+BEGIN
+CREATE TEMPORARY TABLE ref
+(
+    question_id VARCHAR(15) COLLATE utf8_unicode_ci PRIMARY KEY
+) ENGINE=INNODB;
+RETURN 'ref';
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP FUNCTION IF EXISTS `generate_uid` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -560,7 +563,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  FUNCTION `generate_uid`() RETURNS varchar(15) CHARSET utf8mb4
+CREATE DEFINER=`root`@`localhost` FUNCTION `generate_uid`() RETURNS varchar(15) CHARSET utf8mb4
     NO SQL
 BEGIN
 	DECLARE m DOUBLE;
@@ -594,7 +597,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  FUNCTION `get_rand`() RETURNS tinyint(3) unsigned
+CREATE DEFINER=`root`@`localhost` FUNCTION `get_rand`() RETURNS tinyint(3) unsigned
 RETURN RAND() * 254 ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -611,7 +614,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `list_question_by_exam`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_question_by_exam`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 SELECT
 	(CASE WHEN @qid != question.id THEN question.a_title ELSE NULL END) AS 'q_a_title',
@@ -699,7 +702,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `list_question_from_ref`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_question_from_ref`()
     NO SQL
 SELECT
 	(CASE WHEN @qid != question.id THEN question.a_title ELSE NULL END) AS 'q_a_title',
@@ -717,8 +720,8 @@ SELECT
 	multiple_choice.content AS 'multiple_choice_content',
 	multiple_choice.answer AS 'multiple_choice_answer',
 	(@qid:=question.id) AS 'question_id'
-FROM ref_question
-JOIN question ON ref_question.question_id = question.id
+FROM ref
+JOIN question ON ref.question_id = question.id
 JOIN (SELECT @qid:='') AS qvar
 LEFT JOIN
 	(
@@ -787,7 +790,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `list_shared_question_in_exam`(IN `course_id` VARCHAR(15) CHARSET utf8mb4, IN `except_exam_id` VARCHAR(15) CHARSET utf8mb4)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_shared_question_in_exam`(IN `course_id` VARCHAR(15) CHARSET utf8mb4, IN `except_exam_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 SELECT
 	course.id AS 'course_id', course.name AS 'course_name',
@@ -817,7 +820,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `shuffle_question`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `shuffle_question`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 BEGIN
     UPDATE question
@@ -853,7 +856,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013  SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `list_category` AS select `category`.`id` AS `id`,`category`.`name` AS `name`,`category`.`user_id` AS `user_id`,count(`exam`.`id`) AS `n_exam` from (`category` left join `exam` on((`exam`.`category_id` = `category`.`id`))) group by `category`.`id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -872,7 +875,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013  SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `list_course` AS select `course`.`id` AS `id`,`course`.`name` AS `name`,count(`user`.`id`) AS `n_user` from (`course` left join `user` on((`user`.`course_id` = `course`.`id`))) group by `course`.`id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -891,7 +894,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013  SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `list_exam` AS select `exam`.`id` AS `id`,`exam`.`category_id` AS `category_id`,`exam`.`title` AS `title`,`exam`.`header` AS `header`,`exam`.`footer` AS `footer`,`exam`.`share` AS `share`,`exam`.`date` AS `date`,count(`question`.`id`) AS `n_question` from (`exam` left join `question` on((`question`.`exam_id` = `exam`.`id`))) group by `exam`.`id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -910,7 +913,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013  SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `list_multiple_choice_question` AS select `question`.`exam_id` AS `exam_id`,`_multiple_choice`.`question_id` AS `question_id`,`_multiple_choice`.`content` AS `content`,`_multiple_choice`.`answer` AS `answer`,`_multiple_choice`.`position` AS `position` from (`_multiple_choice` join `question` on((`question`.`id` = `_multiple_choice`.`question_id`))) order by `_multiple_choice`.`question_id`,`_multiple_choice`.`position` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -929,7 +932,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013  SQL SECURITY DEFINER */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `list_user` AS select `user`.`id` AS `id`,`user`.`course_id` AS `course_id`,`user`.`user` AS `user`,`user`.`pass` AS `pass`,`user`.`name` AS `name`,count(`category`.`id`) AS `n_category` from (`user` left join `category` on((`category`.`user_id` = `user`.`id`))) group by `user`.`id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -944,4 +947,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-23  6:14:32
+-- Dump completed on 2017-02-23 19:32:40
