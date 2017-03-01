@@ -36,6 +36,12 @@ class System
 	{
 		return isset($_POST[$attr]) ? $_POST[$attr] : FALSE;
 	}
+	public static function get_uid()
+	{
+		static $i = 0;
+		$m = microtime(true);
+		return sprintf("%8x%05x%02x", floor($m), ($m-floor($m)) * 1000000, $i++);
+	}
 	public static function redirect($location = NULL, $data = NULL)
 	{
 		if (!$location)

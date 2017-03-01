@@ -19,19 +19,33 @@ class DML
 	{
 		$this->connect = new Mysql();
 	}
-	private function generate_id()
-	{
-		$result = $this->connect->raw_query('SELECT generate_uid() AS uid');
-		$uid = $result->fetch_object()->uid;
-		$result->free();
-		return $uid;
-	}
-	public function insert_Category($name, $user_id)
+	public function change_PASSWORD($user, $o_pass, $n_pass)
 	{
 		try
 		{
-			$this->connect->query('INSERT INTO category(name, user_id) VALUES(?, ?)', array(
-				$name, $user_id
+			$this->connect->query('UPDATE user SET pass = SHA1(?) WHERE user = ? AND pass = SHA1(?)', array(
+				$n_pass, $user, $o_pass
+			));
+			if ($this->connect->get_affected_rows())
+			{
+				System::put_msg('success', 'Đã đổi mật khẩu thành công, vui lòng đăng nhập lại để kiểm tra !');
+			}
+			else
+			{
+				throw new \Exception('Mật khẩu cũ không chính xác', 2);
+			}
+		}
+		catch (\Exception $e)
+		{
+			System::put_msg('warning', $e->getMessage(), FALSE);
+		}
+	}
+	public function insert_Category($user_id, $name)
+	{
+		try
+		{
+			$this->connect->query('INSERT INTO category(id, name, user_id) VALUES(?, ?, ?)', array(
+				System::get_uid(), $name, $user_id
 			));
 			System::put_msg('success', "Đã thêm mới danh mục '<em>$name</em>'");
 		}
@@ -40,23 +54,30 @@ class DML
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public function delete_Category($id)
+	public function delete_Category($user_id, $category_id)
 	{
 		try
 		{
-			$this->connect->query('DELETE FROM category WHERE category.id = ?', array($id));
-			System::put_msg('success', 'Đã xóa một danh mục !');
+			$this->connect->query('CALL delete_category(?, ?)', array($user_id, $category_id));
+			if ($this->connect->get_affected_rows())
+			{
+				System::put_msg('success', 'Đã xóa một danh mục !');
+			}
+			else
+			{
+				throw new \Exception('Danh mục này không tồn tại !', 2);
+			}
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', $e, FALSE);
+			System::put_msg('warning', $e->getMessage(), FALSE);
 		}
 	}
 	public function insert_Exam($title, $date, $category_id, $header = '', $footer = '')
 	{
 		try
 		{
-			$id = $this->generate_id();
+			$id = System::get_uid();
 			$this->connect->query('INSERT INTO exam(id, category_id, title, header, footer, date) VALUES(?, ?, ?, ?, ?, ?)', array(
 				$id, $category_id, $title, $header, $footer, $date
 			));
@@ -76,26 +97,30 @@ class DML
 		while ($question_result->valid() and $row = $question_result->current())
 		{
 			$id = $row->question_id;
+			$new_q_id = System::get_uid();
 			switch ($row->q_type)
 			{
 				case GetData::$types['link']:
 				{
-					$new_q_id = $this->generate_id();
-					$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type) VALUES(?, ?, ?, ?, ?, ?, ?)', array(
+					$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type, position) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', array(
 						$new_q_id,
 						$row->q_content,
 						$dest_exam_id,
 						$row->q_a_title,
 						$row->q_b_title,
 						$row->q_score,
-						GetData::$types['link']
+						GetData::$types['link'],
+						$row->q_position
 					));
 					while ($question_result->valid() and $row = $question_result->current() and $row->question_id == $id)
 					{
-						$this->connect->query('INSERT INTO _link_option(question_id, a_content, b_content) VALUES(?, ?, ?)', array(
+						$this->connect->query('INSERT INTO _link_option(id, question_id, a_content, a_position, b_content, b_position) VALUES(?, ?, ?, ?, ?, ?)', array(
+							System::get_uid(),
 							$new_q_id,
 							$row->link_a_content,
-							$row->link_b_content
+							$row->link_a_position,
+							$row->link_b_content,
+							$row->link_b_position
 						));
 						$question_result->next();
 					}
@@ -103,20 +128,22 @@ class DML
 				}
 				case GetData::$types['multiple-choice']:
 				{
-					$new_q_id = $this->generate_id();
-					$this->connect->query('INSERT INTO question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+					$this->connect->query('INSERT INTO question(id, content, exam_id, score, type, position) VALUES(?, ?, ?, ?, ?, ?)', array(
 						$new_q_id,
 						$row->q_content,
 						$dest_exam_id,
 						$row->q_score,
-						GetData::$types['multiple-choice']
+						GetData::$types['multiple-choice'],
+						$row->q_position
 					));
 					while ($question_result->valid() and $row = $question_result->current() and $row->question_id == $id)
 					{
-						$this->connect->query('INSERT INTO _multiple_choice(question_id, content, answer) VALUES(?, ?, ?)', array(
+						$this->connect->query('INSERT INTO _multiple_choice(id, question_id, content, answer, position) VALUES(?, ?, ?, ?, ?)', array(
+							System::get_uid(),
 							$new_q_id,
 							$row->multiple_choice_content,
-							$row->multiple_choice_answer
+							$row->multiple_choice_answer,
+							$row->multiple_choice_position
 						));
 						$question_result->next();
 					}
@@ -124,13 +151,14 @@ class DML
 				}
 				case GetData::$types['fill']:
 				{
-					$new_q_id = $this->generate_id();
-					$this->connect->query('INSERT INTO question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+					$new_q_id = System::get_uid();
+					$this->connect->query('INSERT INTO question(id, content, exam_id, score, type, position) VALUES(?, ?, ?, ?, ?, ?)', array(
 						$new_q_id,
 						$row->q_content,
 						$dest_exam_id,
 						$row->q_score,
-						GetData::$types['fill']
+						GetData::$types['fill'],
+						$row->q_position
 					));
 					$question_result->next();
 					break;
@@ -138,18 +166,18 @@ class DML
 			}
 		}
 	}
-	public function copy_Shared($arr_question, $exam_id)
+	public function copy_Shared($arr_exam, $exam_id)
 	{
 		try
 		{
 			$this->connect->begin();
 			$temp_table = $this->connect->query('SELECT create_temp_table() AS temp_name')->first()->temp_name;
-			foreach ($arr_question as $id)
+			foreach ($arr_exam as $id => $n)
 			{
-				$this->connect->query("INSERT INTO $temp_table VALUES(?)", array($id));
+				$this->connect->query('CALL select_random_from_exam(?, ?)', array($id, $n));
 			}
 			$this->connect->commit();
-			$result = $this->connect->query('CALL list_question_from_ref()');
+			$result = $this->connect->query('CALL get_question_from_ref()');
 			$this->connect->close();
 			$this->connect = new Mysql();
 			$this->connect->begin();
@@ -168,53 +196,30 @@ class DML
 			exit;
 		}
 	}
-	public function copy_Exam($exam_id)
+	public function share_Exam($user_id, $category_id, $exam_id, $share = TRUE)
 	{
 		try
 		{
-			$this->connect->begin();
-			$exam_result = GetData::get_Exam($exam_id)->execute();
-			if ($exam_result->num_rows())
-			{
-				$exam_result = $exam_result->first();
-				$new_exam_id = $this->insert_Exam(
-					"$exam_result->title - " . rand(),
-					$exam_result->date,
-					$exam_result->category_id,
-					$exam_result->header,
-					$exam_result->footer
-				);
-				$this->_copy_Question(
-					GetData::get_Question($exam_id)->execute(),
-					$new_exam_id
-				);
-				$this->connect->commit();
-			}
-		}
-		catch (\Exception $e)
-		{
-			$this->connect->rollback();
-			System::put_msg('warning', $e, FALSE);
-		}
-	}
-	public function share_Exam($id, $share = TRUE)
-	{
-		try
-		{
-			$this->connect->query('UPDATE exam SET share = ? WHERE exam.id = ?', array(
-				$share === TRUE ? 1 : 0,
-				$id
+			$this->connect->query('CALL share_exam(?, ?, ?, ?)', array(
+				$user_id, $category_id, $exam_id, ($share === TRUE ? 1 : 0)
 			));
-			if ($share)
+			if ($this->connect->get_affected_rows())
 			{
-				System::put_msg('success', "
-					Đề thi này đang được chia sẻ <br />
-					Các giáo viên khác có thể xem và copy các câu hỏi trong đề thi này
-				", FALSE);
+				if ($share)
+				{
+					System::put_msg('success', "
+						Đề thi này đang được chia sẻ <br />
+						Các giáo viên khác có thể xem và copy các câu hỏi trong đề thi này
+					", FALSE);
+				}
+				else
+				{
+					System::put_msg('success', "Đã hủy chia sẻ đề thi này !");
+				}
 			}
 			else
 			{
-				System::put_msg('success', "Đã hủy chia sẻ đề thi này !");
+				throw new \Exception('Lỗi không thể cập nhật !', 2);
 			}
 		}
 		catch (\Exception $e)
@@ -222,28 +227,46 @@ class DML
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public function delete_Exam($id)
+	public function delete_Exam($user_id, $category_id, $exam_id)
 	{
+		echo $user_id . '<br />';
+		echo $exam_id;
 		try
 		{
-			$this->connect->query('DELETE FROM exam WHERE exam.id = ?', array($id));
-			System::put_msg('success', "Đã xóa thành công !");
+			$this->connect->query('CALL delete_exam(?, ?, ?)', array(
+				$user_id, $category_id, $exam_id
+			));
+			if ($this->connect->get_affected_rows())
+			{
+				System::put_msg('success', "Đã xóa thành công !");
+			}
+			else
+			{
+				throw new \Exception('Đề thi này không tồn tại !', 2);
+			}
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', $e, FALSE);
+			System::put_msg('warning', $e->getMessage(), FALSE);
 		}
 	}
-	public function shuffle_Exam($id)
+	public function shuffle_Exam($user_id, $category_id, $exam_id)
 	{
 		try
 		{
-			$this->connect->query('CALL shuffle_question(?)', array($id));
-			System::put_msg('success', 'Đã xáo trộn đề thi thành công !');
+			$this->connect->query('CALL shuffle_question(?, ?, ?)', array($user_id, $category_id, $exam_id));
+			if ($this->connect->get_affected_rows())
+			{
+				System::put_msg('success', 'Đã xáo trộn đề thi thành công !');
+			}
+			else
+			{
+				throw new \Exception('Không thể xáo trộn (Không có câu hỏi để xáo trộn)', 2);
+			}
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', $e, FALSE);
+			System::put_msg('warning', $e->getMessage(), FALSE);
 		}
 	}
 	public function insert_LinkQuestion($exam_id, &$data)
@@ -251,22 +274,26 @@ class DML
 		try
 		{
 			$this->connect->begin();
-			$q_id = $this->generate_id();
-			$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type) VALUES(?, ?, ?, ?, ?, ?, ?)', array(
+			$q_id = System::get_uid();
+			$this->connect->query('INSERT INTO question(id, content, exam_id, a_title, b_title, score, type, position) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', array(
 				$q_id,
 				$data['q'],
 				$exam_id,
 				$data['title']['a'],
 				$data['title']['b'],
 				$data['score'],
-				GetData::$types['link']
+				GetData::$types['link'],
+				65535
 			));
 			foreach ($data['b'] as $index => $b_content)
 			{
-				$this->connect->query('INSERT INTO _link_option(question_id, a_content, b_content) VALUES(?, ?, ?)', array(
+				$this->connect->query('INSERT INTO _link_option(id, question_id, a_content, a_position, b_content, b_position) VALUES(?, ?, ?, ?, ?, ?)', array(
+					System::get_uid(),
 					$q_id,
 					isset($data['a'][$index]) ? $a_content = $data['a'][$index] : NULL,
-					$b_content
+					isset($data['a'][$index]) ? $index : 255,
+					$b_content,
+					$index
 				));
 			}
 			$this->connect->commit();
@@ -283,13 +310,14 @@ class DML
 		try
 		{
 			$this->connect->begin();
-			$q_id = $this->generate_id();
-			$this->connect->query('INSERT INTO question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+			$q_id = System::get_uid();
+			$this->connect->query('INSERT INTO question(id, content, exam_id, score, type, position) VALUES(?, ?, ?, ?, ?, ?)', array(
 				$q_id,
 				$data['q'],
 				$exam_id,
 				$data['score'],
-				GetData::$types['multiple-choice']
+				GetData::$types['multiple-choice'],
+				65535
 			));
 			foreach ($data['content'] as $index => $content)
 			{
@@ -297,10 +325,12 @@ class DML
 				{
 					throw new \Exception('Lỗi dữ liệu nhập', 2);
 				}
-				$this->connect->query('INSERT INTO _multiple_choice(question_id, content, answer) VALUES(?, ?, ?)', array(
+				$this->connect->query('INSERT INTO _multiple_choice(id, question_id, content, answer, position) VALUES(?, ?, ?, ?, ?)', array(
+					System::get_uid(),
 					$q_id,
 					$content,
-					intval($data['bool'][$index])
+					intval($data['bool'][$index]),
+					$index
 				));
 			}
 			$this->connect->commit();
@@ -317,13 +347,14 @@ class DML
 		try
 		{
 			$this->connect->begin();
-			$q_id = $this->generate_id();
-			$this->connect->query('INSERT INTO question(id, content, exam_id, score, type) VALUES(?, ?, ?, ?, ?)', array(
+			$q_id = System::get_uid();
+			$this->connect->query('INSERT INTO question(id, content, exam_id, score, type, position) VALUES(?, ?, ?, ?, ?, ?)', array(
 				$q_id,
 				$data['q'],
 				$exam_id,
 				$data['score'],
-				GetData::$types['fill']
+				GetData::$types['fill'],
+				65535
 			));
 			$this->connect->commit();
 			System::put_msg('success', 'Đã thêm mới một câu hỏi !');
@@ -334,16 +365,25 @@ class DML
 			System::put_msg('warning', $e, FALSE);
 		}
 	}
-	public function delete_Question($id)
+	public function delete_Question($user_id, $category_id, $exam_id, $question_id)
 	{
 		try
 		{
-			$this->connect->query('DELETE FROM question WHERE question.id = ?', array($id));
-			System::put_msg('success', 'Đã xóa một câu hỏi !');
+			$this->connect->query('CALL delete_question(?, ?, ?, ?)', array(
+				$user_id, $category_id, $exam_id, $question_id
+			));
+			if ($this->connect->get_affected_rows())
+			{
+				System::put_msg('success', 'Đã xóa một câu hỏi !');
+			}
+			else
+			{
+				throw new \Exception('Câu hỏi không tồn tại !', 2);
+			}
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', $e, FALSE);
+			System::put_msg('warning', $e->getMessage(), FALSE);
 		}
 	}
 }

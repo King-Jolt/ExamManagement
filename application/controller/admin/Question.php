@@ -12,16 +12,19 @@ use App\System\System;
 
 class Question extends Admin
 {
+	private $category_id = NULL;
 	private $exam_id = NULL;
 	private $question = NULL;
 	public function __construct()
 	{
-		$this->exam_id = $this->request_get('exam_id');
-		$this->question = new Model_Question($this->exam_id);
 		parent::__construct();
 	}
 	protected function on_get()
 	{
+		$this->category_id = $this->request_get('category_id');
+		$this->exam_id = $this->request_get('exam_id');
+		$this->question = new Model_Question($this->user->id, $this->category_id, $this->exam_id);
+		// action
 		$action = $this->request_get('action');
 		if ($action)
 		{
@@ -36,7 +39,12 @@ class Question extends Admin
 				}
 				case 'delete':
 				{
-					$this->DML->delete_Question($this->request_get('id'));
+					$this->DML->delete_Question(
+						$this->user->id,
+						$this->category_id,
+						$this->exam_id,
+						$this->request_get('id')
+					);
 					unset($_GET['action'], $_GET['id']);
 					System::redirect();
 				}
@@ -75,7 +83,6 @@ class Question extends Admin
 				}
 				case 'fill':
 				{
-					echo $data['q'] = $this->question->parse_FillQuestion($data['q']);
 					$this->DML->insert_FillQuestion($this->exam_id, $data);
 					break;
 				}
@@ -86,7 +93,7 @@ class Question extends Admin
 	}
 	protected function main()
 	{
-		$this->menu['2']['active'] = 'active';
+		$this->menu['manage']['active'] = 'active';
 	}
 }
 

@@ -14,14 +14,18 @@ use App\System\Library\View;
 
 class Model_Question
 {
-	private $exam_id = 0;
-	public function __construct($id)
+	private $user_id = NULL;
+	private $category_id = NULL;
+	private $exam_id = NULL;
+	public function __construct($u_id, $c_id, $e_id)
 	{
-		$this->exam_id = $id;
+		$this->user_id = $u_id;
+		$this->category_id = $c_id;
+		$this->exam_id = $e_id;
 	}
 	public function view($option = FALSE)
 	{
-		$view = new View_Question($this->exam_id);
+		$view = new View_Question($this->user_id, $this->category_id, $this->exam_id);
 		$data = array(
 			'title' => 'Xem các câu hỏi',
 			'content' => $view->get(FALSE)
@@ -29,7 +33,9 @@ class Model_Question
 		if ($option)
 		{
 			$data['ans_btn'] = <<<EOF
-			<a href="javascript:void(0)" id="view-answer" class="btn btn-primary btn-xs" data-toggle="popover" data-content="Bấm vào đây để xem đáp án" data-click="show"><span class="glyphicon glyphicon-comment"></span>&nbsp;Xem đáp án </a>
+			<div class="form-group">
+				<a href="javascript:void(0)" id="view-answer" class="btn btn-primary btn-xs" data-toggle="popover" data-content="Bấm vào đây để xem đáp án" data-click="show"><span class="glyphicon glyphicon-comment"></span>&nbsp;Xem đáp án </a>
+			</div>
 EOF;
 		}
 		return new View('application/view/admin/question/content.php', $data);
@@ -57,7 +63,7 @@ EOF;
 	}
 	public function manage()
 	{
-		$table = new Question_Table($this->exam_id);
+		$table = new Question_Table($this->user_id, $this->category_id, $this->exam_id);
 		$data = array(
 			'title' => 'Quản lý các câu hỏi',
 			'add' => $this->_add_button(),
@@ -108,12 +114,6 @@ EOF;
 		);
 		return new View('application/view/admin/question/content.php', $data);
 	}
-	public function parse_FillQuestion($content)
-	{
-		return preg_replace_callback('/(\[)([^\[\]]+)(\])/', function($m){
-			return "<span data-fill=\"$m[2]\">?</span>";
-		}, $content);
-	} 
 }
 
 ?>

@@ -19,7 +19,9 @@ class Exam extends Admin
 	protected $model_exam;
 	public function __construct()
 	{
-		$this->model_exam = new Model_Exam();
+		$this->model_exam = new Model_Exam(
+			$this->request_get('id')
+		);
 		parent::__construct();
 	}
 	protected function on_post()
@@ -39,10 +41,10 @@ class Exam extends Admin
 				System::redirect();
 				break;
 			}
-			case 'select_to':
+			case 'select_random':
 			{
 				$this->DML->copy_Shared(
-					$this->request_post('q'),
+					$this->request_post('e'),
 					$this->request_get('id')
 				);
 				unset($_GET['action'], $_GET['id']);
@@ -60,37 +62,37 @@ class Exam extends Admin
 			$exam_id = $this->request_get('id');
 			switch ($request)
 			{
-				case 'copy':
-				{
-					$this->DML->copy_Exam($exam_id);
-					break;
-				}
-				case 'select_to':
+				case 'select_random':
 				{
 					$this->view_table = FALSE;
+					$this->nav->add('Bốc câu hỏi', '');
 					$this->load_view(
-						$this->model_exam->select_Exam($exam_id)->list_Shared($this->user->course_id)
+						$this->model_exam->list_OtherExam($this->user->course_id, $this->user->id)
 					);
 					return;
 				}
 				case 'share':
 				{
-					$this->DML->share_Exam($exam_id, TRUE);
+					$this->DML->share_Exam($this->user->id, $this->category_id, $exam_id, TRUE);
 					break;
 				}
 				case 'private':
 				{
-					$this->DML->share_Exam($exam_id, FALSE);
+					$this->DML->share_Exam($this->user->id, $this->category_id, $exam_id, FALSE);
 					break;
 				}
 				case 'shuffle':
 				{
-					$this->DML->shuffle_Exam($exam_id);
+					$this->DML->shuffle_Exam($this->user->id, $this->category_id, $exam_id);
 					break;
 				}
 				case 'delete':
 				{
-					$this->DML->delete_Exam($exam_id);
+					$this->DML->delete_Exam(
+						$this->user->id,
+						$this->category_id,
+						$exam_id
+					);
 					break;
 				}
 			}
@@ -100,10 +102,10 @@ class Exam extends Admin
 	}
 	protected function main()
 	{
-		$this->menu['2']['active'] = 'active';
+		$this->menu['manage']['active'] = 'active';
 		if ($this->view_table)
 		{
-			$ex_table = new Exam_table($this->category_id);
+			$ex_table = new Exam_table($this->user->id, $this->category_id);
 			$this->load_view('application/view/admin/exam/table.php', array(
 				'msg' => System::get_msg(),
 				'table' => $ex_table->get()

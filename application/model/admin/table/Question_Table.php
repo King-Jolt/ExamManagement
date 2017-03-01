@@ -9,12 +9,12 @@ use App\System\Library\Table;
 
 class Question_Table extends Table
 {
-	public function __construct($id = '')
+	public function __construct($user_id, $category_id, $exam_id)
 	{
 		parent::__construct();
-		$this->sql_query = GetData::list_Question($id);
+		$this->sql_query = GetData::list_Question($user_id, $category_id, $exam_id);
 		$this->arr_title = array(
-			'No.', 'Câu hỏi', ''
+			'No.', 'Câu hỏi', '',
 		);
 	}
 	public function row($data, $index)
@@ -24,9 +24,7 @@ class Question_Table extends Table
 		<tr>
 			<td class="nowrap"><strong class="text-muted"> Câu $index </strong></td>
 			<td> $data->content </td>
-			<td>
-				<a href="$delete" class="btn btn-primary btn-xs be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a> &nbsp;
-			</td>
+			<td><a href="$delete" class="btn btn-primary btn-xs be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a> &nbsp;</td>
 		</tr>
 EOF;
 	}

@@ -27,31 +27,8 @@ abstract class Admin extends Controller
 		Auth::redirect_Auth('/index.php'); // redirect to Login page if have not login
 		Auth::validate();
 		$this->user = Auth::get();
-		try
-		{
-			$this->DML = new DML();
-		}
-		catch (\Exception $e)
-		{
-			echo System::get_exception_msg($e);
-			exit;
-		}
+		$this->DML = new DML();
 		$this->nav = new Navigation();
-		$this->load_nav();
-		parent::__construct();
-	}
-	protected $menu = array(
-		'1' => array(
-			'href' => '/index.php',
-			'active' => '' // default
-		),
-		'2' => array(
-			'href' => '#',
-			'active' => ''
-		)
-	);
-	protected function load_nav()
-	{
 		$this->nav->add('Danh sách danh mục', Route::current_path() . '/index.php');
 		$query = array();
 		if ($id = $this->request_get('category_id'))
@@ -64,7 +41,34 @@ abstract class Admin extends Controller
 				$this->nav->add('Danh sách câu hỏi', Route::current_path() . '/question.php?' . http_build_query($query));
 			}
 		}
+		parent::__construct();
 	}
+	protected $menu = array(
+		'home' => array(
+			'href' => '/admin/home.php',
+			'active' => '' // default
+		),
+		'manage' => array(
+			'href' => '/admin/index.php',
+			'active' => ''
+		),
+		'contact' => array(
+			'href' => '/admin/contact.php',
+			'active' => ''
+		),
+		'about' => array(
+			'href' => '/admin/about.php',
+			'active' => ''
+		),
+		'account' => array(
+			'href' => '/admin/account.php',
+			'active' => ''
+		),
+		'logout' => array(
+			'href' => '/admin/logout.php',
+			'active' => ''
+		)
+	);
 	protected function output($html)
 	{
 		$header_data = array(

@@ -11,16 +11,25 @@ use App\System\System;
 
 class Preview extends Admin
 {
-	private $id = 0;
+	private $view = NULL;
+	private $script = NULL;
 	protected function on_get()
 	{
-		$this->id = System::input_get('exam_id'); 
+		$this->view = new View_Question(
+			$this->user->id,
+			$this->request_get('category_id'),
+			$this->request_get('exam_id')
+		);
+		if ($this->request_get('show') == 'answer')
+		{
+			$this->script = '<script> obj_q.show(); </script>';
+		}
 	}
 	protected function main()
 	{
-		$view = new View_Question($this->id);
 		$data = array(
-			'content' => $view->get(TRUE)
+			'content' => $this->view->get(TRUE),
+			'script' => $this->script
 		);
 		$this->load_view('application/view/admin/question/preview.php', $data);
 		$this->send_response();

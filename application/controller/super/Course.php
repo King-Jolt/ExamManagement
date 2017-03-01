@@ -47,6 +47,7 @@ class Course extends Super
 	}
 	protected function main()
 	{
+		$this->menu['manage']['active'] = 'active';
 		$table = new Course_Table();
 		$this->load_view('/application/view/super/course/table.php', array(
 			'msg' => System::get_msg(),

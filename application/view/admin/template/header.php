@@ -11,7 +11,7 @@
 		<script src="/extension/jquery/jquery.validate.js"></script>
 		<script src="/extension/bootstrap/js/bootstrap.min.js"></script>
 		<script src="/extension/ckeditor4/ckeditor.js"></script>
-		<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 		<script src="/extension/jquery-confirm/jquery-confirm.min.js"></script>
 		<script src="/extension/owner/js/app.js"></script>
 		<script type="text/x-mathjax-config">

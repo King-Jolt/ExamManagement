@@ -4,7 +4,7 @@
 <?php self::put($msg) ?>
 <div class="container-fixed">
 	<div class="form-group">
-		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-exam"> Thêm mới &nbsp;<span class="caret"></span></button>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-exam"> Tạo đề thi mới &nbsp;<span class="glyphicon glyphicon-hand-left"></span></button>
 		<form method="post" class="modal fade" id="add-exam" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -49,7 +49,7 @@
 			sideBySide: true,
 			format: 'DD-MM-YYYY HH:mm:ss'
 		});
-		var header = "<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\"><tbody><tr><td style=\"text-align:center\"><strong>B\u1ED8 <u>GI\u00C1O D\u1EE4C V\u00C0 \u0110\u00C0O T<\/u>\u1EA0O<\/strong><\/td><td>&nbsp;<\/td><td style=\"text-align:center\"><strong>K\u1EF2 THI TRUNG H\u1ECCC PH\u1ED4 TH\u00D4NG QU\u1ED0C GIA N\u0102M 2017<\/strong><\/td><\/tr><tr><td>&nbsp;<\/td><td>&nbsp;<\/td><td style=\"text-align:center\"><strong>M\u00F4n thi : TO\u00C1N<\/strong><\/td><\/tr><tr><td style=\"text-align:center\"><strong>\u0110\u1EC0 THI MINH H\u1ECCA<\/strong><\/td><td>&nbsp;<\/td><td style=\"text-align:center\"><em>Th\u1EDDi <u>gian l\u00E0m b\u00E0i: 120 ph\u00FAt, kh\u00F4ng k\u1EC3 th\u1EDDi gian ph\u00E1t<\/u> \u0111\u1EC1<\/em><\/td><\/tr><tr><td style=\"text-align:center\"><em>(\u0110\u1EC1 thi c\u00F3 01 trang)<\/em><\/td><td>&nbsp;<\/td><td>&nbsp;<\/td><\/tr><\/tbody><\/table>";
+		var header = "<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\"><tbody><tr><td style=\"text-align:center\"><strong>B\u1ED8 <u>GI\u00C1O D\u1EE4C V\u00C0 \u0110\u00C0O T<\/u>\u1EA0O<\/strong><\/td><td style=\"text-align:center\"><strong>K\u1EF2 THI TRUNG H\u1ECCC PH\u1ED4 TH\u00D4NG QU\u1ED0C GIA N\u0102M 2017<\/strong><\/td><\/tr><tr><td>&nbsp;<\/td><td style=\"text-align:center\"><strong>M\u00F4n thi : TO\u00C1N<\/strong><\/td><\/tr><tr><td style=\"text-align:center\"><strong>\u0110\u1EC0 THI MINH H\u1ECCA<\/strong><\/td><td style=\"text-align:center\"><em>Th\u1EDDi <u>gian l\u00E0m b\u00E0i: 120 ph\u00FAt, kh\u00F4ng k\u1EC3 th\u1EDDi gian ph\u00E1t<\/u> \u0111\u1EC1<\/em><\/td><\/tr><tr><td style=\"text-align:center\"><em>(\u0110\u1EC1 thi c\u00F3 01 trang)<\/em><\/td><td>&nbsp;<\/td><\/tr><\/tbody><\/table>";
 		var footer = "<table align=\"center\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:100%\"><tbody><tr><td style=\"text-align:center\"><strong>---------------------------------------- H\u1EBET&nbsp;----------------------------------------<\/strong><\/td><\/tr><tr><td style=\"text-align:center\"><em>Th\u00ED sinh kh\u00F4ng \u0111\u01B0\u1EE3c ph\u00E9p s\u1EED d\u1EE5ng t\u00E0i li\u1EC7u<\/em><\/td><\/tr><\/tbody><\/table>\u200B\u200B\u200B\u200B\u200B";
 		$('#add-exam [name="header"]').val(header);
 		$('#add-exam [name="footer"]').val(footer);

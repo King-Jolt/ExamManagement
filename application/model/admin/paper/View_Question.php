@@ -9,10 +9,14 @@ use App\System\System;
 
 class View_Question
 {
-	private $_exam_id;
-	public function __construct($exam_id)
+	private $user_id = NULL;
+	private $category_id = NULL;
+	private $exam_id = NULL;
+	public function __construct($user_id, $category_id, $exam_id)
 	{
-		$this->_exam_id = $exam_id;
+		$this->user_id = $user_id;
+		$this->category_id = $category_id;
+		$this->exam_id = $exam_id;
 	}
 	private function _get_link($id, $result)
 	{
@@ -40,7 +44,7 @@ class View_Question
 			$body .= <<<EOF
 			<tr>
 				<td class="A"> $a_mark. $row->link_a_content </td>
-				<td class="B" $answer> </td>
+				<td class="B" $answer></td>
 				<td class="C"> $b_mark. $row->link_b_content </td>
 			</tr>
 EOF;
@@ -61,10 +65,10 @@ EOF;
 	}
 	private function _get_multiple_choice($id, $result)
 	{
-		$html = '<ol type="A" class="multiple-choice">';
+		$html = '<div class="list-option">';
 		while ($result->valid() and $row = $result->current() and $row->question_id == $id)
 		{
-			$html .= "<li><span class=\"choice\" answer=\"$row->multiple_choice_answer\"> $row->multiple_choice_content </span></li>";
+			$html .= "<div class=\"option\" answer=\"$row->multiple_choice_answer\"> $row->multiple_choice_content </div>";
 			$result->next();
 		}
 		$html .= '</ol>';
@@ -74,7 +78,7 @@ EOF;
 	{
 		try
 		{
-			$exam_data = GetData::get_Exam($this->_exam_id)->execute()->first();
+			$exam_data = GetData::get_Exam($this->user_id, $this->category_id, $this->exam_id)->execute()->first();
 			if (!$exam_data)
 			{
 				throw new \Exception('Lỗi ! Đề thi không tồn tại');
@@ -88,37 +92,39 @@ EOF;
 				$footer .= "<div class=\"footer\"> $exam_data->footer </div>";
 			}
 			$html .= '<div class="question-preview"><ul>';
-			$question_result = GetData::get_Question($this->_exam_id)->execute()->get_data();
+			$question_result = GetData::get_Question($this->user_id, $this->category_id, $this->exam_id)->execute()->get_data();
 			$no = 1;
 			while ($question_result->valid() and $question = $question_result->current())
 			{
 				$id = $question->question_id;
 				$score = $question->q_score ? '(' . sprintf('%.1f', $question->q_score) . ' điểm)  ' : '';
 				$content = $question->q_content;
+				$content_class = '';
 				$data = '';
 				switch ($question->q_type)
 				{
 					case GetData::$types['link']:
 					{
 						$data = $this->_get_link($id, $question_result);
+						$content_class = 'link';
 						break;
 					}
 					case GetData::$types['multiple-choice']:
 					{
 						$data = $this->_get_multiple_choice($id, $question_result);
+						$content_class = 'multiple-choice';
 						break;
 					}
 					case GetData::$types['fill']:
 					{
 						$data = '';
-					}
-					default:
-					{
+						$content_class = 'fill';
 						$question_result->next();
+						break;
 					}
 				}
 				$html .= <<<EOF
-				<li>
+				<li class="$content_class">
 					<strong> Câu $no $score:</strong>&nbsp; $content
 					$data
 				</li>

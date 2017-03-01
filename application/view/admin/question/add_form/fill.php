@@ -12,3 +12,18 @@
 	</div>
 	<button type="submit" class="btn btn-success" name="<?php self::put($action) ?>" value="<?php self::put($type) ?>"> Xác nhận </button>
 </form>
+<script>
+	$(document).ready(function(){
+		$('#add-multiple-choice').on('submit', function(){
+			var q = $(this).find('[name="q[q]"]');
+			var html = $(document.createElement('div')).html(q.val());
+			html.html(html.html().replace(/(\[)([^\[\]]+)(\])/igm, function(m, p1, p2, p3){
+				return '<span class="data-fill">' + p2 + '</span>';
+			}));
+			html.find('span.data-fill').each(function(){
+				$(this).attr('data-fill', $(this).html()).removeAttr('class').text('?');
+			});
+			q.val(html.html());
+		});
+	});
+</script>

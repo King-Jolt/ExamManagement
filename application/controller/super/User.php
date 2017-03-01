@@ -51,9 +51,9 @@ class User extends Super
 	}
 	protected function main()
 	{
+		$this->menu['manage']['active'] = 'active';
 		$table = new User_Table($this->course_id);
 		$this->load_view('/application/view/super/user/table.php', array(
-			'back' => Route::current_path() . '/course.php',
 			'msg' => System::get_msg(),
 			'table' => $table->get()
 		));

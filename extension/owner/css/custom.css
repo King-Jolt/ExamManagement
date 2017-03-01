@@ -1,4 +1,4 @@
-.no-border-radius, .no-border-radius *
+.no-border-radius, .list-group.no-border-radius > .list-group-item
 {
 	border-radius: 0px !important;
 }
@@ -12,6 +12,11 @@ a:hover
 .nowrap
 {
 	white-space: nowrap;
+}
+
+.frame-style
+{
+	box-shadow: 0px 0px 5px #C0C0C0;
 }
 
 /* side bar { */
@@ -64,6 +69,7 @@ a:hover
 .inner-content
 {
 	padding: 15px;
+	min-height: calc(100vh - 51px);
 }
 
 .top-15
@@ -79,6 +85,11 @@ a:hover
 .table tbody tr td
 {
 	vertical-align: middle;
+}
+
+.navbar-nav > li > .dropdown-menu
+{
+	margin-top: 2px;
 }
 
 .dropdown button .glyphicon:first-child:after

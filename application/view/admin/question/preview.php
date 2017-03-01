@@ -4,9 +4,8 @@
 		width: 210mm;
 		/* min-height: 297mm;*/
 		height: auto;
-		/*border: 1px solid #C0C0C0;*/
+		box-shadow: 0px 0px 5px #C0C0C0;
 		margin: auto;
-		padding-top: 0px;
 		padding-right: 0.5cm;
 	}
 	.hide-print
@@ -21,15 +20,11 @@
 		{
 			display: none !important;
 		}
-		body
-		{
-			border: none;
-		}
 	}
 	@page
 	{
 		size: A5;
-		margin: 0.5cm;
+		margin: 0.2cm 0 0 0;
 	}
 </style>
 <div class="hide-print">
@@ -38,3 +33,4 @@
 <?php self::put($content) ?>
 <script src="/extension/owner/js/question.js"></script>
 <link rel="stylesheet" href="/extension/owner/css/question.css" />
+<?php self::put($script) ?>

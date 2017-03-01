@@ -20,7 +20,7 @@ class Category extends Admin
 			case 'add':
 			{
 				$this->DML->insert_Category(
-					$this->request_post('name'), $this->user->id
+					$this->user->id, $this->request_post('name')
 				);
 				System::redirect();
 				break;
@@ -37,7 +37,7 @@ class Category extends Admin
 			{
 				case 'delete':
 				{
-					$this->DML->delete_Category($id);
+					$this->DML->delete_Category($this->user->id, $id);
 					break;
 				}
 			}
@@ -47,7 +47,7 @@ class Category extends Admin
 	}
 	protected function main()
 	{
-		$this->menu['2']['active'] = 'active';
+		$this->menu['manage']['active'] = 'active';
 		$cat_table = new Category_Table($this->user->id);
 		$this->load_view('/application/view/admin/category/table.php', array(
 			'msg' => System::get_msg(),

@@ -16,6 +16,11 @@ class Navigation
 			'uri' => $uri
 		));
 	}
+	public function clear()
+	{
+		$this->data = array();
+		return $this;
+	}
 	public function get()
 	{
 		$html = '<ol class="breadcrumb">';

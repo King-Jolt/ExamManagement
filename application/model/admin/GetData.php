@@ -19,32 +19,32 @@ class GetData
 		$param = array($user_id);
 		return new Sql_QueryCommand($query, $param);
 	}
-	public static function get_Exam($exam_id)
+	public static function list_Exam($user_id, $category_id)
 	{
-		$query = 'SELECT exam.* FROM exam WHERE exam.id = ?';
-		$param = array($exam_id);
+		$query = 'SELECT list_exam.* FROM list_exam WHERE user_id = ? AND category_id = ?';
+		$param = array($user_id, $category_id);
 		return new Sql_QueryCommand($query, $param);
 	}
-	public static function list_Exam($category_id)
+	public static function list_Question($user_id, $category_id, $exam_id)
 	{
-		$query = 'SELECT list_exam.* FROM list_exam WHERE category_id = ?';
-		$param = array($category_id);
+		$query = 'SELECT list_question.* FROM list_question WHERE user_id = ? AND category_id = ? AND exam_id = ? ';
+		$query .= 'ORDER BY position';
+		$param = array($user_id, $category_id, $exam_id);
 		return new Sql_QueryCommand($query, $param);
 	}
-	public static function list_Question($exam_id)
+	public static function get_Exam($user_id, $category_id, $exam_id)
 	{
-		$query = 'SELECT question.* FROM question WHERE question.exam_id = ? ';
-		$query .= 'ORDER BY question.position';
-		$param = array($exam_id);
+		$query = 'SELECT list_exam.* FROM list_exam WHERE user_id = ? AND category_id = ? AND id = ?';
+		$param = array($user_id, $category_id, $exam_id);
 		return new Sql_QueryCommand($query, $param);
 	}
-	public static function get_Question($exam_id)
+	public static function get_Question($user_id, $category_id, $exam_id)
 	{
-		return new Sql_QueryCommand('CALL list_question_by_exam(?)', array($exam_id));
+		return new Sql_QueryCommand('CALL list_question_by_exam(?, ?, ?)', array($user_id, $category_id, $exam_id));
 	}
-	public static function get_SharedExam($course_id, $except_exam_id)
+	public static function list_PublicExam($course_id, $user_id, $exam_id)
 	{
-		return new Sql_QueryCommand('CALL list_shared_question_in_exam(?, ?)', array($course_id, $except_exam_id));
+		return new Sql_QueryCommand('CALL list_shared_exam(?, ?, ?)', array($course_id, $user_id, $exam_id));
 	}
 }
 

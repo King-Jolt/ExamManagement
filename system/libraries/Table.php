@@ -25,9 +25,13 @@ class Table
 		{
 			$this->_use_db = FALSE;
 		}
-		if (isset($_GET['page']) and is_numeric($_GET['page']))
+		if (($p = System::input_get('page')) and is_numeric($p))
 		{
-			$this->_page = $_GET['page'];
+			$this->_page = intval($p);
+		}
+		if (($s = System::input_get('psize')) and is_numeric($s))
+		{
+			$this->_page_size = intval($s);
 		}
 	}
 	protected function row($data, $index) // custom your row item
@@ -52,8 +56,6 @@ class Table
 	{
 		$head = '';
 		$body = '';
-		$n_start = ($this->_page - 1) * $this->_page_size;
-		$n_end = $n_start + $this->_page_size;
 		if ($this->arr_title)
 		{
 			foreach ($this->arr_title as $str)
@@ -65,8 +67,18 @@ class Table
 		{
 			try
 			{
-				$result = $this->sql_query->limit($this->_page_size, $n_start)->execute();
+				$n_start = ($this->_page - 1) * $this->_page_size;
+				if ($this->_page_size > 0)
+				{
+					$this->sql_query->limit($this->_page_size, $n_start);
+				}
+				$result = $this->sql_query->execute();
 				$this->_total = $result->num_rows();
+				$page_max = 1;
+				if ($this->_page_size <= 0)
+				{
+					$this->_page_size = $this->_total;
+				}
 				$page_max = ceil($this->_total / $this->_page_size);
 				if ($this->_total)
 				{
@@ -116,7 +128,9 @@ EOF;
 		$pager = new Pagination($this->_total, $this->_page_size, $this->_page);
 		try
 		{
+			$html .= '<div class="text-left">';
 			$html .= $pager->get();
+			$html .= '</div>';
 		}
 		catch (\Exception $e)
 		{

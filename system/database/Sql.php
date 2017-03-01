@@ -9,6 +9,7 @@ use App\System\System;
 
 class Mysql extends \mysqli
 {
+	private $stmt_affected_rows = NULL;
 	public function __construct()
 	{
 		$db = System::get_config('db');
@@ -115,23 +116,22 @@ class Mysql extends \mysqli
 		}
 		if (($n = $statement->param_count))
 		{
+			if (count($param) < $n)
+			{
+				throw new \Exception("This statement expect $n paramters !", 2);
+			}
 			$i = 1;
 			$stmt_param = array_fill(0, $n + 1, 0);
 			$stmt_param[0] = '';
-			while ($i <= $n)
+			foreach ($param as $key => $value)
 			{
-				$index = $i - 1;
-				if (!array_key_exists($index, $param))
-				{
-					throw new \Exception("Expected parameter $i for statement !", 2);
-				}
-				$type = $this->_stmt_get_type($param[$index]);
+				$type = $this->_stmt_get_type($value);
 				if (!$type)
 				{
 					throw new \Exception("Invalid given value $i for statement !", 2);
 				}
 				$stmt_param[0] .= $type;
-				$stmt_param[$i] = &$param[$index];
+				$stmt_param[$i] = &$param[$key];
 				$i++;
 			}
 			call_user_func_array(array($statement, 'bind_param'), $stmt_param);
@@ -139,8 +139,13 @@ class Mysql extends \mysqli
 		if ($statement->execute())
 		{
 			$result = $this->_get_result_from_stmt($statement);
+			if (!($result instanceof Sql_Result))
+			{
+				$this->stmt_affected_rows = $statement->affected_rows;
+				$result = TRUE;
+			}
 			$statement->close();
-			return $result instanceof Sql_Result ? $result : TRUE;
+			return $result;
 		}
 		else
 		{
@@ -149,6 +154,10 @@ class Mysql extends \mysqli
 			throw new \Exception("#$code : $err", $code);
 		}
 	}
+	public function get_affected_rows()
+	{
+		return $this->stmt_affected_rows;
+	} 
 }
 
 ?>
