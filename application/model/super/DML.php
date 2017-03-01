@@ -81,7 +81,7 @@ class DML
 		try
 		{
 			$id = System::get_uid();
-			$this->connect->query('INSERT INTO user(id, course_id, user, pass, name) VALUES(?, ?, ?, ?, ?)', array(
+			$this->connect->query('INSERT INTO user(id, course_id, user, pass, name) VALUES(?, ?, ?, SHA1(?), ?)', array(
 				$id, $course_id, $user, '12345678', $name
 			));
 			if ($this->connect->get_affected_rows())
