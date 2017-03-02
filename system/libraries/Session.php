@@ -28,7 +28,7 @@ class Session
 		self::start();
 		if (!$key and !$value)
 		{
-			throw new \Exception('"key" and "value" are invalid !', 16);
+			throw new \Exception('The "key" and "value" are invalid !', 16);
 		}
 		$_SESSION[self::$_key][$key] = $value;
 	}

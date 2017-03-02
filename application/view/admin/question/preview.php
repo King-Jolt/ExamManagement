@@ -28,7 +28,12 @@
 	}
 </style>
 <div class="hide-print">
-	<button class="btn btn-primary" onclick="window.print()"><strong><span class="glyphicon glyphicon-print"></span>&nbsp;In đề này </strong></button>
+	<div class="form-group">
+		<button class="btn btn-primary" onclick="window.print()"><strong><span class="glyphicon glyphicon-print"></span>&nbsp;In đề này </strong></button>
+	</div>
+	<div class="form-group">
+		<button class="btn btn-success" onclick="obj_q.toggle()"><strong><span class="glyphicon glyphicon-check"></span>&nbsp;Xem đáp án </strong></button>
+	</div>
 </div>
 <?php self::put($content) ?>
 <script src="/extension/owner/js/question.js"></script>

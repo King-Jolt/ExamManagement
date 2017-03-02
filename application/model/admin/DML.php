@@ -293,7 +293,7 @@ class DML
 					isset($data['a'][$index]) ? $a_content = $data['a'][$index] : NULL,
 					isset($data['a'][$index]) ? $index : 255,
 					$b_content,
-					$index
+					rand(1, 254)
 				));
 			}
 			$this->connect->commit();

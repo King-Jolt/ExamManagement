@@ -28,9 +28,7 @@ class Exam_Table extends Table
 			'exam_id' => $data->id
 		);
 		$manage = Route::current_path() . '/question.php?' . http_build_query($base);
-		$view = Route::current_path() . '/question.php?' . http_build_query($base + array('action' => 'view'));
 		$preview = Route::current_path() . '/preview.php?' . http_build_query($base);
-		$preview_answer = Route::current_path() . '/preview.php?' . http_build_query($base + array('show' => 'answer'));
 		$select_random = '?' . http_build_query(array_merge($_GET, array('action' => 'select_random', 'id' => $data->id)));
 		$share = $data->share ? "javascript:$.alert({title: 'Thông báo', content: 'Đề thi này đang ở chế độ chia sẻ !', type: 'blue'})" : '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
 		$shuffle = '?' . http_build_query(array_merge($_GET, array('action' => 'shuffle', 'id' => $data->id)));
@@ -54,9 +52,7 @@ class Exam_Table extends Table
 						<li><a href="$share"><span class="glyphicon glyphicon-share"></span> Chia sẻ </a></li>
 						<li><a href="$select_random"><span class="glyphicon glyphicon-import"></span> Bốc câu hỏi </a></li>
 						<li><a href="$shuffle"><span class="glyphicon glyphicon-refresh"></span> Xáo trộn </a></li>
-						<li><a href="$view"><span class="glyphicon glyphicon-eye-open"></span> Xem </a></li>
 						<li><a href="$preview" target="_blank"><span class="glyphicon glyphicon-list-alt"></span> Xuất bản </a></li>
-						<li><a href="$preview_answer" target="_blank"><span class="glyphicon glyphicon-check"></span> Xuất bản (<span class="text-muted">có đáp án</span>) </a></li>
 						<li><a href="$delete" class="be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a></li>
 					</ul>
 				</div>

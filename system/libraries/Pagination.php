@@ -55,12 +55,12 @@ class Pagination
 		{
 			throw new \Exception('Pager error !');
 		}
-		$show_left = $this->current_page - ($this->show_page / 2);
+		$show_left = $this->current_page - intval($this->show_page / 2);
 		if ($show_left < 1)
 		{
 			$show_left = 1;
 		}
-		$show_right = $this->current_page + ($this->show_page / 2);
+		$show_right = $this->current_page + intval($this->show_page / 2);
 		if ($show_right > $this->last_page)
 		{
 			$show_right = $this->last_page;

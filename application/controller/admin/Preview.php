@@ -32,8 +32,6 @@ class Preview extends Admin
 			'script' => $this->script
 		);
 		$this->load_view('application/view/admin/question/preview.php', $data);
-		$this->send_response();
-		exit;
 	}
 	protected function output($html)
 	{

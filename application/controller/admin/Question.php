@@ -48,15 +48,6 @@ class Question extends Admin
 					unset($_GET['action'], $_GET['id']);
 					System::redirect();
 				}
-				case 'view':
-				{
-					$this->load_view($this->question->view(TRUE));
-					break;
-				}
-				case 'view_answer':
-				{
-					break;
-				}
 			}
 		}
 		else

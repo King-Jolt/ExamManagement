@@ -19,6 +19,16 @@ function q_view(){
 };
 
 var obj_q = new (function(){
+	this.toggle = function(){
+		if ($('.exam-wrap').hasClass('show-answer'))
+		{
+			this.hide();
+		}
+		else
+		{
+			this.show();
+		}
+	};
 	this.show = function() {
 		$('.exam-wrap').addClass('show-answer');
 		$('.question-preview [data-fill]').each(function(){
@@ -33,19 +43,4 @@ var obj_q = new (function(){
 		});
 	};
 })();
-
 obj_q.hide();
-
-$('#view-answer').click(function(){
-	var clk = $(this).attr('data-click');
-	if (clk == 'show')
-	{
-		$(this).attr('data-click', 'hide');
-		obj_q.show();
-	}
-	else if (clk == 'hide')
-	{
-		$(this).attr('data-click', 'show');
-		obj_q.hide();
-	}
-});
