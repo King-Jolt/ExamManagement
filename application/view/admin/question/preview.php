@@ -36,3 +36,6 @@
 	</div>
 </div>
 <?php self::put($content) ?>
+<script>
+	obj_q.hide();
+</script>
