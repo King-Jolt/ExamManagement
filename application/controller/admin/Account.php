@@ -51,6 +51,8 @@ class Account extends Admin
 	protected function main()
 	{
 		$this->menu['account']['active'] = 'active';
+		$this->nav->clear();
+		$this->nav->add('Quản lý tài khoản', '');
 		if (empty($_GET))
 		{
 			$this->load_view('application/view/admin/account/menu.php', array(

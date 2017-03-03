@@ -196,6 +196,36 @@ class DML
 			exit;
 		}
 	}
+	public function copy_Question($arr_q, $exam_id)
+	{
+		try
+		{
+			$this->connect->begin();
+			$temp_table = $this->connect->query('SELECT create_temp_table() AS temp_name')->first()->temp_name;
+			foreach ($arr_q as $id)
+			{
+				$this->connect->query("INSERT INTO $temp_table VALUES(?)", array($id));
+			}
+			$this->connect->commit();
+			$result = $this->connect->query('CALL get_question_from_ref()');
+			$this->connect->close();
+			$this->connect = new Mysql();
+			$this->connect->begin();
+			$this->_copy_Question(
+				$result,
+				$exam_id
+			);
+			$this->connect->commit();
+			System::put_msg('success', 'Đã sao chép thành công !');
+		}
+		catch (\Exception $e)
+		{
+			echo System::get_exception_msg($e);
+			$this->connect->rollback();
+			System::put_msg('warning', $e, FALSE);
+			exit;
+		}
+	}
 	public function share_Exam($user_id, $category_id, $exam_id, $share = TRUE)
 	{
 		try

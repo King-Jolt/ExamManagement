@@ -43,7 +43,7 @@ abstract class Controller
 		{
 			try
 			{
-				$html .= $view->get();
+				$html .= $view->html();
 			}
 			catch (\Exception $e)
 			{
@@ -76,7 +76,7 @@ abstract class Controller
 			// Return html string
 			try
 			{
-				return $view->get();
+				return $view->html();
 			}
 			catch (\Exception $e)
 			{

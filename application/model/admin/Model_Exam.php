@@ -4,9 +4,11 @@ namespace App\Model\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/View.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
 
 use App\Model\Admin\GetData;
 use App\System\Library\View;
+use App\System\Route;
 
 class Model_Exam
 {
@@ -29,12 +31,20 @@ class Model_Exam
 			$result = GetData::list_PublicExam($c, $u, $e)->execute();
 			foreach ($result->get_data() as $row)
 			{
-				$sel = "<span class=\"form-inline\"><select class=\"form-control\" name=\"e[$row->exam_id]\"><option value=\"0\"> Chọn số câu </option>";
+				$manual = sprintf('<a href="%s" class="select-manual btn btn-default"><span class="glyphicon glyphicon-ok"></span> Chọn câu hỏi </a>', Route::current_path() . '/preview.php?' . http_build_query(
+					array(
+						'uid' => $row->user_id,
+						'category_id' => $row->category_id,
+						'exam_id' => $row->exam_id,
+						'ajax' => TRUE
+					))
+				); 
+				$sel = "<span class=\"form-inline\"><select class=\"hide form-control\" name=\"exam[$row->exam_id]\"><option value=\"0\"> Chọn số câu </option>";
 				for ($i = 1; $i <= $row->n_question; $i++)
 				{
 					$sel .= "<option value=\"$i\"> $i </option>";
 				}
-				$sel .= '</span></select>';
+				$sel .= "</select>&nbsp;$manual</span>";
 				$html .= <<<EOF
 				<li class="list-group-item text-muted"><strong>
 				<span class="text-success"> Giáo viên</span>: $row->user_name <span class="glyphicon glyphicon-arrow-right"></span>

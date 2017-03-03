@@ -23,6 +23,10 @@ class View
 	{
 		echo $var;
 	}
+	public function html()
+	{
+		return $this->get();
+	}
 	public function get()
 	{
 		if (file_exists($this->_file))
@@ -45,7 +49,7 @@ class View
 		{
 			throw new \Exception("View file $this->_file is not exist !", 2);
 		}
-		
+		return '';
 	}
 }
 

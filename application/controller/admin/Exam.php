@@ -43,13 +43,30 @@ class Exam extends Admin
 			}
 			case 'select_random':
 			{
-				$this->DML->copy_Shared(
-					$this->request_post('e'),
-					$this->request_get('id')
-				);
+				if ($this->request_post('set_random'))
+				{
+					$this->DML->copy_Shared(
+						$this->request_post('exam'),
+						$this->request_get('id')
+					);
+				}
+				else
+				{
+					$this->DML->copy_Question(
+						$this->request_post('q'),
+						$this->request_get('id')
+					);
+				}
 				unset($_GET['action'], $_GET['id']);
 				System::redirect();
 				break;
+				/*
+				echo '<pre>';
+				var_dump($_POST);
+				echo '</pre>';
+				exit;
+				 * 
+				 */
 			}
 		}
 	}

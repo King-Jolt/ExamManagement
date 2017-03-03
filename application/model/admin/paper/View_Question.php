@@ -3,8 +3,10 @@
 namespace App\Model\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/View.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
+use App\System\Library\View;
 use App\System\System;
 
 class View_Question
@@ -12,6 +14,9 @@ class View_Question
 	private $user_id = NULL;
 	private $category_id = NULL;
 	private $exam_id = NULL;
+	public $option = array(
+		'show_question_checkbox' => FALSE
+	);
 	public function __construct($user_id, $category_id, $exam_id)
 	{
 		$this->user_id = $user_id;
@@ -76,21 +81,24 @@ EOF;
 	}
 	public function get($full_view = FALSE)
 	{
+		$data = '';
 		try
 		{
-			$exam_data = GetData::get_Exam($this->user_id, $this->category_id, $this->exam_id)->execute()->first();
-			if (!$exam_data)
-			{
-				throw new \Exception('Lỗi ! Đề thi không tồn tại');
-			}
 			$header = '';
 			$html = '';
 			$footer = '';
 			if ($full_view)
 			{
+				$exam_data = GetData::get_Exam($this->user_id, $this->category_id, $this->exam_id)->execute()->first();
 				$header .= "<div class=\"header\"> $exam_data->header </div>";
 				$footer .= "<div class=\"footer\"> $exam_data->footer </div>";
 			}
+			/*
+			if (!$exam_data)
+			{
+				throw new \Exception('Lỗi ! Đề thi không tồn tại');
+			}
+			*/
 			$html .= '<div class="question-preview"><ul>';
 			$question_result = GetData::get_Question($this->user_id, $this->category_id, $this->exam_id)->execute()->get_data();
 			$no = 1;
@@ -100,6 +108,7 @@ EOF;
 				$score = $question->q_score ? '(' . sprintf('%.1f', $question->q_score) . ' điểm)  ' : '';
 				$content = $question->q_content;
 				$content_class = '';
+				$checkbox = '';
 				$data = '';
 				switch ($question->q_type)
 				{
@@ -123,16 +132,20 @@ EOF;
 						break;
 					}
 				}
+				if ($this->option['show_question_checkbox'])
+				{
+					$checkbox = "<input type=\"checkbox\" name=\"q[]\" value=\"$question->question_id\" />";
+				}
 				$html .= <<<EOF
 				<li class="$content_class">
-					<strong> Câu $no $score:</strong>&nbsp; $content
+					<label>$checkbox Câu $no $score:</label>&nbsp; $content
 					$data
 				</li>
 EOF;
 				$no++;
 			}
 			$html .= '</ul></div>';
-			return <<<EOF
+			$data = <<<EOF
 			<div class="exam-wrap">
 				$header
 				$html
@@ -142,8 +155,11 @@ EOF;
 		}
 		catch (\Exception $e)
 		{
-			return '<div>' . $e->getMessage() . '</div>';
+			$data = '<div>' . $e->getMessage() . '</div>';
 		}
+		return new View('/application/view/admin/question/page/preview.php', array(
+			'data' => $data
+		));
 	}
 }
 

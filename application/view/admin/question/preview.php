@@ -36,6 +36,3 @@
 	</div>
 </div>
 <?php self::put($content) ?>
-<script src="/extension/owner/js/question.js"></script>
-<link rel="stylesheet" href="/extension/owner/css/question.css" />
-<?php self::put($script) ?>
