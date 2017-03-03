@@ -54,7 +54,7 @@ class System
 		}
 		if (is_array($data) and !empty($data))
 		{
-			$location .= '?' . http_build_query($_GET);
+			$location .= '?' . http_build_query($data);
 		}
 		header('Location: ' . $location);
 		exit;

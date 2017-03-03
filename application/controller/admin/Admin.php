@@ -7,6 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Auth.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Navigation.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Search.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/DML.php';
 
 use App\System\Controller;
@@ -14,6 +15,7 @@ use App\System\System;
 use App\System\Route;
 use App\System\Library\Auth;
 use App\System\Library\Navigation;
+use App\System\Library\Search;
 use App\Model\Admin\DML;
 
 abstract class Admin extends Controller
@@ -26,6 +28,7 @@ abstract class Admin extends Controller
 		Auth::set_Key('admin');
 		Auth::redirect_Auth('/index.php'); // redirect to Login page if have not login
 		Auth::validate();
+		Search::process();
 		$this->user = Auth::get();
 		$this->DML = new DML();
 		$this->nav = new Navigation();

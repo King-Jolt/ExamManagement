@@ -5,17 +5,20 @@ namespace App\Model\Admin\Table;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Library\Table;
 use App\Model\Admin\GetData;
 use App\System\Route;
+use App\System\System;
 
 class Exam_Table extends Table
 {
 	public function __construct($user_id, $category_id)
 	{
 		parent::__construct();
-		$this->sql_query = GetData::list_Exam($user_id, $category_id);
+		$keyword = System::input_get('search');
+		$this->sql_query = GetData::list_Exam($user_id, $category_id, $keyword ? $keyword : '');
 		$this->arr_title = array(
 			'No.', 'Đề kiểm tra', 'Số câu hỏi', 'Ngày thi', 'Chia sẻ', ''
 		);

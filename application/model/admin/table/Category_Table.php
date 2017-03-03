@@ -5,17 +5,20 @@ namespace App\Model\Admin\Table;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Library\Table;
 use App\Model\Admin\GetData;
 use App\System\Route;
+use App\System\System;
 
 class Category_Table extends Table
 {
 	public function __construct($user_id)
 	{
 		parent::__construct();
-		$this->sql_query = GetData::list_Category($user_id);
+		$search = System::input_get('search');
+		$this->sql_query = GetData::list_Category($user_id, $search ? $search : '');
 		$this->arr_title = array(
 			'No.', 'Tên danh mục', 'Số đề thi', ''
 		);

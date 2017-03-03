@@ -32,6 +32,12 @@
 								</ul>
 							</li>
 						</ul>
+						<form class="navbar-form navbar-right" method="post">
+							<div class="input-group">
+								<input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm ...">
+								<span class="input-group-btn"><button class="btn btn-default" type="submit" name="action" value="search" ><span class="glyphicon glyphicon-search"></span></button></span>
+							</div>
+					    </form>
 					</div>
 				</div>
 			</nav>
