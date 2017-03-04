@@ -9,6 +9,7 @@
 	<li><a href="https://github.com/twbs/bootstrap" target="_blank"> Twitter Bootstrap 3.6 </a></li>
 	<li><a href="https://github.com/ckeditor/ckeditor-dev" target="_blank"> CKEditor 4.6 </a></li>
 	<li><a href="https://github.com/mathjax/MathJax" target="_blank"> MathJax v2.7.0 </a></li>
+	<li><a href="https://github.com/Paul-DS/bootstrap-year-calendar" target="_blank"> Bootstrap Year Calendar v3 </a></li>
 	<li><a href="https://github.com/Eonasdan/bootstrap-datetimepicker" target="_blank"> Bootstrap 3 Datepicker v4 </a></li>
 	<li><a href="https://github.com/craftpip/jquery-confirm" target="_blank"> JQuery Confirm v3 </a></li>
 </ul>
