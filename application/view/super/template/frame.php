@@ -16,6 +16,8 @@
 							<li class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Danh mục <span class="caret"></span></a>
 								<ul class="dropdown-menu">
+									<li class="dropdown-header"> Danh mục tùy chọn <span class="caret"></span></li>
+									<li class="divider"></li>
 									<li class="<?php self::put($menu['manage']['active']) ?>"><a href="<?php self::put($menu['manage']['href']) ?>"><span class="glyphicon glyphicon-th-list"></span>&nbsp; Danh sách môn học </a></li>
 								</ul>
 							</li>

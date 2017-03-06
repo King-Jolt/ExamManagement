@@ -15,7 +15,9 @@
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Danh mục <span class="caret"></span></a>
-								<ul class="dropdown-menu">		
+								<ul class="dropdown-menu">
+									<li class="dropdown-header"> Danh mục tùy chọn <span class="caret"></span></li>
+									<li class="divider"></li>
 									<li class="<?php self::put($menu['home']['active']) ?>"><a href="<?php self::put($menu['home']['href']) ?>"><span class="glyphicon glyphicon-calendar"></span>&nbsp; Xem lịch thi </a></li>
 									<li class="<?php self::put($menu['manage']['active']) ?>"><a href="<?php self::put($menu['manage']['href']) ?>"><span class="glyphicon glyphicon-th-list"></span>&nbsp; Quản lý đề thi </a></li>
 									<li class="<?php self::put($menu['contact']['active']) ?>"><a href="<?php self::put($menu['contact']['href']) ?>"><span class="glyphicon glyphicon-phone-alt"></span>&nbsp; Liên hệ </a></li>
