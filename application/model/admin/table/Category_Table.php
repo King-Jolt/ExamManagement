@@ -4,12 +4,10 @@ namespace App\Model\Admin\Table;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Library\Table;
 use App\Model\Admin\GetData;
-use App\System\Route;
 use App\System\System;
 
 class Category_Table extends Table
@@ -26,7 +24,7 @@ class Category_Table extends Table
 	public function row($data, $index)
 	{
 		$delete = '?' . http_build_query(array('action' => 'delete', 'id' => $data->id));
-		$exam = Route::current_path() . '/exam.php?' . http_build_query(array('category_id' => $data->id));
+		$exam = System::current_path() . '/exam.php?' . http_build_query(array('category_id' => $data->id));
 		return <<<EOF
 		<tr>
 			<td class="text-muted"> $index </td>

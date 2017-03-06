@@ -1,8 +1,3 @@
-<h4> Contributors </h4>
-<ul class="text-muted">
-	<li> <strong class="text-success"> scila1996 </strong> - Developer </li>
-	<li> <strong class="text-success"> Phạm Ngọc Khánh </strong> - Tester </li>
-</ul>
 <h4> Components </h4>
 <ul>
 	<li><a href="https://github.com/jquery/jquery" target="_blank"> jQuery JavaScript Library - v1.12 </a></li>

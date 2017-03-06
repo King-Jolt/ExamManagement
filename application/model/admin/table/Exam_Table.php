@@ -4,12 +4,10 @@ namespace App\Model\Admin\Table;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Library\Table;
 use App\Model\Admin\GetData;
-use App\System\Route;
 use App\System\System;
 
 class Exam_Table extends Table
@@ -30,8 +28,8 @@ class Exam_Table extends Table
 			'category_id' => $_GET['category_id'],
 			'exam_id' => $data->id
 		);
-		$manage = Route::current_path() . '/question.php?' . http_build_query($base);
-		$preview = Route::current_path() . '/preview.php?' . http_build_query($base);
+		$manage = System::current_path() . '/question.php?' . http_build_query($base);
+		$preview = System::current_path() . '/preview.php?' . http_build_query($base);
 		$select_random = '?' . http_build_query(array_merge($_GET, array('action' => 'select_random', 'id' => $data->id)));
 		$share = $data->share ? "javascript:$.alert({title: 'Thông báo', content: 'Đề thi này đang ở chế độ chia sẻ !', type: 'blue'})" : '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
 		$shuffle = '?' . http_build_query(array_merge($_GET, array('action' => 'shuffle', 'id' => $data->id)));

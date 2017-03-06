@@ -63,17 +63,14 @@ class System
 	{
 		return $_SERVER['PHP_SELF'];
 	}
+	public static function current_path()
+	{
+		return preg_replace('/\/([^\/]*$)/', '', $_SERVER['SCRIPT_NAME']);
+	}
 	public static function show_404()
 	{
 		self::redirect('/system/error/404.php', TRUE, 404);
 	}
-	/*
-	public static function generate_uniqid()
-	{
-		return uniqid() . sprintf('%02x', rand(1, 255));
-	}
-	 * 
-	 */
 	public static function alert($type, $msg, $auto_close)
 	{
 		$title = ucfirst($type);

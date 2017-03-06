@@ -59,14 +59,6 @@ class Exam extends Admin
 				}
 				unset($_GET['action'], $_GET['id']);
 				System::redirect();
-				break;
-				/*
-				echo '<pre>';
-				var_dump($_POST);
-				echo '</pre>';
-				exit;
-				 * 
-				 */
 			}
 		}
 	}

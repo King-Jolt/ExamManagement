@@ -5,12 +5,10 @@ namespace App\Controller\Super;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/super/Super.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/super/table/User_Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
 
 use App\Controller\Super\Super;
 use App\Model\Super\Table\User_Table;
 use App\System\System;
-use App\System\Route;
 
 class User extends Super
 {

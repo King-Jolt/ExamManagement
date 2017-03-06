@@ -15,7 +15,7 @@ class Logout extends Controller
 	protected function main()
 	{
 		Auth::set_Key('super');
-		Auth::redirect_Auth(Route::current_path() . '/index.php');
+		Auth::redirect_Auth(System::current_path() . '/index.php');
 		Auth::remove();
 	}
 }

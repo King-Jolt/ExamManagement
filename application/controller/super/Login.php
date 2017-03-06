@@ -17,7 +17,7 @@ class Login extends Controller
 	public function __construct()
 	{
 		Auth::set_Key('super');
-		Auth::redirect_Success('/super/course.php');
+		Auth::redirect_Success(System::current_path() . '/course.php');
 		Auth::validate();
 		parent::__construct();
 	}

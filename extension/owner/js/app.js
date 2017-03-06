@@ -7,20 +7,6 @@
 })();
 
 $(document).ready(function(){
-	$(document).on('scroll', function(){
-		var nav = $('#main-navbar nav');
-		var side = $('#main-sidebar');
-		if ($(this).scrollTop() >= nav.height())
-		{
-			nav.css({'display' : 'none'});
-			side.css({'top': '0px'});
-		}
-		else
-		{
-			nav.css({'display' : ''});
-			side.css({'top' : ''});
-		}
-	});
 	$('[data-toggle="popover"]').popover({
 		trigger: 'hover'
 	});
