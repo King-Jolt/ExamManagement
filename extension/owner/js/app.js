@@ -7,6 +7,10 @@
 })();
 
 $(document).ready(function(){
+	$('#about').on('click', function(e){
+		e.preventDefault();
+		$.alert({title: 'Thông tin', content: 'Phiên bản : 2016.2 <br />Design by : scila1996<br /><em>Thanh you for using !</em>', type: 'green'});
+	});
 	$('[data-toggle="popover"]').popover({
 		trigger: 'hover'
 	});

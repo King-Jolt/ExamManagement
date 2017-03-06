@@ -9,7 +9,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<a href="javascript:$.alert({title: 'Thông tin', content: 'Phiên bản : 2016.2 <br />Design by : scila1996<br /><em>Thanh you for using !</em>', type: 'green'})" class="navbar-brand"><strong> Phần mềm quản lý đề thi </strong></a>
+						<a href="javascript:void(0)" class="navbar-brand" id="about"><strong> Phần mềm quản lý đề thi </strong></a>
 					</div>
 					<div class="collapse navbar-collapse" id="bs-collapse-navbar-menu">
 						<ul class="nav navbar-nav navbar-right">
