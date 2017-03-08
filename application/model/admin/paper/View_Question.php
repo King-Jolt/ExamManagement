@@ -68,11 +68,15 @@ EOF;
 EOF;
 		return $html;
 	}
-	private function _get_multiple_choice($id, $result)
+	private function _get_multiple_choice($id, $result, &$answer = NULL)
 	{
 		$html = '<div class="list-option">';
 		while ($result->valid() and $row = $result->current() and $row->question_id == $id)
 		{
+			if ($row->multiple_choice_answer)
+			{
+				$answer = chr(64 + $row->multiple_choice_mark);
+			}
 			$html .= "<div class=\"option\" answer=\"$row->multiple_choice_answer\"> $row->multiple_choice_content </div>";
 			$result->next();
 		}
@@ -99,6 +103,7 @@ EOF;
 				throw new \Exception('Lỗi ! Đề thi không tồn tại');
 			}
 			*/
+			$table_answer = '';
 			$html .= '<div class="question-preview"><ul>';
 			$question_result = GetData::get_Question($this->user_id, $this->category_id, $this->exam_id)->execute()->get_data();
 			$no = 1;
@@ -120,8 +125,10 @@ EOF;
 					}
 					case GetData::$types['multiple-choice']:
 					{
-						$data = $this->_get_multiple_choice($id, $question_result);
+						$ans = 0;
+						$data = $this->_get_multiple_choice($id, $question_result, $ans);
 						$content_class = 'multiple-choice';
+						$table_answer .= "<div class=\"index\"> Câu $no : $ans </div>";
 						break;
 					}
 					case GetData::$types['fill']:
@@ -144,6 +151,7 @@ EOF;
 EOF;
 				$no++;
 			}
+			$html .= "<li class=\"table-answer\"> $table_answer </li>";
 			$html .= '</ul></div>';
 			$data = <<<EOF
 			<div class="exam-wrap">

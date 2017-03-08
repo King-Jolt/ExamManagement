@@ -23,7 +23,6 @@ class Preview extends Admin
 			);
 			$this->view->option['show_question_checkbox'] = TRUE;
 			$this->load_view('application/view/admin/exam/modal_select_question.php', array(
-				'eid' => $this->request_get('exam_id'),
 				'data' => $this->view->get()->html()
 			));
 		}

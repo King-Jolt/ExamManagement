@@ -1,4 +1,4 @@
-<div class="modal fade" eid="<?php self::put($eid) ?>" role="dialog">
+<div class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width: 210mm">
 		<div class="modal-content">
 			<div class="modal-header">

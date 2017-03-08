@@ -4,11 +4,11 @@ namespace App\Controller\Super;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Controller.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Auth.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Route.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\System\Controller;
 use App\System\Library\Auth;
-use App\System\Route;
+use App\System\System;
 
 class Logout extends Controller 
 {

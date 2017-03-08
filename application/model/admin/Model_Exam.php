@@ -4,9 +4,11 @@ namespace App\Model\Admin;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/View.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
 use App\Model\Admin\GetData;
 use App\System\Library\View;
+use App\System\System;
 
 class Model_Exam
 {
@@ -42,7 +44,7 @@ class Model_Exam
 				{
 					$sel .= "<option value=\"$i\"> $i </option>";
 				}
-				$sel .= "</select>&nbsp;$manual</span>";
+				$sel .= "</select>&nbsp;$manual &nbsp; <span class=\"select-status hide text-success glyphicon glyphicon-ok\" style=\"margin-left: 8px;\"></span></span>";
 				$html .= <<<EOF
 				<li class="list-group-item text-muted"><strong>
 				<span class="text-success"> Giáo viên</span>: $row->user_name <span class="glyphicon glyphicon-arrow-right"></span>

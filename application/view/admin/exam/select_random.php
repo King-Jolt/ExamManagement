@@ -18,17 +18,44 @@
 	</div>
 	<button type="submit" class="btn btn-default" name="action" value="select_random"><span class="glyphicon glyphicon-check"></span>&nbsp; Xác nhận </button>
 </form>
-
+<style>
+	a.select-manual[q-count]:after
+	{
+		content: " (Đã chọn "attr(q-count)" câu)";
+		color: green;
+		font-weight: bold;
+	}
+</style>
 <script>
 	$(document).ready(function(){
 		$('#form-select').on('change', 'input[name^="q["]', function(){
 			var n = 0;
 			$('#form-select .n_selected').val($('#form-select input[name^="q["]:checked').length);
+			var md_sel = $(this).closest('.modal');
+			if (c = md_sel.find('input[name^="q["]:checked').length)
+			{
+				md_sel.siblings('.select-status').removeClass('hide');
+				md_sel.siblings('.select-manual').attr('q-count', c);
+			}
+			else
+			{
+				md_sel.siblings('.select-status').addClass('hide');
+				md_sel.siblings('.select-manual').removeAttr('q-count');
+			}
 		});
 		$('#form-select [name^="exam"]').on('change', function(){
 			var n = 0;
 			$('#form-select [name^="exam"]').each(function(){
-				n += parseInt($(this).val());
+				v = parseInt($(this).val());
+				n += v;
+				if (v)
+				{
+					$(this).siblings('.select-status').removeClass('hide');
+				}
+				else
+				{
+					$(this).siblings('.select-status').addClass('hide');
+				}
 			});
 			$('#form-select .n_selected').val(n);
 		}).trigger('change');

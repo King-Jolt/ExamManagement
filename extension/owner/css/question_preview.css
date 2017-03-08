@@ -105,6 +105,26 @@
 	font-weight: bold;
 }
 
+.exam-wrap .question-preview .table-answer
+{
+	display: none;
+}
+
+.exam-wrap.show-answer .question-preview .table-answer
+{
+	display: block;
+	border: 1px solid black;
+	font-weight: bold;
+}
+
+.exam-wrap.show-answer .question-preview .table-answer .index
+{
+	width: 25%;
+	display: inline-block;
+	padding-left: 5px;
+}
+
+
 /* fill */
 .exam-wrap .question-preview .fill
 {
