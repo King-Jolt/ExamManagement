@@ -31,7 +31,7 @@ class Exam_Table extends Table
 		$manage = System::current_path() . '/question.php?' . http_build_query($base);
 		$preview = System::current_path() . '/preview.php?' . http_build_query($base);
 		$select_random = '?' . http_build_query(array_merge($_GET, array('action' => 'select_random', 'id' => $data->id)));
-		$share = $data->share ? "javascript:$.alert({title: 'Thông báo', content: 'Đề thi này đang ở chế độ chia sẻ !', type: 'blue'})" : '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
+		$share = $data->share ? "javascript:void(0)" : '?' . http_build_query(array_merge($_GET, array('action' => 'share', 'id' => $data->id)));
 		$shuffle = '?' . http_build_query(array_merge($_GET, array('action' => 'shuffle', 'id' => $data->id)));
 		$delete = '?' . http_build_query(array_merge($_GET, array('action' => 'delete', 'id' => $data->id)));
 		$un_share = '?' . http_build_query(array_merge($_GET, array('action' => 'private', 'id' => $data->id)));
