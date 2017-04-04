@@ -6,8 +6,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.ph
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/DML.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\Model\Admin\DML;
-use App\System\System;
+use Model\Admin\DML;
+use System\Core\Misc;
 
 class Account extends Admin
 {
@@ -28,7 +28,7 @@ class Account extends Admin
 					break;
 				}
 			}
-			System::redirect();
+			Misc::redirect();
 		}
 	}
 	protected function on_get()
@@ -41,7 +41,7 @@ class Account extends Admin
 				case 'chpw':
 				{
 					$this->load_view('application/view/admin/account/chpw.php', array(
-						'msg' => System::get_msg()
+						'msg' => Misc::get_msg()
 					));
 					break;
 				}

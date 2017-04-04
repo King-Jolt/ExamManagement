@@ -5,8 +5,8 @@ namespace App\Controller\Super;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/super/Super.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\Controller\Super\Super;
-use App\System\System;
+use Controller\Super\Super;
+use System\Core\Misc;
 
 class Chpw extends Super
 {
@@ -28,14 +28,14 @@ class Chpw extends Super
 					break;
 				}
 			}
-			System::redirect();
+			Misc::redirect();
 		}
 	}
 	protected function main()
 	{
 		$this->menu['chpw']['active'] = 'active';
 		$this->load_view('application/view/super/chpw.php', array(
-			'msg' => System::get_msg()
+			'msg' => Misc::get_msg()
 		));
 	}
 }

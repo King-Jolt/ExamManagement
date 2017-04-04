@@ -7,10 +7,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/paper/View_Qu
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/View.php';
 
-use App\Model\Admin\Question_Table;
-use App\Model\Admin\View_Question;
-use App\System\System;
-use App\System\Library\View;
+use Model\Admin\Question_Table;
+use Model\Admin\View_Question;
+use System\Core\Misc;
+use System\Library\View;
 
 class Model_Question
 {
@@ -68,7 +68,7 @@ EOF;
 			'title' => 'Quản lý các câu hỏi',
 			'add' => $this->_add_button(),
 			'content' => $table->get(),
-			'msg' => System::get_msg()
+			'msg' => Misc::get_msg()
 		);
 		return new View('application/view/admin/question/content.php', $data);
 	}

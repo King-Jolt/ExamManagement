@@ -28,19 +28,32 @@ var obj_q = new (function(){
 		{
 			this.show();
 		}
+		return this;
 	};
 	this.show = function() {
 		$('.exam-wrap').addClass('show-answer');
 		$('.question-preview [data-fill]').each(function(){
 			$(this).html('"' + $(this).attr('data-fill') + '"');
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 		});
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		return this;
 	};
 	this.hide = function() {
 		$('.exam-wrap').removeClass('show-answer');
 		$('.question-preview [data-fill]').each(function(){
 			$(this).text($(this).attr('data-fill').replace(/.?/g, '..'));
 		});
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		return this;
 	};
+	this.show_TableAnswer = function() {
+		$('.exam-wrap .question-preview').addClass('hide');
+		$('.exam-wrap .table-answer').removeClass('hide');
+	};
+	this.hide_TableAnswer = function() {
+		$('.exam-wrap .question-preview').removeClass('hide');
+		$('.exam-wrap .table-answer').addClass('hide');
+	};
+	this.hide();
 })();
-obj_q.hide();
+

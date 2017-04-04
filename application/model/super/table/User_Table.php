@@ -5,8 +5,8 @@ namespace App\Model\Super\Table;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/super/GetData.php';
 
-use App\System\Library\Table;
-use App\Model\Super\GetData;
+use System\Library\Table;
+use Model\Super\GetData;
 
 class User_Table extends Table
 {

@@ -6,9 +6,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.ph
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Model_Question.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\Controller\Admin\Admin;
-use App\Model\Admin\Model_Question;
-use App\System\System;
+use Controller\Admin\Admin;
+use Model\Admin\Model_Question;
+use System\Core\Misc;
 
 class Question extends Admin
 {
@@ -46,7 +46,7 @@ class Question extends Admin
 						$this->request_get('id')
 					);
 					unset($_GET['action'], $_GET['id']);
-					System::redirect();
+					Misc::redirect();
 				}
 			}
 		}
@@ -57,9 +57,9 @@ class Question extends Admin
 	}
 	protected function on_post()
 	{
-		if (($type = System::input_post('add-question')))
+		if (($type = Misc::input_post('add-question')))
 		{
-			$data = System::input_post('q');
+			$data = Misc::input_post('q');
 			switch ($type)
 			{
 				case 'link':
@@ -79,7 +79,7 @@ class Question extends Admin
 				}
 			}
 			unset($_GET['action'], $_GET['type']);
-			System::redirect();
+			Misc::redirect();
 		}
 	}
 	protected function main()

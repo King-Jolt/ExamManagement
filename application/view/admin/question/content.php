@@ -7,5 +7,5 @@
 		<?php self::put($content) ?>
 	</div>
 </div>
-<script src="/extension/owner/js/question.js"></script>
-<link rel="stylesheet" href="/extension/owner/css/question.css" />
+<script src="/extension/owner/js/question_preview.js"></script>
+<link rel="stylesheet" href="/extension/owner/css/question_preview.css" />

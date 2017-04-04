@@ -6,9 +6,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/super/Super.ph
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/super/table/User_Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\Controller\Super\Super;
-use App\Model\Super\Table\User_Table;
-use App\System\System;
+use Controller\Super\Super;
+use Model\Super\Table\User_Table;
+use System\Core\Misc;
 
 class User extends Super
 {
@@ -26,7 +26,7 @@ class User extends Super
 					break;
 				}
 			}
-			System::redirect();
+			Misc::redirect();
 		}
 	}
 	protected function on_get()
@@ -44,7 +44,7 @@ class User extends Super
 				}
 			}
 			unset($_GET['action'], $_GET['id']);
-			System::redirect();
+			Misc::redirect();
 		}
 	}
 	protected function main()
@@ -52,7 +52,7 @@ class User extends Super
 		$this->menu['manage']['active'] = 'active';
 		$table = new User_Table($this->course_id);
 		$this->load_view('/application/view/super/user/table.php', array(
-			'msg' => System::get_msg(),
+			'msg' => Misc::get_msg(),
 			'table' => $table->get()
 		));
 	}

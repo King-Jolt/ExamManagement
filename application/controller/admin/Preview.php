@@ -6,8 +6,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.ph
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/paper/View_Question.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\Model\Admin\View_Question;
-use App\System\System;
+use Model\Admin\View_Question;
+use System\Core\Misc;
 
 class Preview extends Admin
 {
@@ -28,17 +28,37 @@ class Preview extends Admin
 		}
 		else
 		{
-			$this->view = new View_Question(
-				$this->user->id,
-				$this->request_get('category_id'),
-				$this->request_get('exam_id')
-			);
 			$this->load_view('application/view/admin/template/header.php',  array(
 				'title' => 'Xem đề thi - PDF'
 			));
-			$this->load_view('application/view/admin/question/preview.php', array(
-				'content' => $this->view->get(TRUE)->html()
-			));
+			if ($this->request_get('view_answer'))
+			{
+				$content = '';
+				foreach ($this->request_get('eid') as $eid)
+				{
+					$this->view = new View_Question(
+						$this->user->id,
+						$this->request_get('category_id'),
+						$eid
+					);
+					$this->view->option['return_only_answer'] = TRUE;
+					$content .= $this->view->get()->html();
+				}
+				$this->load_view('application/view/admin/question/preview.php', array(
+					'content' => $content
+				));
+			}
+			else
+			{
+				$this->view = new View_Question(
+					$this->user->id,
+					$this->request_get('category_id'),
+					$this->request_get('exam_id')
+				);
+				$this->load_view('application/view/admin/question/preview.php', array(
+					'content' => $this->view->get(TRUE)->html()
+				));
+			}
 			$this->load_view('application/view/admin/template/footer.php');
 		}
 	}

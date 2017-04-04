@@ -15,7 +15,6 @@
 	</div>
 </div>
 <script>
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	q_view();
 	obj_q.show();
 </script>

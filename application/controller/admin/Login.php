@@ -1,68 +1,56 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace Application\Controller\Admin;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/Controller.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Auth.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql_QueryCommand.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
-
-use App\System\Controller;
-use App\System\Library\Auth;
-use App\System\Database\Sql_QueryCommand;
-use App\System\System;
+use System\Core\Controller;
+use System\Libraries\View;
+use System\Libraries\Route;
+use System\Libraries\Auth;
+use System\Libraries\Exception\Auth_NotValidate;
+use System\Libraries\Request;
+use System\Database\DB;
+use Application\Model\Misc;
 
 class Login extends Controller
 {
-	public function __construct()
+	protected function index()
 	{
 		Auth::set_Key('admin');
-		Auth::redirect_Success('/web/admin/index.php');
+		Auth::redirect_Success(Request::current_path() . '/admin/category');
 		Auth::validate();
-		parent::__construct();
-	}
-	protected function on_post()
-	{
-		$btn_action = $this->request_post('btn-action');
-		switch ($btn_action)
-		{
-			case 'login':
+		Route::add('post', 'action', function($value){
+			if ($value == 'login')
 			{
-				$user = $this->request_post('user');
-				$pass = $this->request_post('pass');
-				$course_id = $this->request_post('course');
-				Auth::SQL_Check(new Sql_QueryCommand('SELECT * FROM user WHERE user = ? AND pass = SHA1(?) AND course_id = ?', array($user, $pass, $course_id)));
+				Auth::set_Function(function() {
+					$query = DB::query()->select()->from('user')->where(array(
+						'user' => Request::post('user'),
+						'pass' => sha1(Request::post('pass')),
+						'course_id' => Request::post('course')
+					));
+					$result = $query->execute();
+					if ($result->num_rows())
+					{
+						return $result->current();
+					}
+					return FALSE;
+				});
 				try
 				{
 					Auth::attempt();
 					Auth::validate();
 				}
-				catch (\Exception $e)
+				catch (Auth_NotValidate $e)
 				{
-					System::put_msg('danger', $e->getMessage(), FALSE);
+					Misc::put_msg('danger', $e->getMessage(), FALSE);
 				}
-				System::redirect();
-				break;
 			}
-		}
-	}
-	protected function main()
-	{
-		$query = new Sql_QueryCommand('SELECT course.* FROM course');
-		$c_data = '';
-		try
-		{
-			$c_data = $query->execute()->get_data();
-		}
-		catch (\Exception $e)
-		{
-			$this->error($e);
-		}
-		$path = '/application/view/admin/login.php';
-		$this->load_view($path, array(
-			'course_data' => $c_data,
-			'msg' => System::get_msg()
-		));
+		});
+		Route::add(function (){
+			View::add('admin/login.php', array(
+				'course_data' => DB::query()->select()->from('course')->execute(),
+				'msg' => Misc::get_msg()
+			));
+		});
 	}
 }
 

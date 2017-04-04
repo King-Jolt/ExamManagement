@@ -26,8 +26,7 @@
 
 .exam-wrap .question-preview .link .link-table
 {
-	width: 90%;
-	margin-left: 10%;
+	margin: auto;
 }
 
 .exam-wrap .question-preview .link .link-table td:first-child, .question-preview .link-table th:first-child
@@ -35,15 +34,20 @@
 	width: 30%;
 }
 
+.exam-wrap .question-preview .link .link-table td:nth-child(2), .question-preview .link-table th:nth-child(2)
+{
+	width: 20%;
+}
+
 .exam-wrap .question-preview .link .link-table td, .question-preview .link-table th
 {
 	vertical-align: top;
-	padding-top: 5px;
+	padding: 5px 0px 0px 5px;
 }
 
 .exam-wrap .question-preview .link .link-table td[answer]:before
 {
-	content: '.....';
+	content: '.............';
 }
 
 .exam-wrap.show-answer .question-preview .link .link-table td[answer]:before
@@ -105,25 +109,40 @@
 	font-weight: bold;
 }
 
-.exam-wrap .question-preview .table-answer
+/* table answer */
+
+.exam-wrap .table-answer
 {
-	display: none;
+	padding: 25px 0px 0px 0.5cm;
+	counter-reset: section;
+	/*box-shadow: inset 0 -10px 5px -10px #C0C0C0;*/
+	/*border-bottom: 1px solid #C0C0C0;*/
 }
 
-.exam-wrap.show-answer .question-preview .table-answer
+.exam-wrap .table-answer .exam-title
 {
-	display: block;
-	border: 1px solid black;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.exam-wrap .table-answer .exam-title:before
+{
+	content: '\025CF';
+}
+
+.exam-wrap .table-answer .index:before
+{
+	counter-increment: section;
+	content: "Câu " counter(section, decimal-leading-zero) " :";
 	font-weight: bold;
 }
 
-.exam-wrap.show-answer .question-preview .table-answer .index
+.exam-wrap .table-answer .index
 {
-	width: 25%;
+	width: 20%;
 	display: inline-block;
 	padding-left: 5px;
 }
-
 
 /* fill */
 .exam-wrap .question-preview .fill

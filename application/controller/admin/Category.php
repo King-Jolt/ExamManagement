@@ -1,58 +1,82 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace Application\Controller\Admin;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/table/Category_Table.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
+use Application\Model\Misc;
+use System\Libraries\View;
+use System\Libraries\Route;
+use System\Libraries\Request;
+use Application\Model\Admin\Category\Model;
 
-use App\Controller\Admin\Admin;
-use App\Model\Admin\Table\Category_Table;
-use App\System\System;
+use System\Database\DB;
 
 class Category extends Admin
 {
-	protected function on_post()
+	protected $model = NULL;
+	public function __construct()
 	{
-		$action = $this->request_post('action');
-		switch ($action)
-		{
-			case 'add':
-			{
-				$this->DML->insert_Category(
-					$this->user->id, $this->request_post('name')
-				);
-				System::redirect();
-				break;
-			}
-		} 
+		parent::__construct();
+		$this->model = new Model($this->user->id);
 	}
-	protected function on_get()
+	protected function index()
 	{
-		$action = $this->request_get('action');
-		if ($action)
-		{
-			$id = $this->request_get('id');
-			switch ($action)
-			{
-				case 'delete':
-				{
-					$this->DML->delete_Category($this->user->id, $id);
-					break;
-				}
-			}
-			unset($_GET['action'], $_GET['id']);
-			System::redirect();
-		}
+		Route::add(function(){
+			View::add('admin/category/main.php', array(
+				'msg' => Misc::get_msg()
+			));
+		});
 	}
-	protected function main()
+	protected function load()
 	{
-		$this->menu['manage']['active'] = 'active';
-		$cat_table = new Category_Table($this->user->id);
-		$this->load_view('/application/view/admin/category/table.php', array(
-			'msg' => System::get_msg(),
-			'table' => $cat_table->get()
+		$this->send_response(json_encode(
+			$this->model->getTreeView()
 		));
+	}
+	protected function create()
+	{
+		Route::add('post', 'action', function($value){
+			$data = array(
+				'id' => Misc::get_uid(),
+				'parent' => isset(Request::params()['category_id']) ? Request::params()['category_id'] : NULL,
+				'name' => Request::post('name'),
+				'user_id' => $this->user->id
+			);
+			$this->model->insertCategory($data);
+			$this->back();
+		});
+		Route::add(function(){
+			$this->nav->add('Thêm danh mục mới');
+			View::add('admin/category/add.php', array(
+				'title' => 'Thêm danh mục',
+				'action' => 'add',
+				'value' => ''
+			));
+		});
+	}
+	protected function edit()
+	{
+		Route::add('post', 'action', function($value){
+			$this->model->updateCategory(array('name' => Request::post('name')), Request::params()['category_id']);
+			$this->back();
+		});
+		Route::add(function(){
+			$this->nav->add('Sửa danh mục');
+			$data = $this->model->list_Category('id', Request::params()['category_id'])->execute()->fetch();
+			View::add('admin/category/add.php', array(
+				'title' => 'Chỉnh sửa danh mục',
+				'action' => 'edit',
+				'value' => $data->name
+			));
+		});
+	}
+	protected function delete()
+	{
+		$this->model->deleteCategory(Request::params()['category_id']);
+		$this->back();
+	}
+	protected function back()
+	{
+		Request::redirect('/admin/category');
 	}
 }
 

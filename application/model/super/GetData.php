@@ -4,7 +4,7 @@ namespace App\Model\Super;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql_QueryCommand.php';
 
-use App\System\Database\Sql_QueryCommand;
+use System\Database\Sql_QueryCommand;
 
 class GetData
 {

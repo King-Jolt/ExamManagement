@@ -5,7 +5,7 @@ namespace App\Model\Admin;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 
-use App\System\Library\Table;
+use System\Library\Table;
 
 class Question_Table extends Table
 {

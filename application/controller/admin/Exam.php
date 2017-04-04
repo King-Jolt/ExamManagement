@@ -1,27 +1,75 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace Application\Controller\Admin;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/table/Exam_Table.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Model_Exam.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
-
-use App\Controller\Admin\Admin;
-use App\Model\Admin\Table\Exam_Table;
-use App\Model\Admin\Model_Exam;
-use App\System\System;
+use System\Libraries\Route;
+use System\Libraries\View;
+use System\Libraries\Request;
+use Application\Model\Admin\Exam\Model;
+use Application\Model\Admin\Exam\Table;
+use Application\Model\Misc;
 
 class Exam extends Admin
 {
-	protected $category_id = NULL;
-	protected $view_table = TRUE;
-	protected $model_exam;
+	private $model = NULL;
 	public function __construct()
 	{
-		$this->model_exam = new Model_Exam(
-			$this->request_get('id')
-		);
+		parent::__construct();
+		$this->model = new Model($this->user->id, Request::params()['category_id']);
+		View::add('admin/ckeditor.php'); // use CKEditor;
+	}
+	protected function index()
+	{
+		Route::add('post', 'action', function($value){
+			switch ($value)
+			{
+				case 'delete':
+					$this->model->deleteExams(Request::post('eid'));
+					break;
+			}
+			$this->redirectToTable();
+		});
+		Route::add(function(){
+			$table = new Table();
+			View::add('admin/exam/table.php', array(
+				'add' => Request::current_uri() . '/create',
+				'table' => $table->get(),
+				'msg' => Misc::get_msg()
+			));
+		});
+	}
+	protected function create()
+	{
+		Route::add('post', 'action', function($value){
+			$data = array(
+				'id' => Misc::get_uid(),
+				'category_id' => Request::params()['category_id'],
+				'title' => Request::post('title'),
+				'header' => Request::post('header'),
+				'footer' => Request::post('footer'),
+				'share' => $this->user->id,
+				'date' => Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
+			);
+			$this->model->insertExam($data);
+			$this->redirectToTable();
+		});
+		Route::add(function(){
+			View::add('admin/exam/edit.php');
+		});
+	}
+	protected function delete()
+	{
+		$this->model->deleteExams(array(Request::params()['exam_id']));
+		$this->redirectToTable();
+	}
+	private function redirectToTable()
+	{
+		Request::redirect(sprintf('/admin/category/%s/exam', Request::params()['category_id']));
+	}
+	/*
+	public function __construct()
+	{
+		
 		parent::__construct();
 	}
 	protected function on_post()
@@ -38,8 +86,37 @@ class Exam extends Admin
 					$this->request_post('header'),
 					$this->request_post('footer')
 				);
-				System::redirect();
+				Misc::redirect();
 				break;
+			}
+			case 'copy':
+			{
+				$this->DML->copy_Exam(
+					$this->user->id,
+					$this->category_id,
+					$this->request_get('id'),
+					$this->request_post('quantity'),
+					filter_var($this->request_post('shuffle'), FILTER_VALIDATE_BOOLEAN)
+				);
+				unset($_GET['action'], $_GET['id']);
+				Misc::redirect();
+			}
+			case 'view_answer':
+			{
+				Misc::redirect(Misc::current_path() . '/preview.php', array(
+					'category_id' => $this->category_id,
+					'view_answer' => TRUE,
+					'eid' => $this->request_post('eid')
+				));
+			}
+			case 'delete':
+			{
+				foreach ($this->request_post('eid') as $id)
+				{
+					$this->DML->delete_Exam($this->user->id, $this->category_id, $id);
+				}
+				unset($_GET['action'], $_GET['id']);
+				Misc::redirect();
 			}
 			case 'select_random':
 			{
@@ -58,7 +135,7 @@ class Exam extends Admin
 					);
 				}
 				unset($_GET['action'], $_GET['id']);
-				System::redirect();
+				Misc::redirect();
 			}
 		}
 	}
@@ -77,6 +154,16 @@ class Exam extends Admin
 					$this->nav->add('Bốc câu hỏi', '');
 					$this->load_view(
 						$this->model_exam->list_OtherExam($this->user->course_id, $this->user->id)
+					);
+					return;
+				}
+				case 'copy':
+				{
+					$this->view_table = FALSE;
+					$this->nav->add('Bốc câu hỏi', '');
+					$this->load_view(
+						//$this->model_exam->list_OtherExam($this->user->course_id, $this->user->id)
+						'application/view/admin/exam/copy.php'
 					);
 					return;
 				}
@@ -106,22 +193,20 @@ class Exam extends Admin
 				}
 			}
 			unset($_GET['action'], $_GET['id']);
-			System::redirect();
+			Misc::redirect();
 		}
 	}
 	protected function main()
 	{
 		$this->menu['manage']['active'] = 'active';
-		if ($this->view_table)
-		{
-			$ex_table = new Exam_table($this->user->id, $this->category_id);
-			$this->load_view('application/view/admin/exam/table.php', array(
-				'msg' => System::get_msg(),
-				'table' => $ex_table->get()
-			));
-			$this->load_view('application/view/admin/ckeditor.php'); // use CKEditor for Input
-		}
-	}	
+		$ex_table = new Table($this->user->id, $this->category_id);
+		$this->load_view('admin/exam/table.php', array(
+			'msg' => Misc::get_msg()
+			//'table' => $ex_table->get()
+		));
+		$this->load_view('admin/ckeditor.php'); // use CKEditor for Input
+	}
+	*/
 }
 
 ?>

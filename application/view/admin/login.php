@@ -22,6 +22,7 @@
 							<div class="panel-heading"><strong><span class="glyphicon glyphicon-cog"></span>&nbsp; Đăng nhập hệ thống </strong></div>
 							<div class="panel-body">
 								<?php self::put($msg) ?>
+								
 								<div class="form-group">
 									<div class="input-group">
 										<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
@@ -41,13 +42,13 @@
 										<span class="input-group-addon"> Bộ môn </span>
 										<select class="form-control" name="course">
 											<option value="0"> -- Chọn bộ môn -- </option>
-											<?php foreach($course_data as $c) { ?>
-											<option value="<?php echo $c->id ?>"> <?php echo $c->name ?> </option>
-											<?php } ?>
+											<?php foreach ($course_data as $c) {
+												echo "<option value=\"$c->id\"> $c->name </option>";
+											}?>
 										</select>
 									</div>
 									<div class="pull-right">
-										<button type="submit" class="btn btn-primary" name="btn-action" value="login"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
+										<button type="submit" class="btn btn-primary" name="action" value="login"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
 									</div>
 								</div>
 							</div>

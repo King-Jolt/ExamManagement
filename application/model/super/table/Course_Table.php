@@ -6,9 +6,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Table.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/super/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\System\Library\Table;
-use App\Model\Super\GetData;
-use App\System\System;
+use System\Library\Table;
+use Model\Super\GetData;
+use System\Core\Misc;
 
 class Course_Table extends Table
 {
@@ -23,7 +23,7 @@ class Course_Table extends Table
 	public function row($data, $index)
 	{
 		$delete = '?' . http_build_query(array('action' => 'delete', 'id' => $data->id));
-		$link = System::current_path() . '/user.php?' . http_build_query(array('course_id' => $data->id));
+		$link = Misc::current_path() . '/user.php?' . http_build_query(array('course_id' => $data->id));
 		return <<<EOF
 		<tr>
 			<td> $index </td>

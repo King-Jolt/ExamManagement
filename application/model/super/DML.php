@@ -5,8 +5,8 @@ namespace App\Model\Super;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\System\Database\Mysql;
-use App\System\System;
+use System\Database\Mysql;
+use System\Core\Misc;
 
 class DML
 {
@@ -24,7 +24,7 @@ class DML
 			));
 			if ($this->connect->get_affected_rows())
 			{
-				System::put_msg('success', 'Đã cập nhật thành công, vui lòng đăng nhập lại !');
+				Misc::put_msg('success', 'Đã cập nhật thành công, vui lòng đăng nhập lại !');
 			}
 			else
 			{
@@ -33,18 +33,18 @@ class DML
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', $e->getMessage(), FALSE);
+			Misc::put_msg('warning', $e->getMessage(), FALSE);
 		}
 	}
 	public function insert_Course($name)
 	{
 		try
 		{
-			$id = System::get_uid();
+			$id = Misc::get_uid();
 			$this->connect->query('INSERT INTO course(id, name) VALUES(?, ?)', array($id, $name));
 			if ($this->connect->get_affected_rows())
 			{
-				System::put_msg('success', "Đã thêm bộ môn mới \"$name\"");
+				Misc::put_msg('success', "Đã thêm bộ môn mới \"$name\"");
 			}
 			else
 			{
@@ -54,7 +54,7 @@ class DML
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', $e->getMessage(), FALSE);
+			Misc::put_msg('warning', $e->getMessage(), FALSE);
 		}
 	}
 	public function delete_Course($id)
@@ -64,7 +64,7 @@ class DML
 			$this->connect->query('DELETE FROM course WHERE id = ?', array($id));
 			if ($this->connect->get_affected_rows())
 			{
-				System::put_msg('success', 'Đã xóa một bộ môn');
+				Misc::put_msg('success', 'Đã xóa một bộ môn');
 			}
 			else
 			{
@@ -73,20 +73,20 @@ class DML
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', 'Không thể xóa bộ môn này !', FALSE);
+			Misc::put_msg('warning', 'Không thể xóa bộ môn này !', FALSE);
 		}
 	}
 	public function insert_User($course_id, $user, $name)
 	{
 		try
 		{
-			$id = System::get_uid();
+			$id = Misc::get_uid();
 			$this->connect->query('INSERT INTO user(id, course_id, user, pass, name) VALUES(?, ?, ?, SHA1(?), ?)', array(
 				$id, $course_id, $user, '12345678', $name
 			));
 			if ($this->connect->get_affected_rows())
 			{
-				System::put_msg('success', "Đã thêm mới tài khoản \"$user\" !");
+				Misc::put_msg('success', "Đã thêm mới tài khoản \"$user\" !");
 			}
 			else
 			{
@@ -96,7 +96,7 @@ class DML
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', 'Tên tài khoản không được trùng với tài khoản khác', FALSE);
+			Misc::put_msg('warning', 'Tên tài khoản không được trùng với tài khoản khác', FALSE);
 		}
 	}
 	public function delete_User($id)
@@ -104,11 +104,11 @@ class DML
 		try
 		{
 			$this->connect->query('DELETE FROM user WHERE id = ?', array($id));
-			System::put_msg('success', 'Đã xóa một tài khoản !');
+			Misc::put_msg('success', 'Đã xóa một tài khoản !');
 		}
 		catch (\Exception $e)
 		{
-			System::put_msg('warning', 'Tài khoản này đang chứa dữ liệu => Không thể xóa !', FALSE);
+			Misc::put_msg('warning', 'Tài khoản này đang chứa dữ liệu => Không thể xóa !', FALSE);
 		}
 	}
 }

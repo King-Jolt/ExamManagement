@@ -7,17 +7,17 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/Auth.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/database/Sql_QueryCommand.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\System\Controller;
-use App\System\Library\Auth;
-use App\System\Database\Sql_QueryCommand;
-use App\System\System;
+use System\Controller;
+use System\Library\Auth;
+use System\Database\Sql_QueryCommand;
+use System\Core\Misc;
 
 class Login extends Controller
 {
 	public function __construct()
 	{
 		Auth::set_Key('super');
-		Auth::redirect_Success(System::current_path() . '/course.php');
+		Auth::redirect_Success(Misc::current_path() . '/course.php');
 		Auth::validate();
 		parent::__construct();
 	}
@@ -38,9 +38,9 @@ class Login extends Controller
 				}
 				catch (\Exception $e)
 				{
-					System::put_msg('danger', $e->getMessage(), FALSE);
+					Misc::put_msg('danger', $e->getMessage(), FALSE);
 				}
-				System::redirect();
+				Misc::redirect();
 				break;
 			}
 		}
@@ -49,7 +49,7 @@ class Login extends Controller
 	{
 		$path = '/application/view/super/login.php';
 		$this->load_view($path, array(
-			'msg' => System::get_msg()
+			'msg' => Misc::get_msg()
 		));
 	}
 }

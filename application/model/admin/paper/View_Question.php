@@ -6,8 +6,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/GetData.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/libraries/View.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
 
-use App\System\Library\View;
-use App\System\System;
+use System\Library\View;
+use System\Core\Misc;
 
 class View_Question
 {
@@ -15,7 +15,8 @@ class View_Question
 	private $category_id = NULL;
 	private $exam_id = NULL;
 	public $option = array(
-		'show_question_checkbox' => FALSE
+		'show_question_checkbox' => FALSE,
+		'return_only_answer' => FALSE
 	);
 	public function __construct($user_id, $category_id, $exam_id)
 	{
@@ -44,7 +45,7 @@ class View_Question
 			if ($row->link_answer !== NULL)
 			{
 				$answer = chr($row->link_answer + 64);
-				$answer = "answer=\"$answer\"";
+				$answer = "answer=\"$a_mark - $answer\"";
 			}
 			$body .= <<<EOF
 			<tr>
@@ -60,7 +61,7 @@ EOF;
 			<table class="link-table">
 				<thead>
 					<th> $a_title </th>
-					<th> Chọn đáp án </th>
+					<th> Đáp án </th>
 					<th> $b_title </th>
 				</thead>
 				$body
@@ -85,25 +86,23 @@ EOF;
 	}
 	public function get($full_view = FALSE)
 	{
-		$data = '';
 		try
 		{
 			$header = '';
 			$html = '';
 			$footer = '';
-			if ($full_view)
-			{
-				$exam_data = GetData::get_Exam($this->user_id, $this->category_id, $this->exam_id)->execute()->first();
-				$header .= "<div class=\"header\"> $exam_data->header </div>";
-				$footer .= "<div class=\"footer\"> $exam_data->footer </div>";
-			}
-			/*
+			$script = '';
+			$exam_data = GetData::get_Exam($this->user_id, $this->category_id, $this->exam_id)->execute()->first();
 			if (!$exam_data)
 			{
 				throw new \Exception('Lỗi ! Đề thi không tồn tại');
 			}
-			*/
-			$table_answer = '';
+			if ($full_view)
+			{
+				$header .= "<div class=\"header\"> $exam_data->header </div>";
+				$footer .= "<div class=\"footer\"> $exam_data->footer </div>";
+			}
+			$table_answer = "<div class=\"hide table-answer\"><h3 class=\"exam-title\"> $exam_data->title </h3>";
 			$html .= '<div class="question-preview"><ul>';
 			$question_result = GetData::get_Question($this->user_id, $this->category_id, $this->exam_id)->execute()->get_data();
 			$no = 1;
@@ -115,6 +114,7 @@ EOF;
 				$content_class = '';
 				$checkbox = '';
 				$data = '';
+				$ans = '';
 				switch ($question->q_type)
 				{
 					case GetData::$types['link']:
@@ -125,10 +125,8 @@ EOF;
 					}
 					case GetData::$types['multiple-choice']:
 					{
-						$ans = 0;
 						$data = $this->_get_multiple_choice($id, $question_result, $ans);
 						$content_class = 'multiple-choice';
-						$table_answer .= "<div class=\"index\"> Câu $no : $ans </div>";
 						break;
 					}
 					case GetData::$types['fill']:
@@ -139,6 +137,7 @@ EOF;
 						break;
 					}
 				}
+				$table_answer .= "<div class=\"index\"> $ans </div>";
 				if ($this->option['show_question_checkbox'])
 				{
 					$checkbox = "<input type=\"checkbox\" name=\"q[]\" value=\"$question->question_id\" />";
@@ -151,22 +150,40 @@ EOF;
 EOF;
 				$no++;
 			}
-			$html .= "<li class=\"table-answer\"> $table_answer </li>";
 			$html .= '</ul></div>';
-			$data = <<<EOF
-			<div class="exam-wrap">
-				$header
-				$html
-				$footer
-			</div>
+			$table_answer .= '</div>';
+			if ($this->option['return_only_answer'])
+			{
+				$script = <<<EOF
+				<script>
+					obj_q.show_TableAnswer();
+				</script>
 EOF;
+				$data = <<<EOF
+				<div class="exam-wrap">
+					$table_answer
+				</div>
+EOF;
+			}
+			else
+			{
+				$data = <<<EOF
+				<div class="exam-wrap">
+					$header
+					$html
+					$table_answer
+					$footer
+				</div>
+EOF;
+			}
 		}
 		catch (\Exception $e)
 		{
 			$data = '<div>' . $e->getMessage() . '</div>';
 		}
 		return new View('/application/view/admin/question/page/preview.php', array(
-			'data' => $data
+			'data' => $data,
+			'script' => $script
 		));
 	}
 }

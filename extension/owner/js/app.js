@@ -14,12 +14,6 @@ $(document).ready(function(){
 	$('[data-toggle="popover"]').popover({
 		trigger: 'hover'
 	});
-	$('.dropdown').on('show.bs.dropdown', function() {
-		$(this).find('.dropdown-menu').first().stop(true, true).slideDown(200);
-	});
-	$('.dropdown').on('hide.bs.dropdown', function() {
-		$(this).find('.dropdown-menu').first().stop(true, true).slideUp(200);
-	});
 	$('body').tooltip({
 		selector: 'button[title], a[title]',
 		container: 'body'
@@ -27,9 +21,25 @@ $(document).ready(function(){
 	$('body').on('focus', 'button, a', function(){
 		$(this).blur();
 	});
-	$('.be-care').confirm({
-		title: 'Xác nhận',
-		content: 'Bạn có chắc chắn muốn xóa ?',
-		type: 'red'
+	$(document).on('click', 'a.be-care', function(e){
+		e.preventDefault();
+		var that = this;
+		$.confirm({
+			title: 'Xác nhận',
+			content: 'Bạn có chắc chắn muốn xóa ?',
+			type: 'red',
+			buttons: {
+				OK: {
+					text: 'Có',
+					action: function(){
+						window.location.href = $(that).prop('href');
+						return false;
+					}
+				},
+				NO: {
+					text: 'Không'
+				}
+			}
+		});
 	});
 });

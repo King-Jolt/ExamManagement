@@ -99,5 +99,6 @@
 				$(this).next('.a-selected').remove();
 			}
 		});
+		$('form#add-multiple-choice .set-option').val(4).trigger('change');
 	});
 </script>
