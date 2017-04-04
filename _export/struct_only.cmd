@@ -1,1 +1,0 @@
-C:\xampp\mysql\bin\mysqldump --routines=true --no-data -u root exam_management > data\db.nodata.sql
