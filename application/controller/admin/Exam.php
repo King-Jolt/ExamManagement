@@ -41,22 +41,48 @@ class Exam extends Admin
 	protected function create()
 	{
 		Route::add('post', 'action', function($value){
-			$data = array(
-				'id' => Misc::get_uid(),
-				'category_id' => Request::params()['category_id'],
-				'title' => Request::post('title'),
-				'header' => Request::post('header'),
-				'footer' => Request::post('footer'),
-				'share' => $this->user->id,
-				'date' => Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
-			);
-			$this->model->insertExam($data);
-			$this->redirectToTable();
+			if ($value == 'insert')
+			{
+				$this->model->insertExam(
+					Request::post('title'),
+					Request::post('header'),
+					Request::post('footer'),
+					Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
+				);
+				$this->redirectToTable();
+			}
 		});
 		Route::add(function(){
-			View::add('admin/exam/edit.php');
+			View::add('admin/exam/insert.php');
 		});
 	}
+	protected function edit()
+	{
+		Route::add('post', 'action', function($value){
+			if ($value == 'update')
+			{
+				$this->model->updateExam(
+					Request::params()['exam_id'],
+					Request::post('title'),
+					Request::post('header'),
+					Request::post('footer'),
+					Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
+				);
+				$this->redirectToTable();
+			}
+		});
+		Route::add(function(){
+			$data = Model::list_Exam(array('id' => Request::params()['exam_id']))->execute()->fetch();
+			View::add('admin/exam/update.php', array(
+				'title' => $data->title,
+				'header' => $data->header,
+				'footer' => $data->footer,
+				'set_checked' => $data->date ? 'checked' : '',
+				'date' => $data->date
+			));
+		});
+	}
+
 	protected function delete()
 	{
 		$this->model->deleteExams(array(Request::params()['exam_id']));

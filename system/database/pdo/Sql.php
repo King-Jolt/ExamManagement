@@ -81,10 +81,9 @@ class Sql extends \PDO implements DB_ISQL
 		}
 		if (is_array($param))
 		{
-			for ($i = 0; $i < count($param); $i++)
+			foreach (array_keys($param) as $p => $key)
 			{
-				$p = $i + 1;
-				if (!$this->pdo_stmt->bindParam($p, $param[$i]))
+				if (!$this->pdo_stmt->bindParam($p + 1, $param[$key]))
 				{
 					$arr_err = $this->errorInfo();
 					throw new DB_Exception($arr_err[2], $arr_err[1]);

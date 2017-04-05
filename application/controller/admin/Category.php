@@ -35,36 +35,29 @@ class Category extends Admin
 	protected function create()
 	{
 		Route::add('post', 'action', function($value){
-			$data = array(
-				'id' => Misc::get_uid(),
-				'parent' => isset(Request::params()['category_id']) ? Request::params()['category_id'] : NULL,
-				'name' => Request::post('name'),
-				'user_id' => $this->user->id
+			$this->model->insertCategory(
+				isset(Request::params()['category_id']) ? Request::params()['category_id'] : NULL,
+				Request::post('name')
 			);
-			$this->model->insertCategory($data);
 			$this->back();
 		});
 		Route::add(function(){
 			$this->nav->add('Thêm danh mục mới');
-			View::add('admin/category/add.php', array(
-				'title' => 'Thêm danh mục',
-				'action' => 'add',
-				'value' => ''
-			));
+			View::add('admin/category/insert.php');
 		});
 	}
 	protected function edit()
 	{
 		Route::add('post', 'action', function($value){
-			$this->model->updateCategory(array('name' => Request::post('name')), Request::params()['category_id']);
+			$this->model->updateCategory(Request::params()['category_id'], Request::post('name'));
 			$this->back();
 		});
 		Route::add(function(){
 			$this->nav->add('Sửa danh mục');
-			$data = $this->model->list_Category('id', Request::params()['category_id'])->execute()->fetch();
-			View::add('admin/category/add.php', array(
-				'title' => 'Chỉnh sửa danh mục',
-				'action' => 'edit',
+			$data = $this->model->list_Category(array(
+				'id' => Request::params()['category_id']
+			))->execute()->fetch();
+			View::add('admin/category/update.php', array(
 				'value' => $data->name
 			));
 		});

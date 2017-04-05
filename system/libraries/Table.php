@@ -5,14 +5,13 @@ namespace System\Libraries;
 use System\Database\DB_Query;
 use System\Database\DB_Result;
 
-class Table
+abstract class Table
 {
-	public $db_query = NULL; // Database Query
-	public $arr_title = array(); // for custom title
-	public $class = 'table table-striped table-hover'; // Use Bootstrap table
 	public $page = 1;
 	public $page_size = 50;
-	public $callback = NULL;
+
+	protected $arr_title = array(); // for custom title
+	protected $class = 'table table-striped table-hover'; // Use Bootstrap table
 	
 	private $_use_db = TRUE;
 	private $_total = 0;
@@ -28,18 +27,19 @@ class Table
 		{
 			$this->page_size = intval($s);
 		}
-		$this->callback = function($data, $index)
-		{
-			$html = '<tr>';
-			foreach ($data as $k => $v)
-			{
-				$html .= "<td> $v </td>";
-			}
-			$html .= '</tr>';
-			return $html;
-		}; 
 	}
-	protected function no_Data()
+	abstract protected function Source();
+	protected function row($data, $index)
+	{
+		$html = '<tr>';
+		foreach ($data as $k => $v)
+		{
+			$html .= "<td> $v </td>";
+		}
+		$html .= '</tr>';
+		return $html;
+	}
+	protected function dataEmpty()
 	{
 		return '<tr class="info"><td colspan="25"><b> Không có dữ liệu </b></td></tr>';
 	}
@@ -60,16 +60,17 @@ class Table
 		}
 		if ($this->_use_db)
 		{
-			if (!($this->db_query instanceof DB_Query))
+			$db_query = $this->Source();
+			if (!($db_query instanceof DB_Query))
 			{
 				throw new Exception\Table_DBError('DB_Query Object is not set !');
 			}
 			$n_start = ($this->page - 1) * $this->page_size;
 			if ($this->page_size > 0)
 			{
-				$this->db_query->limit($this->page_size, $n_start);
+				$db_query->limit($this->page_size, $n_start);
 			}
-			$result = $this->db_query->execute();
+			$result = $db_query->execute();
 			if (!($result instanceof DB_Result))
 			{
 				throw new Exception\Table_DBError('DB_Result is empty !');
@@ -98,8 +99,7 @@ class Table
 					$i = $n_start;
 					foreach ($result as $row)
 					{
-						$cb = $this->callback;
-						$body .= $cb($row, ++$i);
+						$body .= $this->row($row, ++$i);
 					}
 				}
 				else
@@ -109,7 +109,7 @@ class Table
 			}
 			else
 			{
-				$body .= $this->no_Data();
+				$body .= $this->dataEmpty();
 			}
 		}
 		// Return html

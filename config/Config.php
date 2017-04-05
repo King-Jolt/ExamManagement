@@ -25,8 +25,9 @@ $config['routes'] = array(
 	'/admin/category/{category_id}/delete' => 'Admin\Category:delete',
 	'/admin/category/{category_id}/exam' => 'Admin\Exam',
 	'/admin/category/{category_id}/exam/create' => 'Admin\Exam:create',
-	'/admin/category/{category_id}/exam/delete/{exam_id}' => 'Admin\Exam:delete',
-	'/admin/exam/{exam_id}/question/view' => 'Admin\Question:view'
+	'/admin/category/{category_id}/exam/{exam_id}/delete' => 'Admin\Exam:delete',
+	'/admin/category/{category_id}/exam/{exam_id}/edit' => 'Admin\Exam:edit',
+	'/admin/category/{category_id}/exam/{exam_id}/question' => 'Admin\Question'
 );
 
 ?>

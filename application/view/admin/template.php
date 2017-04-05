@@ -4,9 +4,10 @@
 		<meta charset="UTF-8">
 		<link rel="icon" href="/asset/default/icon.png" />
 		<link rel="stylesheet" href="/extension/bootstrap/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="/extension/bootstrap/css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" href="/extension/owner/css/custom.css" />
 		<link rel="stylesheet" href="/extension/jquery-confirm/jquery-confirm.min.css" />
+		
+		
 		<script src="/extension/jquery/jquery-1.12.4.min.js"></script>
 		<script src="/extension/jquery/jquery.validate.js"></script>
 		<script src="/extension/bootstrap/js/bootstrap.min.js"></script>
@@ -14,6 +15,7 @@
 		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 		<script src="/extension/jquery-confirm/jquery-confirm.min.js"></script>
 		<script src="/extension/owner/js/app.js"></script>
+		
 		<script type="text/x-mathjax-config">
 			MathJax.Hub.Config({
 				tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
@@ -39,7 +41,7 @@
 									<span class="icon-bar"></span>
 									<span class="icon-bar"></span>
 								</button>
-								<a href="javascript:void(0)" class="navbar-brand" id="about"><strong> Phần mềm quản lý đề thi </strong></a>
+								<a href="javascript:void(0)" class="navbar-brand" id="about"><strong class="text-muted"> Phần mềm quản lý đề thi </strong></a>
 							</div>
 							<div class="collapse navbar-collapse" id="bs-collapse-navbar-menu">
 								<ul class="nav navbar-nav navbar-right">

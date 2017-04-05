@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace Application\Controller\Admin;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/controller/admin/Admin.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/application/model/admin/Model_Question.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/system/System.php';
-
-use Controller\Admin\Admin;
-use Model\Admin\Model_Question;
-use System\Core\Misc;
+use Application\Controller\Admin\Admin;
 
 class Question extends Admin
 {
+	protected function index()
+	{
+		
+	}
+	/*
 	private $category_id = NULL;
 	private $exam_id = NULL;
 	private $question = NULL;
@@ -86,6 +85,8 @@ class Question extends Admin
 	{
 		$this->menu['manage']['active'] = 'active';
 	}
+	 * 
+	 */
 }
 
 ?>

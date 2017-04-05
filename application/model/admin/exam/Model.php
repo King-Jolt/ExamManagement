@@ -11,12 +11,12 @@ class Model
 {
 	public static $category_id = NULL;
 	public static $user_id = NULL;
-	public static function list_Exam($where = array())
+	public static function list_Exam(array $where_data = array())
 	{
-		$where += array(
+		$where = array_merge(array(
 			'user_id' => self::$user_id,
 			'category_id' => self::$category_id
-		);
+		), $where_data);
 		return DB::query()->select()->from('list_exam')->where($where);
 	}
 	public function __construct($user_id, $category_id)
@@ -25,11 +25,41 @@ class Model
 		self::$category_id = $category_id;
 		self::$user_id = $user_id;
 	}
-	public function insertExam($data)
+	public function insertExam($title, $header, $footer, $date)
 	{
-		$r = DB::query()->insert('exam', $data)->execute();
+		$data = array(
+			'id' => Misc::get_uid(),
+			'category_id' => self::$category_id,
+			'title' => $title,
+			'header' => $header,
+			'footer' => $footer,
+			'share' => self::$user_id,
+			'date' => $date
+		);
+		DB::query()->insert('exam_table', $data)->execute();
 		Misc::put_msg('success', 'Đã tạo mới một đề thi');
-		return $r;
+	}
+	public function updateExam($id, $title, $header, $footer, $date)
+	{
+		$data = array(
+			'title' => $title,
+			'header' => $header,
+			'footer' => $footer,
+			'date' => $date,
+		);
+		$where = array(
+			'user_id' => self::$user_id,
+			'category_id' => self::$category_id,
+			'id' => $id
+		);
+		if (DB::query()->update('exam_table')->set($data)->where($where)->execute())
+		{
+			Misc::put_msg('success', 'Đã cập nhật thông tin đề thi thành công');
+		}
+		else
+		{
+			Misc::put_msg('warning', 'Không có thay đổi nào được cập nhật');
+		}
 	}
 	public function deleteExams(array $eid)
 	{

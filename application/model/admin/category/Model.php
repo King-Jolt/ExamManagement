@@ -10,26 +10,25 @@ use Application\Model\Misc;
 
 class Model extends \System\Core\Model
 {
-	private $uid = NULL;
-	public static function list_Category()
+	static private $user_id = NULL;
+	public static function list_Category(array $data_where)
 	{
-		return call_user_func_array(array(DB::query()->select()->from('list_category'), 'where'), func_get_args());
+		$where = array_merge(array('user_id' => self::$user_id), $data_where);
+		return DB::query()->select()->from('list_category')->where($where);
 	}
-	public static function Tree_Traversal($uid, $id, $list, $callback)
+	public static function Tree_Traversal($id, $list, $callback)
 	{
 		$stack = array();
 		$result = NULL;
 		if ($id)
 		{
 			$result = self::list_Category(array(
-				'user_id' => $uid,
 				'parent' => $id
 			));
 		}
 		else
 		{
 			$result = self::list_Category(array(
-				array('user_id', $uid),
 				array('parent', 'IS', NULL)
 			));
 		}
@@ -47,7 +46,6 @@ class Model extends \System\Core\Model
 					));
 					$callback($data, TRUE, $list);
 					$result = self::list_Category(array(
-						'user_id' => $uid,
 						'parent' => $data->id
 					))->execute();
 					continue;
@@ -72,7 +70,7 @@ class Model extends \System\Core\Model
 	}
 	public function __construct($id)
 	{
-		$this->uid = $id;
+		self::$user_id = $id;
 	}
 	public function getTreeView()
 	{
@@ -89,7 +87,7 @@ class Model extends \System\Core\Model
 				)
 			)
 		);
-		self::Tree_Traversal($this->uid, '', $tree[0]->nodes, function($data, $has_child, &$list) use ($curi) {
+		self::Tree_Traversal('', $tree[0]->nodes, function($data, $has_child, &$list) use ($curi) {
 			$add = "$curi/$data->id/create";
 			$edit = "$curi/$data->id/edit";
 			$delete = "$curi/$data->id/delete";
@@ -114,14 +112,27 @@ EOF;
 		});
 		return $tree;
 	}
-	public function insertCategory($data)
+	public function insertCategory($parent, $name)
 	{
-		DB::query()->insert('category', $data)->execute();
+		$data = array(
+			'id' => Misc::get_uid(),
+			'parent' => $parent,
+			'name' => $name,
+			'user_id' => self::$user_id
+		);
+		DB::query()->insert('category_table', $data)->execute();
 		Misc::put_msg('success', "Đã thêm mới một danh mục");
 	}
-	public function updateCategory($data, $id)
+	public function updateCategory($id, $new_name)
 	{
-		if (DB::query()->update('category')->set($data)->where(array('id' => $id))->execute())
+		$data = array(
+			'name' => $new_name
+		);
+		$where = array(
+			'user_id' => self::$user_id,
+			'id' => $id
+		);
+		if (DB::query()->update('category_table')->set($data)->where($where)->execute())
 		{
 			Misc::put_msg('success', 'Đã cập nhật danh mục thành công');
 		}
@@ -133,7 +144,7 @@ EOF;
 	public function deleteCategory($id)
 	{
 		$list_id = new \ArrayObject(array($id));
-		$this->Tree_Traversal($this->uid, $id, $list_id, function($data, $has_child, $list){
+		$this->Tree_Traversal($id, $list_id, function($data, $has_child, $list){
 			$list->append($data->id);
 		});
 		$r = 0;
@@ -141,7 +152,7 @@ EOF;
 		DB::begin();
 		foreach ($list_id as $id)
 		{
-			if (DB::query()->delete()->from('category')->where('id', $id)->execute())
+			if (DB::query('call delete_category(?, ?)', array(self::$user_id, $id))->execute())
 			{
 				$r += 1;
 			}
