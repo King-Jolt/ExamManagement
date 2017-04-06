@@ -11,13 +11,17 @@ class Model
 {
 	public static $category_id = NULL;
 	public static $user_id = NULL;
-	public static function list_Exam(array $where_data = array())
+	public static function list_Exam()
 	{
-		$where = array_merge(array(
-			'user_id' => self::$user_id,
-			'category_id' => self::$category_id
-		), $where_data);
-		return DB::query()->select()->from('list_exam')->where($where);
+		$query = DB::query()->select(['e.*', 'COUNT(e.id) AS n_question'])->from('exam', 'e')
+			->join('category', 'c', 'c.id = e.category_id')
+			->leftJoin('question', 'q', 'q.exam_id = e.id')
+			->where([
+				'user_id' => self::$user_id,
+				'category_id' => self::$category_id
+			])
+			->group_by('e.id');
+		return $query;
 	}
 	public function __construct($user_id, $category_id)
 	{

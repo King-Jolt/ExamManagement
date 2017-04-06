@@ -7,10 +7,7 @@ $config['db'] = array(
 	'host' => 'localhost',
 	'user' => 'root',
 	'password' => '',
-	'db' => 'exam_management',
-	'port' => 3306,
-	'charset' => 'utf8',
-	'collation' => 'utf8_unicode_ci'
+	'db' => 'exam_management'	
 );
 
 $config['routes'] = array(
@@ -28,7 +25,9 @@ $config['routes'] = array(
 	'/admin/category/{category_id}/exam/create' => 'Admin\Exam:create',
 	'/admin/category/{category_id}/exam/{exam_id}/delete' => 'Admin\Exam:delete',
 	'/admin/category/{category_id}/exam/{exam_id}/edit' => 'Admin\Exam:edit',
-	'/admin/category/{category_id}/exam/{exam_id}/question' => 'Admin\Question'
+	'/admin/category/{category_id}/exam/{exam_id}/group' => 'Admin\Group',
+	'/admin/category/{category_id}/exam/{exam_id}/group/create' => 'Admin\Group:create',
+	'/admin/category/{category_id}/exam/{exam_id}/group/{group_id}/delete' => 'Admin\Group:delete'
 );
 
 ?>

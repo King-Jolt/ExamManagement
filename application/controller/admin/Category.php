@@ -16,7 +16,7 @@ class Category extends Admin
 	public function __construct()
 	{
 		parent::__construct();
-		$this->model = new Model($this->user->id);
+		$this->model = new Model();
 	}
 	protected function index()
 	{

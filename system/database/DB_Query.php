@@ -4,11 +4,12 @@ namespace System\Database;
 
 class DB_Query
 {
-	private $_query = 'SELECT @@VERSION as version'; // default query
+	private $_query = 'SELECT @@VERSION as ver'; // default query
 	private $_join = array();
 	private $_where = array();
-	private $_order_by = array();
 	private $_group_by = array();
+	private $_having = array();
+	private $_order_by = array();
 	private $_set = array();
 	private $_limit = -1;
 	private $_offset = 0;
@@ -100,6 +101,11 @@ class DB_Query
 	{
 		$type = strtoupper($type);
 		$table = $argument[0];
+		if ($table instanceof self)
+		{
+			$this->_param = array_merge($this->_param, $table->get_Param());
+			$table = "({$table->get_Query()})";
+		}
 		$alias = '';
 		$condition = $argument[1];
 		switch (count($argument))
@@ -151,14 +157,10 @@ class DB_Query
 	{
 		return $this->_where('OR', array($column, 'IS NOT', NULL));
 	}
-	public function order_by($column, $sort = 'DESC')
+	public function union(self $select)
 	{
-		if (is_string($column))
-		{
-			$column = array($column => $sort);
-		}
-		$this->_order_by = array_merge($this->_order_by, $column);
-		return $this;
+		$this->_query .= "UNION {$select->get_Query()} ";
+		$this->_param = $select->get_Param();
 	}
 	public function group_by($column)
 	{
@@ -167,6 +169,22 @@ class DB_Query
 			$column = array($column);
 		}
 		$this->_group_by = array_merge($this->_group_by, $column);
+		return $this;
+	}
+	public function having($data)
+	{
+		$condition = call_user_func_array(array($this, '_get_condition'), func_get_args());
+		$this->_having = array_merge($this->_having, $condition['expression']);
+		$this->_param = array_merge($this->_param, $condition['param']);
+		return $this;
+	}
+	public function order_by($column, $sort = 'DESC')
+	{
+		if (is_string($column))
+		{
+			$column = array($column => $sort);
+		}
+		$this->_order_by = array_merge($this->_order_by, $column);
 		return $this;
 	}
 	public function insert($table, array $data)
@@ -201,23 +219,22 @@ class DB_Query
 		}, array_keys($data));
 		$this->_param = array_values($data);
 		return $this;
-	}
-	/** @return self */
+	}/*sdsds */
 	public function join()
 	{
 		return call_user_func_array(array($this, 'innerJoin'), func_get_args());
 	}
 	public function innerJoin($table)
 	{
-		return $this->_join('INNER', func_get_args());
+		return $this->_join('inner', func_get_args());
 	}
 	public function leftJoin($table)
 	{
-		return $this->_join('INNER', func_get_args());
+		return $this->_join('left', func_get_args());
 	}
 	public function rightJoin($table)
 	{
-		return $this->_join('INNER', func_get_args());
+		return $this->_join('right', func_get_args());
 	}
 	public function limit($n, $offset = 0)
 	{
@@ -252,6 +269,11 @@ class DB_Query
 			$group = implode(', ', $this->_group_by);
 			$query .= "GROUP BY $group ";
 		}
+		if (!empty($this->_having))
+		{
+			$having = implode(' AND ', $this->_having);
+			$query .= "HAVING $having ";
+		}
 		if (!empty($this->_order_by))
 		{
 			$order = implode(', ', array_map(function($column, $sort){
@@ -279,10 +301,9 @@ class DB_Query
 	{
 		return $this->_param;
 	}
+	/** @return DB_Result */
 	public function execute()
 	{
 		return DB::get_connect()->query($this->get_Query(), $this->get_Param());
 	}
 }
-
-?>

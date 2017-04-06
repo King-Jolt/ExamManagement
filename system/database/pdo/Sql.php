@@ -14,13 +14,18 @@ class Sql extends \PDO implements DB_ISQL
 	private $n_affected_rows = FALSE;
 	public function __construct($db)
 	{
-		$dsn = sprintf('%s:host=%s;port=%s;dbname=%s;charset=%s',
-			$db['driver'],
-			$db['host'],
-			$db['port'],
-			$db['db'],
-			$db['charset']
-		);
+		$dsn = $db['driver'] . ':';
+		switch ($db['driver'])
+		{
+		case 'sqlsrv':
+			if (!isset($db['port'])) $db['port'] = 1433;
+			$dsn .= "Server={$db['host']},{$db['port']};Database={$db['db']}";
+			break;
+		default:
+			if (!isset($db['port'])) $db['port'] = 3306;
+			if (!isset($db['charset'])) $db['charset'] = 'utf8';
+			$dsn .= "host={$db['host']};port={$db['port']};dbname={$db['db']};charset={$db['charset']}";
+		}
 		try
 		{
 			parent::__construct($dsn, $db['user'], $db['password'], array(self::ATTR_ERRMODE => self::ERRMODE_EXCEPTION));
@@ -107,5 +112,3 @@ class Sql extends \PDO implements DB_ISQL
 		return $this->n_affected_rows;
 	}
 }
-
-?>

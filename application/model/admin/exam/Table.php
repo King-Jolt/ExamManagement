@@ -29,7 +29,7 @@ class Table extends \System\Libraries\Table
 		<tr>
 			<td><input type="checkbox" name="eid[]" value="$data->id" /></td>
 			<td> $index </td>
-			<td><a href="/admin/category/$id->category_id/exam/$id->exam_id/question"><span class="glyphicon glyphicon-paperclip"></span> $data->title </a></td>
+			<td><a href="/admin/category/$id->category_id/exam/$id->exam_id/group"><span class="glyphicon glyphicon-paperclip"></span> $data->title </a></td>
 			<td> $data->n_question </td>
 			<td class="text-info"> $date </td>
 			<td> $collect </td>

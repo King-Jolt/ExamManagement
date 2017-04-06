@@ -12,5 +12,3 @@ interface DB_ISQL
 	public function query($query_str, $param = NULL);
 	public function get_affected_rows();
 }
-
-?>

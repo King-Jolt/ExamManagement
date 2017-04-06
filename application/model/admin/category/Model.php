@@ -4,33 +4,37 @@ namespace Application\Model\Admin\Category;
 
 use System\Database\DB;
 use System\Libraries\Request;
+use System\Libraries\Auth;
 use System\Libraries\View;
 
 use Application\Model\Misc;
 
-class Model extends \System\Core\Model
+class Model
 {
 	static private $user_id = NULL;
-	public static function list_Category(array $data_where)
+	public static function list_Category()
 	{
-		$where = array_merge(array('user_id' => self::$user_id), $data_where);
-		return DB::query()->select()->from('list_category')->where($where);
+		$s_query = DB::query()->select(['c.id', 'COUNT(e.id) AS n_exam', 'COUNT(IF(e.share = c.user_id, e.share, NULL)) AS n_share'])->from('category', 'c')
+			->leftJoin('exam', 'e', 'e.category_id = c.id')
+			->group_by('c.id');
+		$query = DB::query()->select(['c.*', 'COUNT(a.id) AS child', 's.n_exam', 's.n_share'])->from('category', 'c')
+			->leftJoin('category', 'a', 'a.parent = c.id')
+			->join($s_query, 's', 's.id = c.id')
+			->where('c.user_id', self::$user_id)
+			->group_by('c.id');
+		return $query;
 	}
 	public static function Tree_Traversal($id, $list, $callback)
 	{
 		$stack = array();
-		$result = NULL;
+		$result = self::list_Category();
 		if ($id)
 		{
-			$result = self::list_Category(array(
-				'parent' => $id
-			));
+			$result->where('c.parent', $id);
 		}
 		else
 		{
-			$result = self::list_Category(array(
-				array('parent', 'IS', NULL)
-			));
+			$result->whereIsNull('c.parent');
 		}
 		$result = $result->execute();
 		while (TRUE)
@@ -45,9 +49,7 @@ class Model extends \System\Core\Model
 						'arr_tree' => $list
 					));
 					$callback($data, TRUE, $list);
-					$result = self::list_Category(array(
-						'parent' => $data->id
-					))->execute();
+					$result = self::list_Category()->where('c.parent', $data->id)->execute();
 					continue;
 				}
 				$callback($data, FALSE, $list);
@@ -68,9 +70,9 @@ class Model extends \System\Core\Model
 		}
 		return TRUE;
 	}
-	public function __construct($id)
+	public function __construct()
 	{
-		self::$user_id = $id;
+		self::$user_id = Auth::get()->id;
 	}
 	public function getTreeView()
 	{

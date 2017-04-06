@@ -4,7 +4,7 @@ namespace System\Database\PDO;
 
 use System\Database\DB_Result;
 
-class Result extends DB_Result
+class Result implements DB_Result
 {
 	private $pdo_stmt = NULL;
 	private $num_rows = NULL;
@@ -57,5 +57,3 @@ class Result extends DB_Result
 		return $this->row === FALSE ? FALSE : TRUE;
 	}
 }
-
-?>

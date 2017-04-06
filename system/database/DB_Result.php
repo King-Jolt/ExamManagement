@@ -2,11 +2,9 @@
 
 namespace System\Database;
 
-abstract class DB_Result implements \Iterator
+interface DB_Result extends \Iterator
 {
-	abstract public function num_rows();
-	abstract public function get_Columns();
-	abstract public function fetch();
+	public function num_rows();
+	public function get_Columns();
+	public function fetch();
 }
-
-?>

@@ -24,7 +24,11 @@ class DB
 		{
 			return FALSE;
 		}
-		self::$instance = new self();
+		else
+		{
+			self::$instance = new self();
+			return TRUE;
+		}
 	}
 	public static function begin()
 	{
@@ -57,16 +61,7 @@ class DB
 	}
 	public static function get_connect()
 	{
-		if (self::$auto_open_connect)
-		{
-			DB::open();
-		}
-		if (self::$instance instanceof self)
-		{
-			return self::$instance->connect;
-		}
-		throw new DB_Exception('Please call ' . __CLASS__ . '::open() : to open connect database.');
+		DB::open();
+		return self::$instance->connect;
 	}
 }
-
-?>

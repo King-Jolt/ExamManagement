@@ -43,14 +43,17 @@ EOF;
 	}
 	public static function put_msg($type, $msg, $auto_close = TRUE)
 	{
-		$str = self::alert($type, $msg, $auto_close);
-		Session::set('msg', $str);
+		Session::set('message', array(
+			'type' => $type,
+			'str' => $msg,
+			'close' => $auto_close
+		));
 	}
 	public static function get_msg()
 	{
-		$r = Session::get('msg');
-		Session::remove('msg');
-		return $r;
+		$msg = Session::get('message');
+		Session::remove('message');
+		return $msg ? self::alert($msg['type'], $msg['str'], $msg['close']) : $msg;
 	}
 }
 
