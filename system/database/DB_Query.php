@@ -4,227 +4,280 @@ namespace System\Database;
 
 class DB_Query
 {
-	private $_query = '';
-	private $_parameter = array();
+	private $_query = 'SELECT @@VERSION as version'; // default query
+	private $_join = array();
+	private $_where = array();
+	private $_order_by = array();
+	private $_group_by = array();
+	private $_set = array();
 	private $_limit = -1;
 	private $_offset = 0;
-	private $_where_data = array();
-	public function __construct($query = '', $param = NULL)
+	private $_param = array();
+	public function __construct($query_str = '', $parameter = array())
 	{
-		if ($query)
+		if ($query_str) $this->_query = $query_str;
+		if ($parameter) $this->_param = $parameter;
+	}
+	private function _get_condition($data)
+	{
+		$get = function($column, $operator, $param){
+			$ret = '1';
+			$operator = strtoupper($operator);
+			switch ($operator)
+			{
+			case 'BETWEEN':
+				$ret = "$column BETWEEN ? AND ?";
+				break;
+			case 'IN':
+				$in = implode(', ', array_fill(0, count($param), '?'));
+				$ret = "$column IN ($in)";
+				break;
+			default:
+				$ret = "$column $operator ?";
+			}
+			return $ret;
+		};
+		$list = array();
+		switch (func_num_args())
 		{
-			$this->_query = $query;
-			$this->_parameter = $param;
+		case 1:
+			foreach (func_get_arg(0) as $k => $w)
+			{
+				$c = $k;
+				$o = '=';
+				$p = $w;
+				if (is_array($w))
+				{
+					$c = $w[0];
+					switch (count($w))
+					{
+					case 2:
+						$p = $w[1];
+						break;
+					case 3:
+						$o = $w[1];
+						$p = $w[2];
+						break;
+					}
+				}
+				array_push($list, array($c, $o, $p));
+			}
+			break;
+		case 2:
+			array_push($list, array(func_get_arg(0), '=', func_get_arg(1)));
+			break;
+		case 3:
+			array_push($list, array(func_get_arg(0), func_get_arg(1), func_get_arg(2)));
+			break;
 		}
+		$where_return = array('expression' => array(), 'param' => array());
+		foreach ($list as $where)
+		{
+			array_push($where_return['expression'], $get($where[0], $where[1], $where[2]));
+			if (is_array($where[2]))
+			{
+				$where_return['param'] = array_merge($where_return['param'], $where[2]);
+			}
+			else
+			{
+				array_push($where_return['param'], $where[2]);
+			}
+		}
+		return $where_return;
 	}
-	public function insert($table, array $data)
+	private function _where($condition, $argument)
 	{
-		$this->_query = sprintf("INSERT INTO %s(%s) VALUES(%s) ",
-			$table,
-			implode(', ', array_keys($data)),
-			implode(', ', array_fill(0, count($data), '?'))
-		);
-		$this->_parameter = array_values($data);
+		$where_get = call_user_func_array(array($this, '_get_condition'), $argument);
+		foreach ($where_get['expression'] as $w)
+		{
+			$k = empty($this->_where) ? '' : "$condition ";
+			array_push($this->_where, "{$k}{$w}");
+		}
+		$this->_param = array_merge($this->_param, $where_get['param']);
 		return $this;
 	}
-	public function delete()
+	private function _join($type, $argument)
 	{
-		$this->_query .= 'DELETE ';
+		$type = strtoupper($type);
+		$table = $argument[0];
+		$alias = '';
+		$condition = $argument[1];
+		switch (count($argument))
+		{
+		case 3:
+			$alias = $argument[1];
+			$condition = $argument[2];
+		}
+		$table = $this->_table_alias($table, $alias);
+		array_push($this->_join, "$type JOIN $table ON $condition");
 		return $this;
 	}
-	public function update($table)
+	private function _table_alias($table, $alias)
 	{
-		$this->_query .= "UPDATE $table ";
-		return $this;
-	}
-	public function set(array $data)
-	{
-		$p = (object)array(
-			'param' => &$this->_parameter,
-			'data' => &$data
-		);
-		$this->_query .= sprintf("SET %s ",
-			implode(', ', array_map(function($column) use ($p) {
-				array_push($p->param, $p->data[$column]);
-				return "$column = ?";
-			}, array_keys($data)))
-		);
-		return $this;
+		return $alias ? "$table AS $alias" : $table;
 	}
 	public function select($columns = '*')
 	{
-		if (is_string($columns))
-		{
-			$this->_query = "SELECT $columns ";
-		}
-		else if (is_array($columns))
-		{
-			$this->_query = sprintf("SELECT %s ", implode(', ', $columns));
-		}
+		$c = is_array($columns) ? implode(', ', $columns) : $columns;
+		$this->_query = "SELECT $c ";
 		return $this;
 	}
-	public function from($table)
+	public function from($table, $alias = '')
 	{
-		$this->_query .= "FROM $table ";
-		return $this;
-	}
-	private function _get_where()
-	{
-		$r_where = array();
-		$r_param = array();
-		$num_argc = func_num_args();
-		switch ($num_argc)
-		{
-			case 1:
-			{
-				$data = func_get_arg(0);
-				if (is_array($data))
-				{
-					foreach ($data as $where)
-					{
-						if (is_array($where))
-						{
-							switch (count($where))
-							{
-								case 2:
-								{
-									array_push($r_where, "$where[0] = ?");
-									array_push($r_param, $where[1]);
-									break;
-								}
-								case 3:
-								{
-									array_push($r_where, "$where[0] $where[1] ?");
-									array_push($r_param, $where[2]);
-									break;
-								}
-							}
-						}
-					}
-				}
-				break;
-			}
-			case 2:
-			{
-				array_push($r_where, sprintf('%s = ?', func_get_arg(0)));
-				array_push($r_param, func_get_arg(1));
-				break;
-			}
-			case 3:
-			{
-				array_push($r_where, sprintf('%s %s ?', func_get_arg(0), func_get_arg(1)));
-				array_push($r_param, func_get_arg(2));
-				break;
-			}
-		}
-		return (object)array(
-			'where' => $r_where,
-			'param' => $r_param
-		);
-	}
-	private function _add_where($operator, $data)
-	{
-		$add = function($operator, $column, $condition, $value)
-		{
-			array_push($this->_where_data, sprintf(
-				'%s %s %s ?',
-				empty($this->_where_data) ? 'WHERE' : $operator,
-				$column,
-				$condition
-			));
-			array_push($this->_parameter, $value);
-		};
-		switch (count($data))
-		{
-			case 1:
-			{
-				foreach ($data[0] as $key => $where)
-				{
-					if (is_array($where))
-					{
-						switch (count($where))
-						{
-							case 2:
-							{
-								$add($operator, $where[0], '=', $where[1]);
-								break;
-							}
-							case 3:
-							{
-								$add($operator, $where[0], $where[1], $where[2]);
-								break;
-							}
-						}
-					}
-					else
-					{
-						$add($operator, $key, '=', $where);
-					}
-				}
-				break;
-			}
-			case 2:
-			{
-				$add($operator, $data[0], '=', $data[1]);
-				break;
-			}
-			case 3:
-			{
-				$add($operator, $data[0], $data[1], $data[2]);
-				break;
-			}
-		}
-	}
-	public function or_where($data)
-	{
-		$this->_add_where('OR', func_get_args());
+		$this->_query .= "FROM {$this->_table_alias($table, $alias)} ";
 		return $this;
 	}
 	public function where($data)
 	{
-		$this->_add_where('AND', func_get_args());
+		return $this->_where('AND', func_get_args());
+	}
+	public function whereIsNull($column)
+	{
+		return $this->_where('AND', array($column, 'IS', NULL));
+	}
+	public function whereNotNull($column)
+	{
+		return $this->_where('AND', array($column, 'IS NOT', NULL));
+	}
+	public function or_where($data)
+	{
+		return $this->_where('OR', func_get_args());
+	}
+	public function or_whereIsNull($column)
+	{
+		return $this->_where('OR', array($column, 'IS', NULL));
+	}
+	public function or_whereNotNull($column)
+	{
+		return $this->_where('OR', array($column, 'IS NOT', NULL));
+	}
+	public function order_by($column, $sort = 'DESC')
+	{
+		if (is_string($column))
+		{
+			$column = array($column => $sort);
+		}
+		$this->_order_by = array_merge($this->_order_by, $column);
 		return $this;
 	}
-	public function limit($i, $offset = 0)
+	public function group_by($column)
 	{
-		$this->_limit = $i;
-		$this->_offset = $offset;
+		if (is_string($column))
+		{
+			$column = array($column);
+		}
+		$this->_group_by = array_merge($this->_group_by, $column);
 		return $this;
 	}
-	public function offset($off)
+	public function insert($table, array $data)
 	{
-		$this->_offset = $off;
+		$cols = implode(', ', array_keys($data));
+		$vals = implode(', ', array_fill(0, count($data), '?'));
+		$this->_query = "INSERT INTO $table ($cols) VALUES ($vals) ";
+		$this->_param = array_values($data);
 		return $this;
 	}
-	public function set_Param($param)
+	public function update($table, $alias = '')
 	{
-		$this->_parameter = $param;
+		$this->_query = "UPDATE {$this->_table_alias($table, $alias)} ";
+		return $this;
+	}
+	public function delete($table = '')
+	{
+		if ($table)
+		{
+			$this->_query = "DELETE $table ";
+		}
+		else
+		{
+			$this->_query = 'DELETE ';
+		}
+		return $this;
+	}
+	public function set(array $data)
+	{
+		$this->_set = array_map(function($column){
+			return "$column = ?";
+		}, array_keys($data));
+		$this->_param = array_values($data);
+		return $this;
+	}
+	/** @return self */
+	public function join()
+	{
+		return call_user_func_array(array($this, 'innerJoin'), func_get_args());
+	}
+	public function innerJoin($table)
+	{
+		return $this->_join('INNER', func_get_args());
+	}
+	public function leftJoin($table)
+	{
+		return $this->_join('INNER', func_get_args());
+	}
+	public function rightJoin($table)
+	{
+		return $this->_join('INNER', func_get_args());
+	}
+	public function limit($n, $offset = 0)
+	{
+		$this->_limit = $n;
+		return $this->offset($offset);
+	}
+	public function offset($n)
+	{
+		$this->_offset = $n;
 		return $this;
 	}
 	public function get_Query()
 	{
 		$query = $this->_query;
-		if ($this->_where_data)
+		if (!empty($this->_join))
 		{
-			$query .= implode(' ', $this->_where_data);
+			$join = implode(' ', $this->_join);
+			$query .= "$join ";
 		}
-		if ($this->_limit >= 0 and $this->_offset >= 0)
+		if (!empty($this->_set))
+		{
+			$set = implode(', ', $this->_set);
+			$query .= "SET $set ";
+		}
+		if (!empty($this->_where))
+		{
+			$where = implode(' ', $this->_where);
+			$query .= "WHERE $where ";
+		}
+		if (!empty($this->_group_by))
+		{
+			$group = implode(', ', $this->_group_by);
+			$query .= "GROUP BY $group ";
+		}
+		if (!empty($this->_order_by))
+		{
+			$order = implode(', ', array_map(function($column, $sort){
+				if (in_array(strtoupper($sort), array('ASC', 'DESC')))
+				{
+					return "$column $sort";
+				}
+				return $sort;
+			}, array_keys($this->_order_by), $this->_order_by));
+			$query .= "ORDER BY $order ";
+		}
+		if ($this->_limit > 0 and $this->_offset >= 0)
 		{
 			switch (DB::$db_driver)
 			{
-				case 'mysql':
-				{
-					$query = preg_replace('/(^\s*SELECT(?=\s))/i', '${1} SQL_CALC_FOUND_ROWS', $query);
-					break;
-				}
+			case 'mysql':
+				$query = preg_replace('/(^\s*SELECT(?=\s))/i', '${1} SQL_CALC_FOUND_ROWS', $query);
+			default:
+				$query .= "LIMIT $this->_limit OFFSET $this->_offset ";
 			}
-			$query .= " LIMIT $this->_limit OFFSET $this->_offset";
 		}
 		return $query;
 	}
 	public function get_Param()
 	{
-		return $this->_parameter;
+		return $this->_param;
 	}
 	public function execute()
 	{

@@ -47,7 +47,7 @@ class Login extends Controller
 		});
 		Route::add(function (){
 			View::add('admin/login.php', array(
-				'course_data' => DB::query()->select()->from('course')->execute(),
+				'course_data' => DB::get('course'),
 				'msg' => Misc::get_msg()
 			));
 		});

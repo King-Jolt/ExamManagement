@@ -120,19 +120,19 @@ EOF;
 			'name' => $name,
 			'user_id' => self::$user_id
 		);
-		DB::query()->insert('category_table', $data)->execute();
+		DB::query()->insert('category', $data)->execute();
 		Misc::put_msg('success', "Đã thêm mới một danh mục");
 	}
 	public function updateCategory($id, $new_name)
 	{
-		$data = array(
-			'name' => $new_name
-		);
-		$where = array(
-			'user_id' => self::$user_id,
-			'id' => $id
-		);
-		if (DB::query()->update('category_table')->set($data)->where($where)->execute())
+		$query = DB::query()
+			->update('category')
+			->set(['name' => $new_name])
+			->where([
+				'user_id' => self::$user_id,
+				'id' => $id
+			]);
+		if ($query->execute())
 		{
 			Misc::put_msg('success', 'Đã cập nhật danh mục thành công');
 		}
@@ -152,7 +152,13 @@ EOF;
 		DB::begin();
 		foreach ($list_id as $id)
 		{
-			if (DB::query('call delete_category(?, ?)', array(self::$user_id, $id))->execute())
+			$query = DB::query()
+				->delete()->from('category')
+				->where([
+					'user_id' => self::$user_id,
+					'id' => $id
+				]);
+			if ($query->execute())
 			{
 				$r += 1;
 			}

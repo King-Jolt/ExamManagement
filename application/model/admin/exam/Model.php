@@ -41,18 +41,20 @@ class Model
 	}
 	public function updateExam($id, $title, $header, $footer, $date)
 	{
-		$data = array(
-			'title' => $title,
-			'header' => $header,
-			'footer' => $footer,
-			'date' => $date,
-		);
-		$where = array(
-			'user_id' => self::$user_id,
-			'category_id' => self::$category_id,
-			'id' => $id
-		);
-		if (DB::query()->update('exam_table')->set($data)->where($where)->execute())
+		$query = DB::query()->update('exam', 'e')
+			->join('category', 'c', 'c.id = e.category_id')
+			->set([
+				'e.title' => $title,
+				'e.header' => $header,
+				'e.footer' => $footer,
+				'e.date' => $date
+			])
+			->where([
+				'c.user_id' => self::$user_id,
+				'e.category_id' => self::$category_id,
+				'e.id' => $id
+			]);
+		if ($query->execute())
 		{
 			Misc::put_msg('success', 'Đã cập nhật thông tin đề thi thành công');
 		}
@@ -63,23 +65,31 @@ class Model
 	}
 	public function deleteExams(array $eid)
 	{
-		$iret = 0;
+		$n = 0;
 		DB::begin();
 		foreach ($eid as $exam_id)
 		{
-			if (DB::query()->delete()->from('exam')->where('id', $exam_id)->execute())
+			$query = DB::query()
+				->delete('e')->from('exam', 'e')
+				->join('category', 'c', 'c.id = e.category_id')
+				->where([
+					'c.user_id' => self::$user_id,
+					'e.category_id' => self::$category_id,
+					'e.id' => $exam_id
+				]);
+			if ($query->execute())
 			{
-				$iret++;
+				$n++;
 			}
 			else
 			{
 				DB::rollback();
-				Misc::put_msg('danger', 'Có lỗi xảy ra khi xóa đề thi này, vui lòng thử lại', FALSE);
+				Misc::put_msg('warning', 'Có lỗi xảy ra khi xóa đề thi này, vui lòng thử lại', FALSE);
 				return FALSE;
 			}
 		}
 		DB::commit();
-		Misc::put_msg('success', "Đã xóa $iret đề thi !");
+		Misc::put_msg('success', "Đã xóa $n đề thi !");
 		return $eid;
 	}
 	/*

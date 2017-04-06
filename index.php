@@ -17,7 +17,6 @@ catch (Exception\Controller_NotAvailable $e)
 }
 catch (\Exception $e)
 {
-	ob_clean();
 	?>
 	<!DOCTYPE HTML>
 	<html>
@@ -62,6 +61,7 @@ catch (\Exception $e)
 			<pre><?php echo $e->getTraceAsString() ?></pre>
 			<hr />
 			<p style="background-color: #cccccc; color: #990033; padding: 5px"><strong> Error Time</strong>: <?php echo date("F j, Y, g:i a"); ?> </p>
+			<em> Please report this error to "Administrator" </em>
 		</body>
 	</html>
 	<?php

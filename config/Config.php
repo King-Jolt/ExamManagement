@@ -14,6 +14,7 @@ $config['db'] = array(
 );
 
 $config['routes'] = array(
+	'/demo' => 'Test\Main',
 	'/' => 'Admin\Login',
 	'/admin/login' => 'Admin\Login',
 	'/admin/logout' => 'Admin\Admin::logout',

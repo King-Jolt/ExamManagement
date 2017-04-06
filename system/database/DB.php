@@ -42,6 +42,10 @@ class DB
 	{
 		return new DB_Query($query, $param);
 	}
+	public static function get($table)
+	{
+		return self::query()->select()->from($table)->execute();
+	}
 	public static function close()
 	{
 		if (method_exists(self::$instance->connect, 'close'))
