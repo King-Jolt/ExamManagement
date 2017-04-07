@@ -43,7 +43,7 @@ class Table extends \System\Libraries\Table
 						<li><a href="$share"><span class="glyphicon glyphicon-share"></span> Chia sẻ </a></li>
 						<li><a href="$copy"><span class="glyphicon glyphicon-copy"></span> Sao chép </a></li>
 						<li><a href="$select_random"><span class="glyphicon glyphicon-import"></span> Bốc câu hỏi </a></li>
-						<li><a href="$shuffle"><span class="glyphicon glyphicon-refresh"></span> Xáo trộn </a></li>
+						<li><a href="$shuffle"><span class="glyphicon glyphicon-random"></span> Xáo trộn </a></li>
 						<li><a href="$preview" target="_blank"><span class="glyphicon glyphicon-list-alt"></span> Xuất bản </a></li>
 						<li><a href="$delete" class="be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a></li>
 					</ul>
@@ -54,7 +54,8 @@ EOF;
 	}
 	protected function Source()
 	{
-		return Model::list_Exam();
+		$data = new Data();
+		return $data->getQuery();
 	}
 }
 

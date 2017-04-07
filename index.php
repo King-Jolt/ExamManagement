@@ -12,13 +12,13 @@ try
 catch (Exception\Controller_NotAvailable $e)
 {
 	http_response_code(404);
-	include $_SERVER['DOCUMENT_ROOT'] . '/system/page/404.html';
+	require $_SERVER['DOCUMENT_ROOT'] . '/system/page/404.html';
 	exit;
 }
 catch (\Exception $e)
 {
-	include $_SERVER['DOCUMENT_ROOT'] . '/system/page/error.html';
+	$error = ob_get_contents();
+	ob_clean();
+	require $_SERVER['DOCUMENT_ROOT'] . '/system/page/error.html';
 	exit;
 }
-
-?>

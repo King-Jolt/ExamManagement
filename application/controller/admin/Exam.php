@@ -6,7 +6,6 @@ use System\Libraries\Route;
 use System\Libraries\View;
 use System\Libraries\Request;
 use Application\Model\Admin\Exam\Model;
-use Application\Model\Admin\Exam\Table;
 use Application\Model\Misc;
 
 class Exam extends Admin
@@ -15,7 +14,9 @@ class Exam extends Admin
 	public function __construct()
 	{
 		parent::__construct();
-		$this->model = new Model($this->user->id, Request::params()['category_id']);
+		Model::$user_id = $this->user->id;
+		Model::$category_id = Request::params('category_id');
+		$this->model = new Model();
 		View::add('admin/ckeditor.php'); // use CKEditor;
 	}
 	protected function index()
@@ -30,10 +31,9 @@ class Exam extends Admin
 			$this->redirectToTable();
 		});
 		Route::add(function(){
-			$table = new Table();
 			View::add('admin/exam/table.php', array(
 				'add' => Request::current_uri() . '/create',
-				'table' => $table->get(),
+				'table' => $this->model->getTable(),
 				'msg' => Misc::get_msg()
 			));
 		});
@@ -72,7 +72,7 @@ class Exam extends Admin
 			}
 		});
 		Route::add(function(){
-			$data = Model::list_Exam(array('id' => Request::params()['exam_id']))->execute()->fetch();
+			$data = $this->model->getExamById(Request::params('exam_id'));
 			View::add('admin/exam/update.php', array(
 				'title' => $data->title,
 				'header' => $data->header,
@@ -82,15 +82,14 @@ class Exam extends Admin
 			));
 		});
 	}
-
 	protected function delete()
 	{
-		$this->model->deleteExams(array(Request::params()['exam_id']));
+		$this->model->deleteExams([(Request::params('exam_id'))]);
 		$this->redirectToTable();
 	}
 	private function redirectToTable()
 	{
-		Request::redirect(sprintf('/admin/category/%s/exam', Request::params()['category_id']));
+		Request::redirect(sprintf('/admin/category/%s/exam', Request::params('category_id')));
 	}
 	/*
 	public function __construct()

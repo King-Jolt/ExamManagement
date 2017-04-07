@@ -2,7 +2,7 @@
 
 namespace System\Database;
 
-use System\Libraries\Misc;
+use System\Common\Config;
 use System\Database\DB_Query;
 use System\Database\DB_Exception;
 
@@ -14,13 +14,13 @@ class DB
 	private $connect = NULL;
 	private function __construct()
 	{
-		$db = Misc::get_config('db');
+		$db = Config::get('db');
 		self::$db_driver = $db['driver'];
 		$this->connect = new PDO\Sql($db);
 	}
-	public static function open()
+	public static function open($new_connect = FALSE)
 	{
-		if (self::$instance instanceof self)
+		if (self::$instance instanceof self and $new_connect === FALSE)
 		{
 			return FALSE;
 		}
@@ -46,9 +46,10 @@ class DB
 	{
 		return new DB_Query($query, $param);
 	}
+	/** get data from quickly 'SELECT * FROM ...' clause */
 	public static function get($table)
 	{
-		return self::query()->select()->from($table)->execute();
+		return self::query()->table($table)->execute();
 	}
 	public static function close()
 	{

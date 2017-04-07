@@ -2,11 +2,18 @@
 
 namespace System\Libraries;
 
+use System\Common\Config;
+
 class Request
 {
 	private static $_params = FALSE;
-	public static function params()
+	public static function base_url()
 	{
+		return sprintf('http%s://%s', isset($_SERVER['HTTPS']) ? 's' : '', $_SERVER["HTTP_HOST"]);
+	}
+	public static function params($name = NULL)
+	{
+		if ($name) return self::$_params[$name];
 		return self::$_params;
 	}
 	public static function get($attr = NULL)
@@ -22,7 +29,7 @@ class Request
 	public static function get_request_uri()
 	{
 		$uri = self::current_uri();
-		$get_routes = Misc::get_config('routes');
+		$get_routes = Config::get('routes');
 		$obj_ret = array(
 			'class' => '',
 			'static' => '',

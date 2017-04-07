@@ -5,8 +5,7 @@
 		<style>
 			.frame
 			{
-				margin-left: 10%;
-				margin-right: 10%;
+				margin: 5px 5px 50px 5px;
 				padding: 25px;
 				box-shadow: 0px 0px 5px #C0C0C0;
 			}
@@ -19,8 +18,10 @@
 			{
 				content: ':';
 			}
-			.frame .time
+			.frame pre
 			{
+				word-wrap: break-word;
+				white-space: pre-wrap;
 			}
 		</style>
 	</head>
@@ -54,5 +55,6 @@
 			<p class="time"><strong> Error Time</strong>: <?php echo date("F j, Y, g:i a"); ?> </p>
 			<em> Please report this error to "Administrator" </em>
 		</div>
+		<?php echo $error ?>
 	</body>
 </html>

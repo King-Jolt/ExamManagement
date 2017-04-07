@@ -9,7 +9,7 @@ use System\Libraries\View;
 use System\Libraries\Navigation;
 use System\Libraries\Search;
 
-class Admin extends Controller
+abstract class Admin extends Controller
 {
 	protected $nav = NULL;
 	protected $user = NULL;

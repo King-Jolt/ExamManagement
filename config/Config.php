@@ -1,7 +1,5 @@
 <?php
 
-$config['base_url'] = sprintf('http%s://%s', isset($_SERVER['HTTPS']) ? 's' : '', $_SERVER["HTTP_HOST"]);
-
 $config['db'] = array(
 	'driver' => 'mysql',
 	'host' => 'localhost',

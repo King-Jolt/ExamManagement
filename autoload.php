@@ -7,16 +7,13 @@ set_error_handler(function($severity, $message, $file, $line) {
 });
 
 spl_autoload_register(function($class){
-	$path = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] . '/' . $class . '.php');
-	$files[] = $path;
-	$files[] = strtolower(dirname($path)) . '/' . basename($path);
-	foreach ($files as $file)
+	$class = str_replace('\\', '/', $class . '.php');
+	if (file_exists($class) or file_exists(
+		$_SERVER['DOCUMENT_ROOT'] . '/' .
+		strtolower(dirname($class)) . '/' .
+		basename($class)
+	))
 	{
-		if (file_exists($file))
-		{
-			require_once $file;
-		}
+		require_once $class;
 	}
 });
-
-?>

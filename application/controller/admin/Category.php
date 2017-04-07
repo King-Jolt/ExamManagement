@@ -7,6 +7,7 @@ use System\Libraries\View;
 use System\Libraries\Route;
 use System\Libraries\Request;
 use Application\Model\Admin\Category\Model;
+use Application\Model\Admin\Category\Data;
 
 use System\Database\DB;
 
@@ -16,6 +17,7 @@ class Category extends Admin
 	public function __construct()
 	{
 		parent::__construct();
+		Model::$user_id = $this->user->id;
 		$this->model = new Model();
 	}
 	protected function index()
@@ -54,9 +56,7 @@ class Category extends Admin
 		});
 		Route::add(function(){
 			$this->nav->add('Sửa danh mục');
-			$data = $this->model->list_Category(array(
-				'id' => Request::params()['category_id']
-			))->execute()->fetch();
+			$data = $this->model->getCategoryById(Request::params('category_id'));
 			View::add('admin/category/update.php', array(
 				'value' => $data->name
 			));

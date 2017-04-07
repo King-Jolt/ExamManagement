@@ -14,6 +14,9 @@ class Group extends Admin
 	public function __construct()
 	{
 		parent::__construct();
+		Model::$user_id = $this->user->id;
+		Model::$category_id = Request::params('category_id');
+		Model::$exam_id = Request::params('exam_id');
 		$this->model = new Model();
 	}
 	protected function index()

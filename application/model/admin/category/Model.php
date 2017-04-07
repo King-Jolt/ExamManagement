@@ -3,40 +3,24 @@
 namespace Application\Model\Admin\Category;
 
 use System\Database\DB;
-use System\Libraries\Request;
-use System\Libraries\Auth;
-use System\Libraries\View;
-
 use Application\Model\Misc;
 
 class Model
 {
-	static private $user_id = NULL;
-	public static function list_Category()
-	{
-		$s_query = DB::query()->select(['c.id', 'COUNT(e.id) AS n_exam', 'COUNT(IF(e.share = c.user_id, e.share, NULL)) AS n_share'])->from('category', 'c')
-			->leftJoin('exam', 'e', 'e.category_id = c.id')
-			->group_by('c.id');
-		$query = DB::query()->select(['c.*', 'COUNT(a.id) AS child', 's.n_exam', 's.n_share'])->from('category', 'c')
-			->leftJoin('category', 'a', 'a.parent = c.id')
-			->join($s_query, 's', 's.id = c.id')
-			->where('c.user_id', self::$user_id)
-			->group_by('c.id');
-		return $query;
-	}
-	public static function Tree_Traversal($id, $list, $callback)
+	static public $user_id = NULL;
+	private function Tree_Traversal($id, $list, $callback)
 	{
 		$stack = array();
-		$result = self::list_Category();
+		$result = new Data();
 		if ($id)
 		{
-			$result->where('c.parent', $id);
+			$result->filterParent($id);
 		}
 		else
 		{
-			$result->whereIsNull('c.parent');
+			$result->filterParent(NULL);
 		}
-		$result = $result->execute();
+		$result = $result->getCategory();
 		while (TRUE)
 		{
 			if ($result->valid())
@@ -49,7 +33,8 @@ class Model
 						'arr_tree' => $list
 					));
 					$callback($data, TRUE, $list);
-					$result = self::list_Category()->where('c.parent', $data->id)->execute();
+					$result = new Data();
+					$result = $result->filterParent($data->id)->getCategory();
 					continue;
 				}
 				$callback($data, FALSE, $list);
@@ -70,46 +55,15 @@ class Model
 		}
 		return TRUE;
 	}
-	public function __construct()
-	{
-		self::$user_id = Auth::get()->id;
-	}
 	public function getTreeView()
 	{
-		$curi = "/admin/category";
-		$tree = new \ArrayObject(
-			array(
-				(object)array(
-					'text' => "Thư mục gốc <a href=\"$curi/create\" class=\"pull-right btn btn-primary btn-xs\"> Thêm </a>",
-					'href' => '',
-					'state' => (object)array(
-						'expanded' => TRUE
-					),
-					'nodes' => new \ArrayObject(array())
-				)
-			)
-		);
-		self::Tree_Traversal('', $tree[0]->nodes, function($data, $has_child, &$list) use ($curi) {
-			$add = "$curi/$data->id/create";
-			$edit = "$curi/$data->id/edit";
-			$delete = "$curi/$data->id/delete";
-			$exam = "/admin/category/$data->id/exam";
-			$html = <<<EOF
-			<a href="$exam">$data->name</a> <span class="text-muted"> ($data->child danh mục con, $data->n_exam đề thi, $data->n_share được chia sẻ) </span>
-			<span class="pull-right">
-				<a href="$add" class="btn btn-primary btn-xs"> Thêm </a>
-				<a href="$edit" class="btn btn-primary btn-xs"> Sửa </a>
-				<a href="$delete" class="btn btn-primary btn-xs be-care"> Xóa </a>
-			</span>
-EOF;
-			$push = (object)array(
-				'text' => $html
-			);
+		$tree = new \ArrayObject(array());
+		$this->Tree_Traversal('', $tree, function($data, $has_child, &$list) {
+			$push = (object)array('nodeData' => $data);
 			$list->append($push);
 			if ($has_child)
 			{
-				$push->nodes = new \ArrayObject(array());
-				$list = $push->nodes;
+				$list = $push->nodes = new \ArrayObject(array());
 			}
 		});
 		return $tree;
@@ -124,6 +78,11 @@ EOF;
 		);
 		DB::query()->insert('category', $data)->execute();
 		Misc::put_msg('success', "Đã thêm mới một danh mục");
+	}
+	public function getCategoryById($id)
+	{
+		$data = new Data();
+		return $data->filterId($id)->getCategory()->fetch();
 	}
 	public function updateCategory($id, $new_name)
 	{
@@ -176,5 +135,3 @@ EOF;
 		return TRUE;
 	}
 }
-
-?>

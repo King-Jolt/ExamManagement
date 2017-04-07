@@ -8,7 +8,8 @@ class Main extends \System\Core\Controller
 {
 	protected function index()
 	{
-		echo $a;
-		echo DB::query('SELECT @@VERSION AS ver')->execute()->fetch()->ver;
+		echo '<pre>';
+		echo DB::query('SELECT @@VERSION AS ver')->execute()->fetch()->ver . PHP_EOL;
+		echo '</pre>';
 	}
 }

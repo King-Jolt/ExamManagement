@@ -3,31 +3,16 @@
 namespace Application\Model\Admin\Exam;
 
 use Application\Model\Misc;
-use System\Libraries\View;
-use System\Libraries\Request;
 use System\Database\DB;
 
 class Model
 {
-	public static $category_id = NULL;
 	public static $user_id = NULL;
-	public static function list_Exam()
+	public static $category_id = NULL;
+	public function getTable()
 	{
-		$query = DB::query()->select(['e.*', 'COUNT(e.id) AS n_question'])->from('exam', 'e')
-			->join('category', 'c', 'c.id = e.category_id')
-			->leftJoin('question', 'q', 'q.exam_id = e.id')
-			->where([
-				'user_id' => self::$user_id,
-				'category_id' => self::$category_id
-			])
-			->group_by('e.id');
-		return $query;
-	}
-	public function __construct($user_id, $category_id)
-	{
-		DB::open();
-		self::$category_id = $category_id;
-		self::$user_id = $user_id;
+		$table = new Table();
+		return $table->get();
 	}
 	public function insertExam($title, $header, $footer, $date)
 	{
@@ -40,8 +25,13 @@ class Model
 			'share' => self::$user_id,
 			'date' => $date
 		);
-		DB::query()->insert('exam_table', $data)->execute();
+		DB::query()->insert('exam', $data)->execute();
 		Misc::put_msg('success', 'Đã tạo mới một đề thi');
+	}
+	public function getExamById($id)
+	{
+		$data = new Data();
+		return $data->filterId($id)->getExam()->fetch();
 	}
 	public function updateExam($id, $title, $header, $footer, $date)
 	{
@@ -87,14 +77,12 @@ class Model
 			}
 			else
 			{
-				DB::rollback();
 				Misc::put_msg('warning', 'Có lỗi xảy ra khi xóa đề thi này, vui lòng thử lại', FALSE);
 				return FALSE;
 			}
 		}
 		DB::commit();
 		Misc::put_msg('success', "Đã xóa $n đề thi !");
-		return $eid;
 	}
 	/*
 	public function list_OtherExam($course_id, $user_id)

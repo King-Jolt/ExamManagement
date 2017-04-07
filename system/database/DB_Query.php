@@ -11,6 +11,7 @@ class DB_Query
 	private $_having = array();
 	private $_order_by = array();
 	private $_set = array();
+	private $_union = array();
 	private $_limit = -1;
 	private $_offset = 0;
 	private $_param = array();
@@ -21,17 +22,33 @@ class DB_Query
 	}
 	private function _get_condition($data)
 	{
-		$get = function($column, $operator, $param){
+		$get = function($column, $operator, &$param){
 			$ret = '1';
-			$operator = strtoupper($operator);
+			$operator = trim(strtoupper($operator));
 			switch ($operator)
 			{
+			case 'EXISTS':
+			case 'NOT EXISTS':	
+				$ret = "$operator ({$param->getQuery()})";
+				$param = $param->getParams();
+				break;
 			case 'BETWEEN':
-				$ret = "$column BETWEEN ? AND ?";
+			case 'NOT BETWEEN':
+				$ret = "$column $operator ? AND ?";
 				break;
 			case 'IN':
-				$in = implode(', ', array_fill(0, count($param), '?'));
-				$ret = "$column IN ($in)";
+			case 'NOT IN':
+				$in = '';
+				if ($param instanceof self)
+				{
+					$in = "({$param->getQuery()})";
+					$param = $param->getParams();
+				}
+				else
+				{
+					$in = implode(', ', array_fill(0, count($param), '?'));
+				}
+				$ret = "$column $operator ($in)";
 				break;
 			default:
 				$ret = "$column $operator ?";
@@ -103,8 +120,8 @@ class DB_Query
 		$table = $argument[0];
 		if ($table instanceof self)
 		{
-			$this->_param = array_merge($this->_param, $table->get_Param());
-			$table = "({$table->get_Query()})";
+			$this->_param = array_merge($this->_param, $table->getParams());
+			$table = "({$table->getQuery()})";
 		}
 		$alias = '';
 		$condition = $argument[1];
@@ -133,6 +150,11 @@ class DB_Query
 		$this->_query .= "FROM {$this->_table_alias($table, $alias)} ";
 		return $this;
 	}
+	/** Shorthand ->select('*')->from('table') */
+	public function table($table, $alias = '')
+	{
+		return $this->select()->from($table, $alias);
+	}
 	public function where($data)
 	{
 		return $this->_where('AND', func_get_args());
@@ -145,24 +167,52 @@ class DB_Query
 	{
 		return $this->_where('AND', array($column, 'IS NOT', NULL));
 	}
-	public function or_where($data)
+	public function whereIn($column, $data)
+	{
+		return $this->where($column, 'IN', $data);
+	}
+	public function whereNotIn($column, $data)
+	{
+		return $this->where($column, 'NOT IN', $data);
+	}
+	public function whereBetween($column, $data)
+	{
+		return $this->where($column, 'BETWEEN', $data);
+	}
+	public function whereNotBetween($column, $data)
+	{
+		return $this->where($column, 'NOT BETWEEN', $data);
+	}
+	public function whereExists($select)
+	{
+		return $this->where('', 'EXISTS', $select);
+	}
+	public function whereNotExists($select)
+	{
+		return $this->where('', 'NOT EXISTS', $select);
+	}
+	public function orWhere($data)
 	{
 		return $this->_where('OR', func_get_args());
 	}
-	public function or_whereIsNull($column)
+	/** Custom WHERE with parameters */
+	public function whereRaw($condition, $param = array())
 	{
-		return $this->_where('OR', array($column, 'IS', NULL));
-	}
-	public function or_whereNotNull($column)
-	{
-		return $this->_where('OR', array($column, 'IS NOT', NULL));
+		if (!is_array($param))
+		{
+			$param = array($param);
+		}
+		array_push($this->_where, empty($this->_where) ? "$condition" : "AND $condition");
+		$this->_param = array_merge($this->_param, $param);
+		return $this;
 	}
 	public function union(self $select)
 	{
-		$this->_query .= "UNION {$select->get_Query()} ";
-		$this->_param = $select->get_Param();
+		array_push($this->_union, "UNION ({$select->getQuery()})");
+		$this->_param = array_merge($this->_param, $select->getParams());
+		return $this;
 	}
-	public function group_by($column)
+	public function groupBy($column)
 	{
 		if (is_string($column))
 		{
@@ -178,7 +228,13 @@ class DB_Query
 		$this->_param = array_merge($this->_param, $condition['param']);
 		return $this;
 	}
-	public function order_by($column, $sort = 'DESC')
+	public function havingRaw($condition, $param = array())
+	{
+		array_push($this->_having, $condition);
+		$this->_param = array_merge($this->_param, $param);
+		return $this;
+	}
+	public function orderBy($column, $sort = 'DESC')
 	{
 		if (is_string($column))
 		{
@@ -193,6 +249,21 @@ class DB_Query
 		$vals = implode(', ', array_fill(0, count($data), '?'));
 		$this->_query = "INSERT INTO $table ($cols) VALUES ($vals) ";
 		$this->_param = array_values($data);
+		return $this;
+	}
+	public function insertInto($table, $column, $select = NULL)
+	{
+		if (!($select instanceof self))
+		{
+			$select = $column;
+			$column = '';
+		}
+		else
+		{
+			$column = ' (' . implode(', ', $column) . ')';
+		}
+		$this->_query = "INSERT INTO {$table}{$column} {$select->getQuery()}";
+		$this->_param = array_merge($this->_param, $select->getParams());
 		return $this;
 	}
 	public function update($table, $alias = '')
@@ -219,7 +290,8 @@ class DB_Query
 		}, array_keys($data));
 		$this->_param = array_values($data);
 		return $this;
-	}/*sdsds */
+	}
+	/** @return $this */
 	public function join()
 	{
 		return call_user_func_array(array($this, 'innerJoin'), func_get_args());
@@ -236,6 +308,7 @@ class DB_Query
 	{
 		return $this->_join('right', func_get_args());
 	}
+	/** for MySQL database */
 	public function limit($n, $offset = 0)
 	{
 		$this->_limit = $n;
@@ -246,7 +319,7 @@ class DB_Query
 		$this->_offset = $n;
 		return $this;
 	}
-	public function get_Query()
+	public function getQuery()
 	{
 		$query = $this->_query;
 		if (!empty($this->_join))
@@ -295,15 +368,21 @@ class DB_Query
 				$query .= "LIMIT $this->_limit OFFSET $this->_offset ";
 			}
 		}
+		$query = trim($query);
+		if (!empty($this->_union))
+		{
+			$union = implode(' ', $this->_union);
+			$query = "($query) $union";
+		}
 		return $query;
 	}
-	public function get_Param()
+	public function getParams()
 	{
 		return $this->_param;
 	}
 	/** @return DB_Result */
 	public function execute()
 	{
-		return DB::get_connect()->query($this->get_Query(), $this->get_Param());
+		return DB::get_connect()->query($this->getQuery(), $this->getParams());
 	}
 }
