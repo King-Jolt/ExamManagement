@@ -14,15 +14,12 @@ class Group extends Admin
 	public function __construct()
 	{
 		parent::__construct();
-		Model::$user_id = $this->user->id;
-		Model::$category_id = Request::params('category_id');
-		Model::$exam_id = Request::params('exam_id');
 		$this->model = new Model();
 	}
 	protected function index()
 	{
 		Route::add(function(){
-			View::add('group/content.php', array(
+			View::add('admin/group/page.php', array(
 				'add' => Request::current_uri() . '/create',
 				'table' => $this->model->getTable(),
 				'msg' => Misc::get_msg()
@@ -38,7 +35,7 @@ class Group extends Admin
 			$this->redirectIndex();
 		});
 		Route::add(function(){
-			View::add('group/insert.php');
+			View::add('admin/group/insert.php');
 		});
 	}
 	protected function delete()
@@ -48,6 +45,9 @@ class Group extends Admin
 	}
 	private function redirectIndex()
 	{
-		Request::redirect(Model::baseUri());
+		Request::redirect(sprintf("/admin/category/%s/exam/%s/group",
+			Request::params('category_id'),
+			Request::params('exam_id')
+		));
 	}
 }

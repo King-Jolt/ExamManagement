@@ -4,7 +4,7 @@
 <?php self::put($msg) ?>
 <div class="container-fixed">
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-sm-3">
 			<div class="panel panel-info" id="category-info">
 				<div class="panel-heading"> Thông tin danh mục </div>
 				<div class="panel-body">
@@ -15,7 +15,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-9">
+		<div class="col-sm-9" style="border-left: 2px outset #edf8f8">
+			<div class="form-group" id="tree-btns">
+				<a href="" class="btn btn-primary btn-xs insert"><span class="glyphicon glyphicon-plus"></span> Thêm </a>
+				<a href="" class="btn btn-success btn-xs update"><span class="glyphicon glyphicon-pencil"></span> Sửa </a>
+				<a href="" class="btn btn-danger btn-xs delete be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a>
+			</div>
 			<div id="tree"></div>
 		</div>
 	</div>

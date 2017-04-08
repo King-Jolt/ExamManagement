@@ -9,9 +9,6 @@ use Application\Model\Misc;
 
 class Model
 {
-	public static $user_id = NULL;
-	public static $category_id = NULL;
-	public static $exam_id = NULL;
 	public function getTable()
 	{
 		$table = new Table();
@@ -24,7 +21,7 @@ class Model
 			'id' => $id,
 			'title' => $title,
 			'content' => $content,
-			'exam_id' => self::$id['exam']
+			'exam_id' => Request::params('exam_id')
 		]);
 		if ($query->execute())
 		{
@@ -38,17 +35,21 @@ class Model
 	public function deleteGroup($id)
 	{
 		$query = DB::query()->delete('g')->from('question_group', 'g')
-			->innerJoin(self::listGroup(), 'a', 'a.id = g.id')
-			->where('g.id', $id);
-		echo $query->get_Query() . '<br />';
-		var_dump($query->get_Param());
+			->innerJoin('exam', 'e', 'e.id = g.exam_id')
+			->innerJoin('category', 'c', 'c.id = e.category_id')
+			->where([
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
+				'g.exam_id' => Request::params('exam_id'),
+				'g.id' => $id
+			]);
 		if ($query->execute())
 		{
 			Misc::put_msg('success', 'Đã xóa một nhóm câu hỏi');
 		}
 		else
 		{
-			Misc::put_msg('danger', 'Không thể xóa nhóm này !', FALSE);
+			Misc::put_msg('warning', 'Không thể xóa nhóm này !', FALSE);
 		}
 	}
 }

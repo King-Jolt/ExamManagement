@@ -2,6 +2,7 @@
 
 namespace Application\Model\Admin\Category;
 
+use System\Libraries\Auth;
 use System\Database\DB;
 
 class Data
@@ -16,7 +17,7 @@ class Data
 		$query = DB::query()->select(['c.*', 'COUNT(a.id) AS child', 's.n_exam', 's.n_share'])->from('category', 'c')
 			->leftJoin('category', 'a', 'a.parent = c.id')
 			->join($s_query, 's', 's.id = c.id')
-			->where('c.user_id', Model::$user_id)
+			->where('c.user_id', Auth::get()->id)
 			->groupBy('c.id');
 		$this->query = $query;
 	}

@@ -2,13 +2,13 @@
 
 namespace Application\Model\Admin\Exam;
 
+use System\Libraries\Auth;
+use System\Libraries\Request;
 use Application\Model\Misc;
 use System\Database\DB;
 
 class Model
 {
-	public static $user_id = NULL;
-	public static $category_id = NULL;
 	public function getTable()
 	{
 		$table = new Table();
@@ -18,11 +18,11 @@ class Model
 	{
 		$data = array(
 			'id' => Misc::get_uid(),
-			'category_id' => self::$category_id,
+			'category_id' => Request::params('category_id'),
 			'title' => $title,
 			'header' => $header,
 			'footer' => $footer,
-			'share' => self::$user_id,
+			'share' => Auth::get()->id,
 			'date' => $date
 		);
 		DB::query()->insert('exam', $data)->execute();
@@ -44,8 +44,8 @@ class Model
 				'e.date' => $date
 			])
 			->where([
-				'c.user_id' => self::$user_id,
-				'e.category_id' => self::$category_id,
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
 				'e.id' => $id
 			]);
 		if ($query->execute())
@@ -57,6 +57,35 @@ class Model
 			Misc::put_msg('warning', 'Không có thay đổi nào được cập nhật');
 		}
 	}
+	public function getAllUsers()
+	{
+		return DB::query()->table('user')->where([
+			['id', '!=', Auth::get()->id],
+			['course_id', '=', Auth::get()->course_id]
+		])->execute();
+	}
+	public function setVisible($id, $object)
+	{
+		$query = DB::query()->update('exam', 'e')
+			->join('category', 'c', 'c.id = e.category_id')
+			->set([
+				'e.share' => $object ? $object : NULL
+			])
+			->where([
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
+				'e.id' => $id
+			]);
+		if ($query->execute())
+		{
+			Misc::put_msg('success', 'Đã cập nhật chia sẻ đề thi này');
+		}
+		else
+		{
+			Misc::put_msg('warning', 'Không có thay đổi nào được cập nhật');
+		}
+	}
+
 	public function deleteExams(array $eid)
 	{
 		$n = 0;
@@ -67,8 +96,8 @@ class Model
 				->delete('e')->from('exam', 'e')
 				->join('category', 'c', 'c.id = e.category_id')
 				->where([
-					'c.user_id' => self::$user_id,
-					'e.category_id' => self::$category_id,
+					'c.user_id' => Auth::get()->id,
+					'e.category_id' => Request::params('category_id'),
 					'e.id' => $exam_id
 				]);
 			if ($query->execute())

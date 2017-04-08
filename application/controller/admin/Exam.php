@@ -14,8 +14,6 @@ class Exam extends Admin
 	public function __construct()
 	{
 		parent::__construct();
-		Model::$user_id = $this->user->id;
-		Model::$category_id = Request::params('category_id');
 		$this->model = new Model();
 		View::add('admin/ckeditor.php'); // use CKEditor;
 	}
@@ -31,7 +29,7 @@ class Exam extends Admin
 			$this->redirectToTable();
 		});
 		Route::add(function(){
-			View::add('admin/exam/table.php', array(
+			View::add('admin/exam/page.php', array(
 				'add' => Request::current_uri() . '/create',
 				'table' => $this->model->getTable(),
 				'msg' => Misc::get_msg()
@@ -79,6 +77,22 @@ class Exam extends Admin
 				'footer' => $data->footer,
 				'set_checked' => $data->date ? 'checked' : '',
 				'date' => $data->date
+			));
+		});
+	}
+	protected function share()
+	{
+		Route::add('post', 'share', function($value){
+			$this->model->setVisible(
+				Request::params('exam_id'),
+				Request::post('object')
+			);
+			$this->redirectToTable();
+		});
+		Route::add(function(){
+			View::add('admin/exam/share.php', array(
+				'master' => $this->user->id,
+				'users' => $this->model->getAllUsers()
 			));
 		});
 	}

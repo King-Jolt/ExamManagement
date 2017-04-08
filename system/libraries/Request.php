@@ -13,7 +13,10 @@ class Request
 	}
 	public static function params($name = NULL)
 	{
-		if ($name) return self::$_params[$name];
+		if ($name and isset(self::$_params[$name]))
+		{
+			return self::$_params[$name];
+		}
 		return self::$_params;
 	}
 	public static function get($attr = NULL)

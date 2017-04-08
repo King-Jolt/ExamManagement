@@ -2,12 +2,12 @@
 
 namespace Application\Model\Admin\Category;
 
+use System\Libraries\Auth;
 use System\Database\DB;
 use Application\Model\Misc;
 
 class Model
 {
-	static public $user_id = NULL;
 	private function Tree_Traversal($id, $list, $callback)
 	{
 		$stack = array();
@@ -59,7 +59,11 @@ class Model
 	{
 		$tree = new \ArrayObject(array());
 		$this->Tree_Traversal('', $tree, function($data, $has_child, &$list) {
-			$push = (object)array('nodeData' => $data);
+			$push = (object)array(
+				'text' => " $data->name ",
+				'href' => "/admin/category/$data->id/exam",
+				'nodeData' => $data
+			);
 			$list->append($push);
 			if ($has_child)
 			{
@@ -74,7 +78,7 @@ class Model
 			'id' => Misc::get_uid(),
 			'parent' => $parent,
 			'name' => $name,
-			'user_id' => self::$user_id
+			'user_id' => Auth::get()->id
 		);
 		DB::query()->insert('category', $data)->execute();
 		Misc::put_msg('success', "Đã thêm mới một danh mục");
@@ -90,7 +94,7 @@ class Model
 			->update('category')
 			->set(['name' => $new_name])
 			->where([
-				'user_id' => self::$user_id,
+				'user_id' => Auth::get()->id,
 				'id' => $id
 			]);
 		if ($query->execute())
@@ -116,7 +120,7 @@ class Model
 			$query = DB::query()
 				->delete()->from('category')
 				->where([
-					'user_id' => self::$user_id,
+					'user_id' => Auth::get()->id,
 					'id' => $id
 				]);
 			if ($query->execute())

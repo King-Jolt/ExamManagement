@@ -2,6 +2,8 @@
 
 namespace Application\Model\Admin\Exam;
 
+use System\Libraries\Auth;
+use System\Libraries\Request;
 use System\Database\DB;
 
 class Data
@@ -10,14 +12,15 @@ class Data
 	private $query = NULL;
 	public function __construct()
 	{
-		$query = DB::query()->select(['e.*', 'COUNT(e.id) AS n_question'])->from('exam', 'e')
+		$query = DB::query()->select(['c.user_id', 'u.name AS share_user_name', 'e.*', 'COUNT(q.id) AS n_question'])->from('exam', 'e')
 			->join('category', 'c', 'c.id = e.category_id')
+			->leftJoin('user', 'u', 'u.id = e.share')
 			->leftJoin('question', 'q', 'q.exam_id = e.id')
 			->where([
-				'c.user_id' => Model::$user_id,
-				'e.category_id' => Model::$category_id
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id')
 			])
-			->group_by('e.id');
+			->groupBy('e.id');
 		$this->query = $query;
 	}
 	public function filterId($id)

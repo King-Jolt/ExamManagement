@@ -7,9 +7,6 @@ use System\Libraries\View;
 use System\Libraries\Route;
 use System\Libraries\Request;
 use Application\Model\Admin\Category\Model;
-use Application\Model\Admin\Category\Data;
-
-use System\Database\DB;
 
 class Category extends Admin
 {
@@ -17,18 +14,17 @@ class Category extends Admin
 	public function __construct()
 	{
 		parent::__construct();
-		Model::$user_id = $this->user->id;
 		$this->model = new Model();
 	}
 	protected function index()
 	{
 		Route::add(function(){
-			View::add('admin/category/main.php', array(
+			View::add('admin/category/page.php', array(
 				'msg' => Misc::get_msg()
 			));
 		});
 	}
-	protected function load()
+	protected function get()
 	{
 		$this->send_response(json_encode(
 			$this->model->getTreeView()
@@ -55,7 +51,6 @@ class Category extends Admin
 			$this->back();
 		});
 		Route::add(function(){
-			$this->nav->add('Sửa danh mục');
 			$data = $this->model->getCategoryById(Request::params('category_id'));
 			View::add('admin/category/update.php', array(
 				'value' => $data->name

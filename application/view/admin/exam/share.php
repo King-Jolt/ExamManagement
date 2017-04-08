@@ -1,10 +1,24 @@
-<div class="form-group">
-	<div class="form-inline">
-		<input type="number" name="num" />
+<form class="panel panel-info" method="post">
+	<div class="panel-heading">
+		Tùy chọn chia sẻ
 	</div>
-</div>
-<div class="form-group">
-	<div class="form-inline">
-		<?php self::put($data) ?>
+	<div class="panel-body">
+		<div class="form-group form-inline">
+			<div class="input-group">
+				<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+				<select class="form-control" name="object" >
+					<optgroup label="Tùy chọn">
+						<option value="0"> Chia sẻ tất cả </option>
+						<option value="{{master}}"> Chỉ mình tôi </option>
+					</optgroup>
+					<optgroup label="Chọn giáo viên">
+					<?php foreach ($users as $u) {
+						echo "<option value=\"$u->id\"> $u->user </option>";
+					} ?>
+					</optgroup>
+				</select>
+			</div>
+		</div>
+		<button class="btn btn-primary" name="share" value="1" ><span class="glyphicon glyphicon-check"></span> Xác nhận </button>
 	</div>
-</div>
+</form>

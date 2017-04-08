@@ -1,64 +1,56 @@
-$(document).ready(function() {
-	$('#tree').on('update-tv', function(){
-		var tree = [{text: 'Không có dữ liệu', icon: 'glyphicon glyphicon-remove'}];
+$(document).ready(function(){
+	(function(){
+		var tree = $('#tree');
+		var data = [{
+			text: ' Thư mục gốc (ROOT) ',
+			href: 'javascript:void(0)'
+		}];
 		$.ajax({
-			url: '/admin/category/load',
+			url: '/admin/category/gettree',
+			method: 'post',
 			async: false,
-			type: 'POST',
-			data: { load : 'tree' },
-			dataType: 'json',
-			success: function(result){
-				tree = [{
-					href: 'javascript:void(0)',
-					nodes: []
-				}];
-				tree[0].nodes = result;
+			dataType: 'json'
+		}).success(function(d){
+			data[0].nodes = d;
+		});
+		tree.treeview({
+			enableLinks: true,
+			highlightSelected: false,
+			nodeIcon: 'glyphicon glyphicon-folder-close',
+			selectedIcon: "glyphicon glyphicon-folder-open text-primary",
+			collapseIcon: 'glyphicon glyphicon-chevron-down',
+			expandIcon: 'glyphicon glyphicon-chevron-right',
+			selectedBackColor: '#9f9f9f',
+			data: data,
+			onNodeUnselected: function(event, data){
+				$('#category-info .name').text('...');
+				$('#category-info .child').text('...');
+				$('#category-info .exam').text('...');
+				$('#category-info .share').text('...');
+				$('#tree-btns a.insert').prop('href', 'javascript:void(0)').addClass('disabled');
+				$('#tree-btns a.update').prop('href', 'javascript:void(0)').addClass('disabled');
+				$('#tree-btns a.delete').prop('href', 'javascript:void(0)').addClass('disabled');
+			},
+			onNodeSelected: function(event, data){
+				$('#tree-btns a.insert').prop('href', '/admin/category/create').removeClass('disabled');
+				$('#category-info .name').text(data.text);
+				if (data.nodeData)
+				{
+					$('#category-info .child').text(data.nodeData.child);
+					$('#category-info .exam').text(data.nodeData.n_exam);
+					$('#category-info .share').text(data.nodeData.n_share);
+					$('#tree-btns a.insert').prop('href', '/admin/category/' + data.nodeData.id + '/create');
+					$('#tree-btns a.update').prop('href', '/admin/category/' + data.nodeData.id + '/edit').removeClass('disabled');
+					$('#tree-btns a.delete').prop('href', '/admin/category/' + data.nodeData.id + '/delete').removeClass('disabled');
+				}
+				else
+				{
+					$('#category-info .child').text(Object.keys(data.nodes).length);
+					$('#tree-btns a.insert').prop('href', '/admin/category/create');
+				}
 			}
 		});
-		$(this).treeview({
-			color: "#428bca",
-			expandIcon: 'glyphicon glyphicon-chevron-right',
-			collapseIcon: 'glyphicon glyphicon-chevron-down',
-			nodeIcon: 'glyphicon glyphicon-file',
-			enableLinks: true,
-			selectedIcon: "glyphicon glyphicon-hand-right text-success",
-			highlightSelected: false,
-			data : tree,
-			customText: function(data){
-				data.href = 'javascript:void(0)';
-				if (data.nodeData)
-				{
-					var t = '<a href="/admin/category/' + data.nodeData.id + '/exam">' + data.nodeData.name + ' &nbsp; <span class="text-muted"><span class="glyphicon glyphicon-arrow-right"></span> Quản lý </span> </a>' +
-							'<span class="pull-right">' + 
-							'<a href="/admin/category/' + data.nodeData.id + '/create" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Thêm </a> ' +
-							'<a href="/admin/category/' + data.nodeData.id + '/edit" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-pencil"></span> Sửa </a> ' +
-							'<a href="/admin/category/' + data.nodeData.id + '/delete" class="btn btn-danger btn-xs be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a>' + 
-							'</span>';
-					return t;
-				}
-				else
-				{
-				return '<strong> Thư mục gốc (ROOT) </strong> <a href="/admin/category/create" class="pull-right btn btn-primary btn-xs"> Thêm </a>';
-			}
-			},
-			onNodeSelected: function(event, data) {
-				var n = '<strong> ROOT </strong>', c = 0, e = 0, s = 0;
-				if (data.nodeData)
-				{
-					n = data.nodeData.name;
-					c = data.nodeData.child;
-					e = data.nodeData.n_exam;
-					s = data.nodeData.n_share;
-				}
-				else
-				{
-					c = Object.keys(data.nodes).length;
-				}
-				$('#category-info .name').html(n);
-				$('#category-info .child').text(c);
-				$('#category-info .exam').text(e);
-				$('#category-info .share').text(s);
-			}
-		}).treeview('expandAll', { levels: 4, silent: false }).treeview('selectNode', 1, { silent: false });
-	}).trigger('update-tv');
-}); 
+		tree.treeview('expandAll', { levels: 2, silent: true });
+		tree.treeview('selectNode', 1);
+	})();
+});
