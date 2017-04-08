@@ -32,6 +32,36 @@ class Model
 			Misc::put_msg('danger', 'Có lỗi xảy ra, không thể tạo nhóm câu hỏi', FALSE);
 		}
 	}
+	public function getGroupById($id)
+	{
+		$data = new Data();
+		return $data->filterId($id)->getGroup()->fetch();
+	}
+	public function updateGroup($id, $title, $content)
+	{
+		$query = DB::query()->update('question_group', 'g')
+			->innerJoin('exam', 'e', 'e.id = g.exam_id')
+			->innerJoin('category', 'c', 'c.id = e.category_id')
+			->set([
+				'g.title' => $title,
+				'g.content' => $content
+			])
+			->where([
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
+				'g.exam_id' => Request::params('exam_id'),
+				'g.id' => $id
+			]);
+		if ($query->execute())
+		{
+			Misc::put_msg('success', 'Cập nhật nhóm câu hỏi thành công');
+		}
+		else
+		{
+			Misc::put_msg('warning', 'Không có thay đổi nào được cập nhật !');
+		}
+	}
+
 	public function deleteGroup($id)
 	{
 		$query = DB::query()->delete('g')->from('question_group', 'g')

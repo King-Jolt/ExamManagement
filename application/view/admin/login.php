@@ -5,7 +5,6 @@
 		<link rel="icon" href="/asset/default/icon.png" />
 		<link rel="stylesheet" href="/extension/bootstrap/css/bootstrap.css" />
 		<link rel="stylesheet" href="/extension/owner/css/custom.css" />
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<script src="/extension/jquery/jquery-1.12.4.min.js"></script>
 		<script src="/extension/bootstrap/js/bootstrap.js"></script>
 		<script src="/extension/owner/js/app.js"></script>
@@ -23,19 +22,19 @@
 								
 								<div class="form-group">
 									<div class="input-group">
-										<span class="input-group-addon"><span class="fa fa-user"></span></span>
+										<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 										<input type="text" class="form-control" placeholder="Tài khoản" name="user" autofocus />
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="input-group">
-										<span class="input-group-addon"><span class="fa fa-lock"></span></span>
+										<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
 										<input type="password" class="form-control" placeholder="Mật khẩu" name="pass" />
 									</div>
 								</div>
 								<div>
 									<div class="input-group">
-										<span class="input-group-addon"><span class="fa fa-book"></span></span>
+										<span class="input-group-addon"><span class="glyphicon glyphicon-book"></span></span>
 										<select class="form-control" name="course">
 											<option value="0"> -- Chọn bộ môn -- </option>
 											<?php foreach ($course_data as $c) {
@@ -46,7 +45,7 @@
 								</div>
 							</div>
 							<div class="panel-footer">
-								<button type="submit" class="btn btn-primary" name="action" value="login"><strong><span class="fa fa-sign-in"></span>&nbsp; Đăng nhập </strong></button>
+								<button type="submit" class="btn btn-primary" name="action" value="login"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
 							</div>
 						</form>
 					</div>

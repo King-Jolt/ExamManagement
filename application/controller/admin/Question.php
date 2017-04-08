@@ -3,12 +3,31 @@
 namespace Application\Controller\Admin;
 
 use Application\Controller\Admin\Admin;
+use Application\Model\Admin\Question\Model;
+use System\Libraries\Request;
+use System\Libraries\Route;
+use System\Libraries\View;
 
 class Question extends Admin
 {
+	private $model = NULL;
+	public function __construct()
+	{
+		parent::__construct();
+		$this->nav->add('Quản lý danh mục', '/admin/category');
+		$this->nav->add('Quản lý đề thi', sprintf('/admin/category/%s/exam', Request::params('category_id')));
+		$this->nav->add('Quản lý nhóm câu hỏi', sprintf("/admin/category/%s/exam/%s/group", Request::params('category_id'), Request::params('exam_id')));
+		$this->nav->add('Quản lý câu hỏi', '#');
+		$this->model = new Model();
+	}
+
 	protected function index()
 	{
-		
+		Route::add(function(){
+			View::add('admin/question/page.php', array(
+				'table' => $this->model->getTable()
+			));
+		});
 	}
 	/*
 	private $category_id = NULL;
@@ -88,5 +107,3 @@ class Question extends Admin
 	 * 
 	 */
 }
-
-?>

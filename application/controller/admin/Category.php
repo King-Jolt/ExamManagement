@@ -14,6 +14,7 @@ class Category extends Admin
 	public function __construct()
 	{
 		parent::__construct();
+		$this->nav->add('Quản lý danh mục', '/admin/category');
 		$this->model = new Model();
 	}
 	protected function index()
@@ -67,5 +68,3 @@ class Category extends Admin
 		Request::redirect('/admin/category');
 	}
 }
-
-?>

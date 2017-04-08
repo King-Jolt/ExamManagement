@@ -114,5 +114,3 @@ class Request
 		return '?' . http_build_query($data);
 	}
 }
-
-?>

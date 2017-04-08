@@ -6,10 +6,12 @@ use System\Libraries\Request;
 
 class Table extends \System\Libraries\Table
 {
-	public $class = 'table table-striped table-hover table-with-checkbox';
-	public $arr_title = array(
-		'<input type="checkbox" />', 'No.', 'Đề kiểm tra', 'Số câu hỏi', 'Ngày thi', 'Chia sẻ', ''
-	);
+	public function __construct()
+	{
+		parent::__construct();
+		$this->columns = array('<input type="checkbox" />', 'No.', 'Đề kiểm tra', 'Số câu hỏi', 'Ngày thi', 'Chia sẻ', '');
+		$this->class[] = 'table-with-checkbox';
+	}
 	protected function row($data, $index)
 	{
 		$visible = '';

@@ -141,8 +141,8 @@ class DB_Query
 	}
 	public function select($columns = '*')
 	{
-		$c = is_array($columns) ? implode(', ', $columns) : $columns;
-		$this->_query = "SELECT $c ";
+		$columns = implode(', ', func_num_args() ? (is_array($columns) ? $columns : func_get_args()) : array($columns));
+		$this->_query = "SELECT $columns ";
 		return $this;
 	}
 	public function from($table, $alias = '')

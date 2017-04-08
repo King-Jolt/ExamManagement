@@ -1,8 +1,12 @@
+<script src="/extension/owner/js/exam/share.js"></script>
 <form class="panel panel-info" method="post">
 	<div class="panel-heading">
 		Tùy chọn chia sẻ
 	</div>
 	<div class="panel-body">
+		<div class="form-group">
+			<button class="btn btn-info btn-xs" type="button" id="t-tip"><span class="glyphicon glyphicon-question-sign"></span> Hướng dẫn </button>
+		</div>
 		<div class="form-group form-inline">
 			<div class="input-group">
 				<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>

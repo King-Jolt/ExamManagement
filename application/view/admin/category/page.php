@@ -17,9 +17,9 @@
 		</div>
 		<div class="col-sm-9" style="border-left: 2px outset #edf8f8">
 			<div class="form-group" id="tree-btns">
-				<a href="" class="btn btn-primary btn-xs insert"><span class="glyphicon glyphicon-plus"></span> Thêm </a>
-				<a href="" class="btn btn-success btn-xs update"><span class="glyphicon glyphicon-pencil"></span> Sửa </a>
-				<a href="" class="btn btn-danger btn-xs delete be-care"><span class="glyphicon glyphicon-remove"></span> Xóa </a>
+				<a href="" class="btn btn-primary btn-xs insert"><span class="glyphicon glyphicon-plus"></span> Tạo mới </a>
+				<a href="" class="btn btn-success btn-xs update"><span class="glyphicon glyphicon-pencil"></span> Chỉnh sửa </a>
+				<a href="" class="btn btn-warning btn-xs delete be-care"><span class="glyphicon glyphicon-remove"></span> Xóa danh mục </a>
 			</div>
 			<div id="tree"></div>
 		</div>

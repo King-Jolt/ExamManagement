@@ -14,6 +14,9 @@ class Group extends Admin
 	public function __construct()
 	{
 		parent::__construct();
+		$this->nav->add('Quản lý danh mục', '/admin/category');
+		$this->nav->add('Quản lý đề thi', sprintf('/admin/category/%s/exam', Request::params('category_id')));
+		$this->nav->add('Quản lý Nhóm câu hỏi', sprintf("/admin/category/%s/exam/%s/group", Request::params('category_id'), Request::params('exam_id')));
 		$this->model = new Model();
 	}
 	protected function index()
@@ -28,14 +31,33 @@ class Group extends Admin
 	}
 	protected function create()
 	{
-		Route::add('post', 'action', function($value){
+		Route::add('post', 'insert', function(){
 			$title = Request::post('title');
-			$content = Request::post('content');
-			$this->model->insertGroup($title, $content ? $content : NULL);
+			$has_ct = Request::post('has-content');
+			$content = $has_ct ? Request::post('content') : NULL;
+			$this->model->insertGroup($title, $content);
 			$this->redirectIndex();
 		});
 		Route::add(function(){
 			View::add('admin/group/insert.php');
+		});
+	}
+	protected function edit()
+	{
+		Route::add('post', 'update', function(){
+			$title = Request::post('title');
+			$has_ct = Request::post('has-content');
+			$content = $has_ct ? Request::post('content') : NULL;
+			$this->model->updateGroup(Request::params('group_id'), $title, $content);
+			$this->redirectIndex();
+		});
+		Route::add(function(){
+			$data = $this->model->getGroupById(Request::params('group_id'));
+			View::add('admin/group/update.php', array(
+				'title' => $data->title,
+				'has_content' => $data->content !== NULL ? 'checked' : '',
+				'content' => $data->content !== NULL ? $data->content : ''
+			));
 		});
 	}
 	protected function delete()

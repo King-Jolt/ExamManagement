@@ -61,5 +61,3 @@ class Account extends Admin
 		}
 	}
 }
-
-?>

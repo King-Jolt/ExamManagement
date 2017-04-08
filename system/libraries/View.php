@@ -73,5 +73,3 @@ class View
 		return '';
 	}
 }
-
-?>

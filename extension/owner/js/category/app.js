@@ -50,7 +50,7 @@ $(document).ready(function(){
 				}
 			}
 		});
-		tree.treeview('expandAll', { levels: 2, silent: true });
+		tree.treeview('expandAll', { levels: 5, silent: true });
 		tree.treeview('selectNode', 1);
 	})();
 });

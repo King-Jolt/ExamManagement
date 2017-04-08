@@ -81,5 +81,3 @@ class Pagination
 		return $html;
 	}
 }
-
-?>

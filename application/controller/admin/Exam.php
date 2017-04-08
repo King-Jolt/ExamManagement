@@ -14,8 +14,9 @@ class Exam extends Admin
 	public function __construct()
 	{
 		parent::__construct();
+		$this->nav->add('Quản lý danh mục', '/admin/category');
+		$this->nav->add('Quản lý đề thi', sprintf('/admin/category/%s/exam', Request::params('category_id')));
 		$this->model = new Model();
-		View::add('admin/ckeditor.php'); // use CKEditor;
 	}
 	protected function index()
 	{
@@ -51,6 +52,7 @@ class Exam extends Admin
 			}
 		});
 		Route::add(function(){
+			View::add('admin/ckeditor.php');
 			View::add('admin/exam/insert.php');
 		});
 	}
@@ -71,6 +73,7 @@ class Exam extends Admin
 		});
 		Route::add(function(){
 			$data = $this->model->getExamById(Request::params('exam_id'));
+			View::add('admin/ckeditor.php');
 			View::add('admin/exam/update.php', array(
 				'title' => $data->title,
 				'header' => $data->header,
@@ -247,5 +250,3 @@ class Exam extends Admin
 	}
 	*/
 }
-
-?>

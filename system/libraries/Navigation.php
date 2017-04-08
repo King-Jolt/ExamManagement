@@ -36,5 +36,3 @@ class Navigation
 		return $html;
 	}
 }
-
-?>

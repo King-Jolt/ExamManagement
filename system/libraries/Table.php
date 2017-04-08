@@ -9,10 +9,10 @@ abstract class Table
 {
 	public $page = 1;
 	public $page_size = 50;
-
-	protected $arr_title = array(); // for custom title
-	protected $class = 'table table-striped table-hover'; // Use Bootstrap table
 	
+	protected $class = array('table', 'table-striped', 'table-hover');
+	protected $columns = array();
+
 	private $_use_db = TRUE;
 	private $_total = 0;
 	private $_page_max = 1;
@@ -51,12 +51,9 @@ abstract class Table
 	{
 		$head = '';
 		$body = '';
-		if ($this->arr_title)
+		foreach ($this->columns as $str)
 		{
-			foreach ($this->arr_title as $str)
-			{
-				$head .= "<th> $str </th>";
-			}
+			$head .= "<th> $str </th>";
 		}
 		if ($this->_use_db)
 		{
@@ -88,7 +85,7 @@ abstract class Table
 				if ($n_start >= 0 and $n_start < $this->_total)
 				{
 					// fetch columns title if not set
-					if (!$this->arr_title)
+					if (!$head)
 					{
 						foreach ($result->get_Columns() as $column)
 						{
@@ -97,9 +94,11 @@ abstract class Table
 					}
 					// fetch rows
 					$i = $n_start;
+					$c = 0;
 					foreach ($result as $row)
 					{
 						$body .= $this->row($row, ++$i);
+						$c++;
 					}
 				}
 				else
@@ -113,22 +112,17 @@ abstract class Table
 			}
 		}
 		// Return html
-		$html = <<<EOF
-		<table class="$this->class">
-			<thead>
-				$head
-			</thead>
-			<tbody>
-				$body
-			</tbody>
-		</table>
-EOF;
+		$class = implode(' ', $this->class);
+		$html = '<div class="table-responsive">' .
+				"<table class=\"$class\">" .
+				"<thead> $head </thead>" .
+				"<tbody> $body </tbody>" .
+				'</table></div>';
 		$pager = new Pagination($this->_total, $this->page_size, $this->page);
 		$html .= '<div>';
+		$html .= "<div> Showing $c in $this->_total row </div>";
 		$html .= $pager->get();
 		$html .= '</div>';
 		return $html;
 	}
 }
-
-?>

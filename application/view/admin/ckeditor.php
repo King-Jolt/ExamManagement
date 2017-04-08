@@ -1,3 +1,4 @@
+<script src="/extension/ckeditor4/ckeditor.js"></script>
 <div class="modal fade ckeditor" id="ck-modal-input" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">

@@ -56,5 +56,3 @@ class Route
 		or ($this->_method == 'post' and array_key_exists($this->_name, $_POST));
 	}
 }
-
-?>

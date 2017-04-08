@@ -4,7 +4,11 @@ namespace Application\Model\Admin\Group;
 
 class Table extends \System\Libraries\Table
 {
-	protected $arr_title = ['No.', 'Nhóm câu hỏi', 'Nội dung', 'Số câu hỏi', 'Action'];
+	public function __construct()
+	{
+		parent::__construct();
+		$this->columns = array('No.', 'Nhóm câu hỏi', 'Nội dung', 'Số câu hỏi', 'Action');
+	}
 	protected function Source()
 	{
 		$data = new Data();
@@ -12,7 +16,7 @@ class Table extends \System\Libraries\Table
 	}
 	protected function row($data, $index)
 	{
-		if (!$data->content) $data->content = '<span class="text-muted"><em> Không có nội dung </em></span>';
+		if ($data->content === NULL) $data->content = '<span class="text-muted"><em> Không có nội dung </em></span>';
 		$delete = '#';
 		$edit = '#';
 		$btn_disable = ' disabled';
