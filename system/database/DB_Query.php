@@ -111,7 +111,7 @@ class DB_Query
 			$k = empty($this->_where) ? '' : "$condition ";
 			array_push($this->_where, "{$k}{$w}");
 		}
-		$this->_param = array_merge($this->_param, $where_get['param']);
+		$this->_param = array_merge($this->_param, array_values($where_get['param']));
 		return $this;
 	}
 	private function _join($type, $argument)
@@ -120,7 +120,7 @@ class DB_Query
 		$table = $argument[0];
 		if ($table instanceof self)
 		{
-			$this->_param = array_merge($this->_param, $table->getParams());
+			$this->_param = array_merge($this->_param, array_values($table->getParams()));
 			$table = "({$table->getQuery()})";
 		}
 		$alias = '';
@@ -203,13 +203,13 @@ class DB_Query
 			$param = array($param);
 		}
 		array_push($this->_where, empty($this->_where) ? "$condition" : "AND $condition");
-		$this->_param = array_merge($this->_param, $param);
+		$this->_param = array_merge($this->_param, array_values($param));
 		return $this;
 	}
 	public function union(self $select)
 	{
 		array_push($this->_union, "UNION ({$select->getQuery()})");
-		$this->_param = array_merge($this->_param, $select->getParams());
+		$this->_param = array_merge($this->_param, array_values($select->getParams()));
 		return $this;
 	}
 	public function groupBy($column)
@@ -225,13 +225,13 @@ class DB_Query
 	{
 		$condition = call_user_func_array(array($this, '_get_condition'), func_get_args());
 		$this->_having = array_merge($this->_having, $condition['expression']);
-		$this->_param = array_merge($this->_param, $condition['param']);
+		$this->_param = array_merge($this->_param, array_values($condition['param']));
 		return $this;
 	}
 	public function havingRaw($condition, $param = array())
 	{
 		array_push($this->_having, $condition);
-		$this->_param = array_merge($this->_param, $param);
+		$this->_param = array_merge($this->_param, array_values($param));
 		return $this;
 	}
 	public function orderBy($column, $sort = 'DESC')
@@ -263,7 +263,7 @@ class DB_Query
 			$column = ' (' . implode(', ', $column) . ')';
 		}
 		$this->_query = "INSERT INTO {$table}{$column} {$select->getQuery()}";
-		$this->_param = array_merge($this->_param, $select->getParams());
+		$this->_param = array_merge($this->_param, array_values($select->getParams()));
 		return $this;
 	}
 	public function update($table, $alias = '')
