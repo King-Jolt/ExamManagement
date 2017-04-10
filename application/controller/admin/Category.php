@@ -53,6 +53,7 @@ class Category extends Admin
 		}
 		else
 		{
+			$this->nav->add('Chỉnh sửa danh mục');
 			$data = $this->model->getCategoryById(Request::params('category_id'));
 			View::add('admin/category/update.php', array(
 				'value' => $data->name

@@ -41,7 +41,7 @@ class DB_Query
 				$in = '';
 				if ($param instanceof self)
 				{
-					$in = "({$param->getQuery()})";
+					$in = "{$param->getQuery()}";
 					$param = $param->getParams();
 				}
 				else
