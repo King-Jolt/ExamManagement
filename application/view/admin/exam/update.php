@@ -5,7 +5,7 @@
 <div>
 	<form method="post" class="exam-form panel panel-default" role="dialog">
 		<div class="panel-heading">
-			Nhập thông tin chỉnh sửa
+			<span class="text-muted"> Nhập thông tin chỉnh sửa </span>
 		</div>
 		<div class="panel-body">
 			<div class="form-hint"></div>

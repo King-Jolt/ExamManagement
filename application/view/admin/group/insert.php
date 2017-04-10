@@ -1,6 +1,7 @@
-<form class="panel panel-default" method="post" id="insert-group">
+<script src="/extension/owner/js/group/form.js"></script>
+<form class="panel panel-default" method="post" id="group">
 	<div class="panel-heading">
-		Thêm nhóm câu hỏi mới
+		<span class="text-muted"> Thêm nhóm câu hỏi mới </span>
 	</div>
 	<div class="panel-body">
 		<label> Tiêu đề </label>
@@ -14,10 +15,3 @@
 		<button class="btn btn-primary" name="insert" value="1"> Xác nhận </button>
 	</div>
 </form>
-<script>
-	$(document).ready(function(){
-		$('#insert-group [name="has-content"]').on('change', function(){
-			$(this).closest('form').find('[name="content"]').prop('disabled', !$(this).prop('checked'));
-		}).trigger('change');
-	});
-</script>

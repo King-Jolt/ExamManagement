@@ -35,7 +35,7 @@ class Table extends \System\Libraries\Table
 			<td>
 				<a href="/admin/category/$data->category_id/exam/$data->exam_id/group/$data->id/question" class="btn btn-primary btn-xs"> Câu hỏi </a> &nbsp;
 				<a href="$edit" class="btn btn-success btn-xs{$btn_disable}"> Sửa </a> &nbsp;
-				<a href="$delete" class="btn btn-warning btn-xs{$btn_disable}"> Xóa </a>
+				<a href="$delete" class="btn btn-warning btn-xs{$btn_disable} be-care"> Xóa </a>
 			</td>
 		</tr>
 EOF;

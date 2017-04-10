@@ -1,7 +1,7 @@
 <script src="/extension/owner/js/category/form_validate.js"></script>
 <form class="panel panel-default category-form" method="post">
 	<div class="panel-heading">
-		Thêm mới danh mục
+		<span class="text-muted"> Thêm mới danh mục </span>
 	</div>
 	<div class="panel-body">
 		<div class="form-inline">

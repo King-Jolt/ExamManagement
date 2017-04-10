@@ -4,7 +4,7 @@
 <script src="/extension/owner/js/exam/form_validate.js"></script>
 <form method="post" class="exam-form panel panel-default" role="dialog">
 	<div class="panel-heading">
-		Nhập thông tin cho đề thi
+		<span class="text-muted"> Nhập thông tin cho đề thi </span>
 	</div>
 	<div class="panel-body">
 		<div class="form-hint"></div>

@@ -47,6 +47,7 @@ class Exam extends Admin
 		}
 		else
 		{
+			$this->nav->add('Tạo mới đề thi');
 			View::add('admin/ckeditor.php');
 			View::add('admin/exam/insert.php');
 		}
@@ -66,6 +67,7 @@ class Exam extends Admin
 		}
 		else
 		{
+			$this->nav->add('Chỉnh sửa đề thi');
 			$data = $this->model->getExamById(Request::params('exam_id'));
 			View::add('admin/ckeditor.php');
 			View::add('admin/exam/update.php', array(
@@ -89,6 +91,7 @@ class Exam extends Admin
 		}
 		else
 		{
+			$this->nav->add('Chia sẻ đề thi');
 			View::add('admin/exam/share.php', array(
 				'master' => $this->user->id,
 				'users' => $this->model->getAllUsers()
