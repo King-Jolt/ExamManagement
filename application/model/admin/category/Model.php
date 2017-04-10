@@ -60,7 +60,7 @@ class Model
 		$tree = new \ArrayObject(array());
 		$this->Tree_Traversal('', $tree, function($data, $has_child, &$list) {
 			$push = (object)array(
-				'text' => " $data->name ",
+				'text' => " $data->name - $data->n_exam đề thi",
 				'href' => "/admin/category/$data->id/exam",
 				'nodeData' => $data
 			);

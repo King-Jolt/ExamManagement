@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<div class="panel-footer">
-		<button type="submit" class="btn btn-primary" name="action" value="insert" title="Thêm mới danh mục">
+		<button type="submit" class="btn btn-primary" name="insert" value="1" title="Thêm mới danh mục">
 			<span class="glyphicon glyphicon-check"></span> Xác nhận
 		</button>
 	</div>

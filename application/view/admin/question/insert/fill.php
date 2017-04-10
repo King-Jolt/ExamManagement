@@ -1,9 +1,9 @@
 <form id="add-multiple-choice" method="post">
-	<h4> <?php self::put($title) ?> </h4>
+	<h4> Thêm câu điền khuyết </h4>
 	<hr />
 	<div class="form-hint"></div>
 	<div class="form-group">
-		<input class="form-control qt use-ckeditor" name="q[q]" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" autocomplete="off" />
+		<input class="form-control qt use-ckeditor" name="content" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" autocomplete="off" />
 	</div>
 	<div class="form-group">
 		<div class="form-inline">

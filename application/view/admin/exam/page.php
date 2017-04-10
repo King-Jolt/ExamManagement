@@ -7,7 +7,7 @@
 	<form class="form-group" method="post">
 		<a href="{{add}}" class="btn btn-primary btn-xs"> Thêm mới </a>
 		<button type="submit" class="btn btn-success btn-xs" name="action" value="view_answer" formtarget="_blank"> Xem đáp án </button>
-		<button type="submit" class="btn btn-success btn-xs" name="action" value="delete"> Xóa </button>
+		<button type="submit" class="btn btn-warning btn-xs" name="delete" value="1"> Xóa </button>
 		<hr />
 		{{ table }}
 	</form>

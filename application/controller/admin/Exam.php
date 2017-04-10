@@ -2,11 +2,10 @@
 
 namespace Application\Controller\Admin;
 
-use System\Libraries\Route;
+use Application\Model\Misc;
 use System\Libraries\View;
 use System\Libraries\Request;
 use Application\Model\Admin\Exam\Model;
-use Application\Model\Misc;
 
 class Exam extends Admin
 {
@@ -18,60 +17,55 @@ class Exam extends Admin
 		$this->nav->add('Quản lý đề thi', sprintf('/admin/category/%s/exam', Request::params('category_id')));
 		$this->model = new Model();
 	}
-	protected function index()
+	public function index()
 	{
-		Route::add('post', 'action', function($value){
-			switch ($value)
-			{
-				case 'delete':
-					$this->model->deleteExams(Request::post('eid'));
-					break;
-			}
+		if (Request::post('delete'))
+		{
+			$this->model->deleteExams(Request::post('eid'));
 			$this->redirectToTable();
-		});
-		Route::add(function(){
+		}
+		else
+		{
 			View::add('admin/exam/page.php', array(
 				'add' => Request::current_uri() . '/create',
 				'table' => $this->model->getTable(),
 				'msg' => Misc::get_msg()
 			));
-		});
+		}
 	}
-	protected function create()
+	public function createExam()
 	{
-		Route::add('post', 'action', function($value){
-			if ($value == 'insert')
-			{
-				$this->model->insertExam(
-					Request::post('title'),
-					Request::post('header'),
-					Request::post('footer'),
-					Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
-				);
-				$this->redirectToTable();
-			}
-		});
-		Route::add(function(){
+		if (Request::post('insert'))
+		{
+			$this->model->insertExam(
+				Request::post('title'),
+				Request::post('header'),
+				Request::post('footer'),
+				Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
+			);
+			$this->redirectToTable();
+		}
+		else
+		{
 			View::add('admin/ckeditor.php');
 			View::add('admin/exam/insert.php');
-		});
+		}
 	}
-	protected function edit()
+	public function editExam()
 	{
-		Route::add('post', 'action', function($value){
-			if ($value == 'update')
-			{
-				$this->model->updateExam(
-					Request::params()['exam_id'],
-					Request::post('title'),
-					Request::post('header'),
-					Request::post('footer'),
-					Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
-				);
-				$this->redirectToTable();
-			}
-		});
-		Route::add(function(){
+		if (Request::post('update'))
+		{
+			$this->model->updateExam(
+				Request::params()['exam_id'],
+				Request::post('title'),
+				Request::post('header'),
+				Request::post('footer'),
+				Request::post('set-date') ? \DateTime::createFromFormat('d-m-Y H:i:s', Request::post('date'))->format('Y-m-d H:i:s') : NULL
+			);
+			$this->redirectToTable();
+		}
+		else
+		{
 			$data = $this->model->getExamById(Request::params('exam_id'));
 			View::add('admin/ckeditor.php');
 			View::add('admin/exam/update.php', array(
@@ -81,25 +75,27 @@ class Exam extends Admin
 				'set_checked' => $data->date ? 'checked' : '',
 				'date' => $data->date
 			));
-		});
+		}
 	}
-	protected function share()
+	public function setVisible()
 	{
-		Route::add('post', 'share', function($value){
+		if (Request::post('share'))
+		{
 			$this->model->setVisible(
 				Request::params('exam_id'),
 				Request::post('object')
 			);
 			$this->redirectToTable();
-		});
-		Route::add(function(){
+		}
+		else
+		{
 			View::add('admin/exam/share.php', array(
 				'master' => $this->user->id,
 				'users' => $this->model->getAllUsers()
 			));
-		});
+		}
 	}
-	protected function delete()
+	public function deleteExam()
 	{
 		$this->model->deleteExams([(Request::params('exam_id'))]);
 		$this->redirectToTable();

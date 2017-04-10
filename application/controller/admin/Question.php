@@ -4,8 +4,8 @@ namespace Application\Controller\Admin;
 
 use Application\Controller\Admin\Admin;
 use Application\Model\Admin\Question\Model;
+use Application\Model\Misc;
 use System\Libraries\Request;
-use System\Libraries\Route;
 use System\Libraries\View;
 
 class Question extends Admin
@@ -17,17 +17,64 @@ class Question extends Admin
 		$this->nav->add('Quản lý danh mục', '/admin/category');
 		$this->nav->add('Quản lý đề thi', sprintf('/admin/category/%s/exam', Request::params('category_id')));
 		$this->nav->add('Quản lý nhóm câu hỏi', sprintf("/admin/category/%s/exam/%s/group", Request::params('category_id'), Request::params('exam_id')));
-		$this->nav->add('Quản lý câu hỏi', '#');
+		$this->nav->add('Quản lý câu hỏi', sprintf("/admin/category/%s/exam/%s/group/%s/question", Request::params('category_id'), Request::params('exam_id'), Request::params('group_id')));
 		$this->model = new Model();
 	}
-
-	protected function index()
+	public function index()
 	{
-		Route::add(function(){
-			View::add('admin/question/page.php', array(
-				'table' => $this->model->getTable()
-			));
-		});
+		if (Request::post('delete'))
+		{
+			var_dump(Request::post('id'));
+			$this->model->deleteQuestion(Request::post('id'));
+			$this->redirectToIndex();
+		}
+		$add = sprintf("/admin/category/%s/exam/%s/group/%s/question/insert", Request::params('category_id'), Request::params('exam_id'), Request::params('group_id'));
+		View::add('admin/question/page.php', array(
+			'add_a' => $add . '/multiple_choice',
+			'add_b' => $add . '/link',
+			'add_c' => $add . '/fill',
+			'table' => $this->model->getTable(),
+			'msg' => Misc::get_msg()
+		));
+	}
+	public function insertQuestion()
+	{
+		if (Request::post('insert'))
+		{
+			switch (Request::params('question_type'))
+			{
+			case 'multiple_choice':
+				$this->model->insertMultipleChoiceQuestion(
+					Request::post('content'),
+					Request::post('options'),
+					is_numeric(Request::post('score')) ? Request::post('score') : NULL
+				);
+				break;
+			}
+			$this->redirectToIndex();
+		}
+		else
+		{
+			$this->nav->add('Thêm câu hỏi mới', '');
+			View::add('admin/ckeditor.php');
+			switch (Request::params('question_type'))
+			{
+			case 'multiple_choice':
+				View::add('admin/question/insert/multiple_choice.php');
+				break;
+			case 'fill':
+				View::add('admin/question/insert/fill.php');
+				break;
+			}
+		}
+	}
+	private function redirectToIndex()
+	{
+		Request::redirect(sprintf("/admin/category/%s/exam/%s/group/%s/question",
+			Request::params('category_id'),
+			Request::params('exam_id'),
+			Request::params('group_id')
+		));
 	}
 	/*
 	private $category_id = NULL;

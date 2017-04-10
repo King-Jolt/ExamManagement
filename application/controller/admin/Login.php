@@ -13,43 +13,42 @@ use Application\Model\Misc;
 
 class Login extends Controller
 {
-	protected function index()
+	public function index()
 	{
 		Auth::set_Key('admin');
 		Auth::redirect_Success(Request::current_path() . '/admin/category');
 		Auth::validate();
-		Route::add('post', 'action', function($value){
-			if ($value == 'login')
+		if (Request::post('submit'))
+		{
+			Auth::set_Function(function() {
+				$query = DB::query()->select()->from('user')->where(array(
+					'user' => Request::post('user'),
+					'pass' => sha1(Request::post('pass')),
+					'course_id' => Request::post('course')
+				));
+				$result = $query->execute();
+				if ($result->num_rows())
+				{
+					return $result->current();
+				}
+				return FALSE;
+			});
+			try
 			{
-				Auth::set_Function(function() {
-					$query = DB::query()->select()->from('user')->where(array(
-						'user' => Request::post('user'),
-						'pass' => sha1(Request::post('pass')),
-						'course_id' => Request::post('course')
-					));
-					$result = $query->execute();
-					if ($result->num_rows())
-					{
-						return $result->current();
-					}
-					return FALSE;
-				});
-				try
-				{
-					Auth::attempt();
-					Auth::validate();
-				}
-				catch (Auth_NotValidate $e)
-				{
-					Misc::put_msg('danger', $e->getMessage(), FALSE);
-				}
+				Auth::attempt();
+				Auth::validate();
 			}
-		});
-		Route::add(function (){
+			catch (Auth_NotValidate $e)
+			{
+				Misc::put_msg('danger', $e->getMessage(), FALSE);
+			}
+		}
+		else
+		{
 			View::add('admin/login.php', array(
 				'course_data' => DB::get('course'),
 				'msg' => Misc::get_msg()
 			));
-		});
+		}
 	}
 }

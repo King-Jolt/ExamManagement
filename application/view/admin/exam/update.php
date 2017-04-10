@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		<div class="panel-footer">
-			<button type="submit" class="btn btn-primary" name="action" value="update" title="Xác nhận thay đổi"> Xác nhận </button>
+			<button type="submit" class="btn btn-primary" name="update" value="1" title="Xác nhận thay đổi"> Xác nhận </button>
 		</div>
 	</form>
 </div>

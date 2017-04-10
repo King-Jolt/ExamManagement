@@ -45,7 +45,7 @@
 								</div>
 							</div>
 							<div class="panel-footer">
-								<button type="submit" class="btn btn-primary" name="action" value="login"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
+								<button type="submit" class="btn btn-primary" name="submit" value="1"><strong><span class="glyphicon glyphicon-log-in"></span>&nbsp; Đăng nhập </strong></button>
 							</div>
 						</form>
 					</div>

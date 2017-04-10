@@ -60,9 +60,14 @@ class DB
 		}
 		return FALSE;
 	}
+	/** @return DB_ISQL */
 	public static function get_connect()
 	{
 		DB::open();
 		return self::$instance->connect;
+	}
+	public static function affected_rows()
+	{
+		return self::get_connect()->get_affected_rows();
 	}
 }

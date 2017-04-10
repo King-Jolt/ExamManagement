@@ -4,7 +4,6 @@ namespace Application\Controller\Admin;
 
 use Application\Model\Misc;
 use System\Libraries\View;
-use System\Libraries\Route;
 use System\Libraries\Request;
 use Application\Model\Admin\Category\Model;
 
@@ -17,53 +16,55 @@ class Category extends Admin
 		$this->nav->add('Quản lý danh mục', '/admin/category');
 		$this->model = new Model();
 	}
-	protected function index()
+	public function index()
 	{
-		Route::add(function(){
-			View::add('admin/category/page.php', array(
-				'msg' => Misc::get_msg()
-			));
-		});
+		View::add('admin/category/page.php', array(
+			'msg' => Misc::get_msg()
+		));
 	}
-	protected function get()
+	public function getTreeData()
 	{
 		$this->send_response(json_encode(
 			$this->model->getTreeView()
 		));
 	}
-	protected function create()
+	public function insertCategory()
 	{
-		Route::add('post', 'action', function($value){
+		if (Request::post('insert'))
+		{
 			$this->model->insertCategory(
 				isset(Request::params()['category_id']) ? Request::params()['category_id'] : NULL,
 				Request::post('name')
 			);
-			$this->back();
-		});
-		Route::add(function(){
+			$this->redirectToIndex();
+		}
+		else
+		{
 			$this->nav->add('Thêm danh mục mới');
 			View::add('admin/category/insert.php');
-		});
+		}
 	}
-	protected function edit()
+	public function editCategory()
 	{
-		Route::add('post', 'action', function($value){
+		if (Request::post('update'))
+		{
 			$this->model->updateCategory(Request::params()['category_id'], Request::post('name'));
-			$this->back();
-		});
-		Route::add(function(){
+			$this->redirectToIndex();
+		}
+		else
+		{
 			$data = $this->model->getCategoryById(Request::params('category_id'));
 			View::add('admin/category/update.php', array(
 				'value' => $data->name
 			));
-		});
+		}
 	}
-	protected function delete()
+	public function deleteCategory()
 	{
 		$this->model->deleteCategory(Request::params()['category_id']);
-		$this->back();
+		$this->redirectToIndex();
 	}
-	protected function back()
+	private function redirectToIndex()
 	{
 		Request::redirect('/admin/category');
 	}

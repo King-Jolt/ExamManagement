@@ -19,7 +19,7 @@ class Table extends \System\Libraries\Table
 	{
 		return <<<EOF
 		<tr>
-			<td> <input type="checkbox" /> </td>
+			<td> <input type="checkbox" name="id[]" value="$data->id" /> </td>
 			<td> $index </td>
 			<td> $data->content </td>
 			<td> $data->type </td>

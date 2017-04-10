@@ -2,7 +2,6 @@
 
 namespace System\Core;
 
-use System\Libraries\Misc;
 use System\Libraries\Request;
 
 class Instance
@@ -15,7 +14,7 @@ class Instance
 		$request = Request::get_request_uri();
 		if (!$request or !class_exists($request['class']))
 		{
-			throw new Exception\Controller_NotAvailable("Can not found controller !");
+			throw new Exception\UndefinedController("Can not found controller !");
 		}
 		$this->controller = $request;
 		$this->stack = array(

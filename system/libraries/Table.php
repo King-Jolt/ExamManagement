@@ -51,6 +51,7 @@ abstract class Table
 	{
 		$head = '';
 		$body = '';
+		$c = 0;
 		foreach ($this->columns as $str)
 		{
 			$head .= "<th> $str </th>";
@@ -94,7 +95,6 @@ abstract class Table
 					}
 					// fetch rows
 					$i = $n_start;
-					$c = 0;
 					foreach ($result as $row)
 					{
 						$body .= $this->row($row, ++$i);
@@ -113,11 +113,10 @@ abstract class Table
 		}
 		// Return html
 		$class = implode(' ', $this->class);
-		$html = '<div class="table-responsive">' .
-				"<table class=\"$class\">" .
+		$html = "<table class=\"$class\">" .
 				"<thead> $head </thead>" .
 				"<tbody> $body </tbody>" .
-				'</table></div>';
+				"</table>";
 		$pager = new Pagination($this->_total, $this->page_size, $this->page);
 		$html .= '<div>';
 		$html .= "<div> Showing $c in $this->_total row </div>";
