@@ -4,7 +4,6 @@ namespace Application\Controller\Admin;
 
 use System\Core\Controller;
 use System\Libraries\View;
-use System\Libraries\Route;
 use System\Libraries\Auth;
 use System\Libraries\Exception\Auth_NotValidate;
 use System\Libraries\Request;
@@ -43,12 +42,9 @@ class Login extends Controller
 				Misc::put_msg('danger', $e->getMessage(), FALSE);
 			}
 		}
-		else
-		{
-			View::add('admin/login.php', array(
-				'course_data' => DB::get('course'),
-				'msg' => Misc::get_msg()
-			));
-		}
+		View::add('admin/login.php', array(
+			'course_data' => DB::get('course'),
+			'msg' => Misc::get_msg()
+		));
 	}
 }
