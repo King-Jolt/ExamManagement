@@ -1,3 +1,4 @@
+<script src="/extension/owner/js/question/form_insert/multiple_choice.js"></script>
 <form id="add-multiple-choice" method="post">
 	<h4> Thêm câu chọn đáp án </h4>
 	<hr />
@@ -37,4 +38,3 @@
 	</div>
 	<button type="submit" class="btn btn-success" name="insert" value="1"> Xác nhận </button>
 </form>
-<script src="/extension/owner/js/question/form_insert/create_multiple_choice.js"></script>

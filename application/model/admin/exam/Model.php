@@ -28,6 +28,28 @@ class Model
 		DB::query()->insert('exam', $data)->execute();
 		Misc::put_msg('success', 'Đã tạo mới một đề thi');
 	}
+	public function shuffleExam($id)
+	{
+		$query = DB::query()->update('question', 'q')
+			->join('exam', 'e', 'e.id = q.exam_id')
+			->join('category', 'c', 'c.id = e.category_id')
+			->set([
+				'q.position = RAND() * 60000'
+			])
+			->where([
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
+				'e.id' => $id
+			]);
+		if ($query->execute())
+		{
+			Misc::put_msg('success', 'Đã xáo trộn đề thi thành công');
+		}
+		else
+		{
+			Misc::put_msg('info', 'Không có thay đổi nào được cập nhật');
+		}
+	}
 	public function getExamById($id)
 	{
 		$data = new Data();

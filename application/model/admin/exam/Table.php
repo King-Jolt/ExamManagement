@@ -45,7 +45,7 @@ class Table extends \System\Libraries\Table
 						<li><a href="/admin/category/$data->category_id/exam/$data->id/share"><span class="glyphicon glyphicon-share"></span> Chia sẻ </a></li>
 						<li><a href=""><span class="glyphicon glyphicon-copy"></span> Sao chép </a></li>
 						<li><a href=""><span class="glyphicon glyphicon-import"></span> Bốc câu hỏi </a></li>
-						<li><a href=""><span class="glyphicon glyphicon-random"></span> Xáo trộn </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/shuffle"><span class="glyphicon glyphicon-random"></span> Xáo trộn </a></li>
 						<li><a href="" target="_blank"><span class="glyphicon glyphicon-list-alt"></span> Xuất bản </a></li>
 						<li><a href="/admin/category/$data->category_id/exam/$data->id/delete" class="be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a></li>
 					</ul>

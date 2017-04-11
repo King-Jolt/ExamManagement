@@ -1,24 +1,25 @@
+<script src="/extension/owner/js/question/form_insert/link.js"></script>
 <form id="add-link" method="post">
-	<h4> <?php self::put($title) ?> </h4>
+	<h4> Thêm câu hỏi ghép nối </h4>
 	<hr />
 	<div class="form-hint"></div>
 	<div class="form-group">
-		<input class="form-control qt use-ckeditor" name="q[q]" placeholder="Nhập câu hỏi vào đây" value="<?php self::put($q_content) ?>" autocomplete="off" />
+		<input class="form-control use-ckeditor" name="content" placeholder="Nhập câu hỏi vào đây" autofocus autocomplete="off" />
 	</div>
-	<table class="table no-margin">
+	<table class="table table-striped no-margin">
 		<thead>
 			<tr>
 				<th>
-					<div class="input-group">
-						<input class="form-control" name="q[title][a]" placeholder="Tiêu đề cột A" value="<?php self::put($a_title) ?>" autocomplete="off" />
-						<span class="input-group-btn"><button type="button" class="btn btn-primary pull-right add add-a" title="Thêm tùy chọn A"><span class="glyphicon glyphicon-plus"></span></button></span>
+					<div class="form-group">
+						<input class="form-control" name="a_title" placeholder="Tiêu đề cột A" autocomplete="off" />
 					</div>
+					<button type="button" class="btn btn-primary btn-xs add add-a" title="Thêm tùy chọn A"> Thêm tùy chọn </button>
 				</th>
 				<th>
-					<div class="input-group">
-						<input class="form-control" name="q[title][b]" placeholder="Tiêu đề cột B" value="<?php self::put($b_title) ?>" autocomplete="off" />
-						<span class="input-group-btn"><button type="button" class="btn btn-primary pull-right add add-b" title="Thêm tùy chọn B"><span class="glyphicon glyphicon-plus"></span></button></span>
+					<div class="form-group">
+						<input class="form-control" name="b_title" placeholder="Tiêu đề cột B" autocomplete="off" />
 					</div>
+					<button type="button" class="btn btn-info btn-xs add add-b" title="Thêm tùy chọn B"> Thêm tùy chọn </button>
 				</th>
 				<th></th>
 			</tr>
@@ -26,10 +27,10 @@
 		<tbody>
 			<tr class="row-input">
 				<td>
-					<input class="form-control qa use-ckeditor" name="q[a][]" autocomplete="off" />
+					<input class="form-control qa use-ckeditor" name="option[0][a]" autocomplete="off" />
 				</td>
 				<td>
-					<input class="form-control qb use-ckeditor" name="q[b][]" autocomplete="off" />
+					<input class="form-control qb use-ckeditor" name="option[0][b]" autocomplete="off" />
 				</td>
 				<td>
 					<button class="btn btn-primary rm-row" type="button" disabled><span class="glyphicon glyphicon-trash"></span></button>
@@ -40,37 +41,15 @@
 			<tr>
 				<td colspan="10">
 					<div class="form-inline">
-						<input type="number" class="form-control" name="q[score]" placeholder="Điểm" value="<?php self::put($score) ?>" step="0.1" autocomplete="off" />
+						<input type="number" class="form-control" name="score" placeholder="Điểm" step="0.1" autocomplete="off" />
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="10">
-					<button type="submit" class="btn btn-success" name="<?php self::put($action) ?>" value="<?php self::put($type) ?>"><span class="glyphicon glyphicon-check"></span> Xác nhận </button>
+					<button type="submit" class="btn btn-success" name="insert" value="1"><span class="glyphicon glyphicon-check"></span> Xác nhận </button>
 				</td>
 			</tr>
 		</tfoot>
 	</table>
 </form>
-<script>
-	$(document).ready(function(){
-	$(document).on('click', '#add-link .add', function(){
-		var tr = $(this).parents('table').first().find('.row-input');
-		var clone = tr.first().clone();
-		clone.find('input[name]').val('');
-		clone.find('.rm-row').removeProp('disabled');
-		if ($(this).hasClass('add-a'))
-		{
-			tr.has('.qa').last().after(clone);
-		}
-		else if ($(this).hasClass('add-b'))
-		{
-			clone.find('td:has(.qa)').empty();
-			tr.last().after(clone);
-		}
-	});
-	$(document).on('click', '#add-link .rm-row', function(){
-		$(this).parents('.row-input').remove();
-	});
-});
-</script>

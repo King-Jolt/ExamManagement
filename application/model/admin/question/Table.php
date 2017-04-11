@@ -17,14 +17,14 @@ class Table extends \System\Libraries\Table
 	}
 	protected function row($data, $index)
 	{
-		return <<<EOF
-		<tr>
-			<td> <input type="checkbox" name="id[]" value="$data->id" /> </td>
-			<td> $index </td>
-			<td> $data->content </td>
-			<td> $data->type </td>
-			<td> $data->score </td>
-		</tr>
-EOF;
+		if (!$data->score) $data->score = '<em> Unknown </em>';
+		return
+		"<tr>" .
+			"<td> <input type=\"checkbox\" name=\"id[]\" value=\"$data->id\" /> </td>" .
+			"<td> $index </td>" .
+			"<td> $data->content </td>" .
+			"<td> $data->typename </td>" .
+			"<td> $data->score </td>" .
+		"</tr>";
 	}
 }

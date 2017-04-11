@@ -33,6 +33,7 @@ class Question extends Admin
 			'add_a' => $add . '/multiple_choice',
 			'add_b' => $add . '/link',
 			'add_c' => $add . '/fill',
+			'add_essay' => $add . '/essay',
 			'table' => $this->model->getTable(),
 			'msg' => Misc::get_msg()
 		));
@@ -50,6 +51,27 @@ class Question extends Admin
 					is_numeric(Request::post('score')) ? Request::post('score') : NULL
 				);
 				break;
+			case 'fill':
+				$this->model->insertFillQuestion(
+					Request::post('content'),
+					is_numeric(Request::post('score')) ? Request::post('score') : NULL
+				);
+				break;
+			case 'link':
+				$this->model->insertLinkQuestion(
+					Request::post('content'),
+					Request::post('a_title'),
+					Request::post('b_title'),
+					Request::post('option'),
+					Request::post('score')
+				);
+				break;
+			case 'essay':
+				$this->model->insertEssayQuestion(
+					Request::post('content'),
+					is_numeric(Request::post('score')) ? Request::post('score') : NULL
+				);
+				break;
 			}
 			$this->redirectToIndex();
 		}
@@ -62,9 +84,15 @@ class Question extends Admin
 			case 'multiple_choice':
 				View::add('admin/question/insert/multiple_choice.php');
 				break;
+			case 'link':
+				View::add('admin/question/insert/link.php');
+				break;
 			case 'fill':
 				View::add('admin/question/insert/fill.php');
 				break;
+			case 'essay':
+				View::add('admin/question/insert/essay.php');
+				break;;
 			}
 		}
 	}

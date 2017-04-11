@@ -1,6 +1,6 @@
-<script src="/extension/owner/js/question/form_insert/fill.js"></script>
-<form id="add-fill-question" method="post">
-	<h4> Thêm câu điền khuyết </h4>
+<script src="/extension/owner/js/question/form_insert/essay.js"></script>
+<form id="add-essay-question" method="post">
+	<h4> Thêm câu hỏi tự luận </h4>
 	<hr />
 	<div class="form-hint"></div>
 	<div class="form-group">

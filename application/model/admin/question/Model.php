@@ -13,6 +13,11 @@ class Model
 	CONST QUESTION_LINK = 1;
 	CONST QUESTION_MULTIPLE_CHOICE = 2;
 	CONST QUESTION_FILL = 4;
+	CONST QUESTION_ESSAY = 8;
+	private function getQuestionLastPosition()
+	{
+		return DB::query('SELECT MAX(position) AS pos FROM question')->execute()->fetch()->pos + 1;
+	}
 	public function insertMultipleChoiceQuestion($content, $data, $score = NULL)
 	{
 		DB::begin();
@@ -24,7 +29,7 @@ class Model
 			'group_id' => Request::params('group_id') ? Request::params('group_id') : NULL,
 			'score' => $score,
 			'type' => self::QUESTION_MULTIPLE_CHOICE,
-			'position' => 65536
+			'position' => $this->getQuestionLastPosition()
 		])->execute();
 		foreach ($data as $key => $option)
 		{
@@ -37,6 +42,63 @@ class Model
 		}
 		DB::commit();
 		Misc::put_msg('success', 'Đã thêm mới câu hỏi thành công');
+	}
+	public function insertFillQuestion($content, $score)
+	{
+		$id = Misc::get_uid();
+		DB::query()->insert('question', [
+			'id' => $id,
+			'content' => $content,
+			'exam_id' => Request::params('exam_id'),
+			'group_id' => Request::params('group_id') ? Request::params('group_id') : NULL,
+			'score' => $score,
+			'type' => self::QUESTION_FILL,
+			'position' => $this->getQuestionLastPosition()
+		])->execute();
+		Misc::put_msg('success', 'Đã thêm mới một câu điền khuyết');
+	}
+	public function insertEssayQuestion($content, $score)
+	{
+		$id = Misc::get_uid();
+		DB::query()->insert('question', [
+			'id' => $id,
+			'content' => $content,
+			'exam_id' => Request::params('exam_id'),
+			'group_id' => Request::params('group_id') ? Request::params('group_id') : NULL,
+			'score' => $score,
+			'type' => self::QUESTION_ESSAY,
+			'position' => $this->getQuestionLastPosition()
+		])->execute();
+		Misc::put_msg('success', 'Đã thêm mới một câu điền khuyết');
+	}
+	public function insertLinkQuestion($content, $a_title, $b_title, $data, $score)
+	{
+		DB::begin();
+		$id = Misc::get_uid();
+		DB::query()->insert('question', [
+			'id' => $id,
+			'content' => $content,
+			'exam_id' => Request::params('exam_id'),
+			'group_id' => Request::params('group_id') ? Request::params('group_id') : NULL,
+			'a_title' => $a_title,
+			'b_title' => $b_title,
+			'score' => $score,
+			'type' => self::QUESTION_LINK,
+			'position' => $this->getQuestionLastPosition()
+		])->execute();
+		foreach ($data as $option)
+		{
+			DB::query()->insert('_link_option', [
+				'id' => Misc::get_uid(),
+				'question_id' => $id,
+				'a_content' => isset($option['a']) ? $option['a'] : NULL,
+				'a_position' => rand(0, 255),
+				'b_content' => $option['b'],
+				'b_position' => rand(0, 255)
+			])->execute();
+		}
+		DB::commit();
+		Misc::put_msg('success', 'Đã thêm một câu hỏi mới');
 	}
 	public function deleteQuestion(array $ids)
 	{
@@ -58,13 +120,17 @@ class Model
 		{
 			$query->whereIsNull('q.group_id');
 		}
-		if (!$query->execute())
+		$result = $query->execute();
+		DB::commit();
+		if ($result)
+		{
+			Misc::put_msg('success', "Đã xóa $result câu hỏi");
+		}
+		else
 		{
 			Misc::put_msg('warning', 'Không thể xóa câu hỏi này');
 			return FALSE;
 		}
-		DB::commit();
-		Misc::put_msg('success', 'Đã xóa ' . DB::affected_rows() . ' câu hỏi');
 	}
 	public function getTable()
 	{

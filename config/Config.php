@@ -28,6 +28,7 @@ $config['routes'] = array(
 	'/admin/category/{category_id}/exam/{exam_id}/delete' => 'Admin\Exam:deleteExam',
 	'/admin/category/{category_id}/exam/{exam_id}/edit' => 'Admin\Exam:editExam',
 	'/admin/category/{category_id}/exam/{exam_id}/share' => 'Admin\Exam:setVisible',
+	'/admin/category/{category_id}/exam/{exam_id}/shuffle' => 'Admin\Exam:shuffleExam',
 	/** Group Manage */
 	'/admin/category/{category_id}/exam/{exam_id}/group' => 'Admin\Group',
 	'/admin/category/{category_id}/exam/{exam_id}/group/create' => 'Admin\Group:createGroup',

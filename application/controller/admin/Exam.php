@@ -98,6 +98,12 @@ class Exam extends Admin
 			));
 		}
 	}
+	public function shuffleExam()
+	{
+		$this->model->shuffleExam(Request::params('exam_id'));
+		$this->redirectToTable();
+	}
+
 	public function deleteExam()
 	{
 		$this->model->deleteExams([(Request::params('exam_id'))]);

@@ -1,4 +1,12 @@
 $(document).ready(function(){
+	$('form#add-multiple-choice').validate({
+		rules: {
+			content: {
+				required: true
+			}
+		},
+		errorClass: 'text-danger'
+	});
 	$('form#add-multiple-choice').on('change', '.set-answer-number', function(){
 		var options = $('ol.answer-options');
 		var opt = options.find('li');

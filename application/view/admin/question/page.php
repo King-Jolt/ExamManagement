@@ -12,6 +12,7 @@
 				<li><a href="{{add_a}}"> Chọn đáp án </a></li>
 				<li><a href="{{add_b}}"> Câu ghép nối </a></li>
 				<li><a href="{{add_c}}"> Câu Điền khuyết </a></li>
+				<li><a href="{{add_essay}}"> Câu tự luận </a></li>
 			</ul>
 		</span>
 		<button type="submit" class="btn btn-warning btn-xs" name="delete" value="1" > Xóa câu hỏi </button>
