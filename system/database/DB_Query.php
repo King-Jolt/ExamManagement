@@ -236,6 +236,7 @@ class DB_Query
 	}
 	public function orderBy($column, $sort = 'DESC')
 	{
+		$sort = strtoupper($sort);
 		if (is_string($column))
 		{
 			$column = array($column => $sort);
@@ -243,27 +244,35 @@ class DB_Query
 		$this->_order_by = array_merge($this->_order_by, $column);
 		return $this;
 	}
-	public function insert($table, array $data)
+	public function insert($table, $data)
 	{
-		$cols = implode(', ', array_keys($data));
-		$vals = implode(', ', array_fill(0, count($data), '?'));
-		$this->_query = "INSERT INTO $table ($cols) VALUES ($vals) ";
-		$this->_param = array_values($data);
-		return $this;
-	}
-	public function insertInto($table, $column, $select = NULL)
-	{
-		if (!($select instanceof self))
+		$query = '';
+		$param = array();
+		switch (func_num_args())
 		{
-			$select = $column;
-			$column = '';
+		case 2:
+			if ($data instanceof self)
+			{
+				$query = "INSERT INTO $table {$data->getQuery()}";
+				$param = $data->getParams();
+			}
+			else if (is_array($data))
+			{
+				$cols = implode(', ', array_keys($data));
+				$vals = implode(', ', array_fill(0, count($data), '?'));
+				$query = "INSERT INTO $table ($cols) VALUES ($vals) ";
+				$param = array_values($data);
+			}
+			break;
+		case 3:
+			$cols = implode(', ', $data);
+			$select = func_get_arg(3);
+			$query = "INSERT INTO $table ($cols) {$select->getQuery()}";
+			$param = $select->getParams();
+			break;
 		}
-		else
-		{
-			$column = ' (' . implode(', ', $column) . ')';
-		}
-		$this->_query = "INSERT INTO {$table}{$column} {$select->getQuery()}";
-		$this->_param = array_merge($this->_param, array_values($select->getParams()));
+		$this->_query = $query;
+		$this->_param = array_values($param);
 		return $this;
 	}
 	public function update($table, $alias = '')
@@ -285,10 +294,27 @@ class DB_Query
 	}
 	public function set(array $data)
 	{
-		$this->_set = array_map(function($column){
-			return "$column = ?";
-		}, array_keys($data));
-		$this->_param = array_values($data);
+		$set = array();
+		$param = array();
+		foreach ($data as $column => $value)
+		{
+			if (is_numeric($column))
+			{
+				array_push($set, $value);
+			}
+			else if (is_array($value))
+			{
+				array_push($set, $column);
+				$param = array_merge($param, array_values($value));
+			}
+			else
+			{
+				array_push($set, "$column = ?");
+				array_push($param, $value);
+			}
+		}
+		$this->_set = array_values($set);
+		$this->_param = array_merge($this->_param, array_values($param));
 		return $this;
 	}
 	/** @return $this */

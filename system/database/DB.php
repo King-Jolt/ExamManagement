@@ -66,8 +66,4 @@ class DB
 		DB::open();
 		return self::$instance->connect;
 	}
-	public static function affected_rows()
-	{
-		return self::get_connect()->get_affected_rows();
-	}
 }
