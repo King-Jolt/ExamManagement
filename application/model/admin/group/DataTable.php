@@ -6,7 +6,7 @@ use System\Libraries\Auth;
 use System\Libraries\Request;
 use System\Database\DB;
 
-class Data
+class DataTable
 {
 	private $query_a = NULL;
 	private $query_b = NULL;

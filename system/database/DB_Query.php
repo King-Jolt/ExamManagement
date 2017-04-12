@@ -147,7 +147,16 @@ class DB_Query
 	}
 	public function from($table, $alias = '')
 	{
-		$this->_query .= "FROM {$this->_table_alias($table, $alias)} ";
+		if ($table instanceof self)
+		{
+			$query = "({$table->getQuery()})";
+			$this->_query .= "FROM {$this->_table_alias($query, $alias)} ";
+			$this->_param = array_merge($this->_param, $table->getParams());
+		}
+		else
+		{
+			$this->_query .= "FROM {$this->_table_alias($table, $alias)} ";
+		}
 		return $this;
 	}
 	/** Shorthand ->select('*')->from('table') */

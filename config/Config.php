@@ -28,6 +28,7 @@ $config['routes'] = array(
 	'/admin/category/{category_id}/exam/{exam_id}/edit' => 'Admin\Exam:editExam',
 	'/admin/category/{category_id}/exam/{exam_id}/share' => 'Admin\Exam:setVisible',
 	'/admin/category/{category_id}/exam/{exam_id}/shuffle' => 'Admin\Exam:shuffleExam',
+	'/admin/category/{category_id}/exam/{exam_id}/preview' => 'Admin\Exam:previewExam',
 	/** Group Manage */
 	'/admin/category/{category_id}/exam/{exam_id}/group' => 'Admin\Group',
 	'/admin/category/{category_id}/exam/{exam_id}/group/create' => 'Admin\Group:createGroup',
@@ -35,7 +36,7 @@ $config['routes'] = array(
 	'/admin/category/{category_id}/exam/{exam_id}/group/{group_id}/delete' => 'Admin\Group:deleteGroup',
 	/** Question Manage */
 	'/admin/category/{category_id}/exam/{exam_id}/group/{group_id}/question' => 'Admin\Question',
-	'/admin/category/{category_id}/exam/{exam_id}/group/{group_id}/question/insert/{question_type}' => 'Admin\Question:insertQuestion'
+	'/admin/category/{category_id}/exam/{exam_id}/group/{group_id}/question/insert/{question_type}' => 'Admin\Question:insertQuestion'	
 );
 
 ?>

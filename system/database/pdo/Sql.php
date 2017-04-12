@@ -57,7 +57,10 @@ class Sql extends \PDO implements DB_ISQL
 			{
 				case 'mysql':
 				{
-					$num_rows = $this->raw_query('SELECT FOUND_ROWS() AS total')->fetchObject()->total;
+					if (preg_match('/^\s*\(*SELECT/i', $this->pdo_stmt->queryString)) // ONLY for SELECT QUERY
+					{
+						$num_rows = $this->raw_query('SELECT FOUND_ROWS() AS total')->fetchObject()->total;
+					}
 					break;
 				}
 			}

@@ -11,11 +11,12 @@ class Table extends \System\Libraries\Table
 	}
 	protected function Source()
 	{
-		$data = new Data();
+		$data = new DataTable();
 		return $data->getQuery();
 	}
 	protected function row($data, $index)
 	{
+		if (!$data->id) $data->title = '<em class="text-success"> Nhóm cơ sở <a href="javascript:void(0)" title="Đây là nhóm mặc định, không thể sửa hoặc xóa. Thường dành cho loại đề thi chỉ có một hình thức thi"><span class="fa fa-question-circle"></span></a> </em>';
 		if ($data->content === NULL) $data->content = '<span class="text-muted"><em> Không có nội dung </em></span>';
 		$delete = '#';
 		$edit = '#';

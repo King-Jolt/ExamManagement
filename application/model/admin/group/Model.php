@@ -34,7 +34,7 @@ class Model
 	}
 	public function getGroupById($id)
 	{
-		$data = new Data();
+		$data = new DataTable();
 		return $data->filterId($id)->getGroup()->fetch();
 	}
 	public function updateGroup($id, $title, $content)

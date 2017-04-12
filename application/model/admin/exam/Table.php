@@ -30,23 +30,23 @@ class Table extends \System\Libraries\Table
 		<tr>
 			<td><input type="checkbox" name="eid[]" value="$data->id" /></td>
 			<td> $index </td>
-			<td><a href="/admin/category/$data->category_id/exam/$data->id/group"><span class="glyphicon glyphicon-paperclip"></span> $data->title </a></td>
+			<td><a href="/admin/category/$data->category_id/exam/$data->id/group"><span class="fa fa-link"></span> $data->title </a></td>
 			<td> $data->n_question </td>
 			<td class="text-info"> $date </td>
 			<td> $visible </td>
 			<td>
 				<div class="dropdown">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span>&nbsp;<span class="caret"></span></button>
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="fa fa-bars"></span></button>
 					<ul class="dropdown-menu dropdown-menu-right">
 						<li class="dropdown-header"> Danh mục tùy chọn <span class="caret"></span></li>
 						<li class="divider"></li>
-						<li><a href="/admin/category/$data->category_id/exam/$data->id/edit"><span class="glyphicon glyphicon-pencil"></span> Chỉnh sửa </a></li>
-						<li><a href="/admin/category/$data->category_id/exam/$data->id/share"><span class="glyphicon glyphicon-share"></span> Chia sẻ </a></li>
-						<li><a href=""><span class="glyphicon glyphicon-copy"></span> Sao chép </a></li>
-						<li><a href=""><span class="glyphicon glyphicon-import"></span> Bốc câu hỏi </a></li>
-						<li><a href="/admin/category/$data->category_id/exam/$data->id/shuffle"><span class="glyphicon glyphicon-random"></span> Xáo trộn </a></li>
-						<li><a href="" target="_blank"><span class="glyphicon glyphicon-list-alt"></span> Xuất bản </a></li>
-						<li><a href="/admin/category/$data->category_id/exam/$data->id/delete" class="be-care"><span class="glyphicon glyphicon-trash"></span> Xóa </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/edit"><span class="fa fa-pencil"></span> Chỉnh sửa </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/share"><span class="fa fa-share"></span> Chia sẻ </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/copy"><span class="fa fa-copy"></span> Sao chép </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/import"><span class="fa fa-download"></span> Bốc câu hỏi </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/shuffle"><span class="fa fa-random"></span> Xáo trộn </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/preview" target="_blank"><span class="fa fa-list-alt"></span> Xuất bản </a></li>
+						<li><a href="/admin/category/$data->category_id/exam/$data->id/delete" class="be-care"><span class="fa fa-trash"></span> Xóa </a></li>
 					</ul>
 				</div>
 			</td>
@@ -55,7 +55,7 @@ EOF;
 	}
 	protected function Source()
 	{
-		$data = new Data();
+		$data = new DataTable();
 		return $data->getQuery();
 	}
 }

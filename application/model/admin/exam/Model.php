@@ -52,7 +52,7 @@ class Model
 	}
 	public function getExamById($id)
 	{
-		$data = new Data();
+		$data = new DataTable();
 		return $data->filterId($id)->getExam()->fetch();
 	}
 	public function updateExam($id, $title, $header, $footer, $date)
@@ -107,7 +107,11 @@ class Model
 			Misc::put_msg('warning', 'Không có thay đổi nào được cập nhật');
 		}
 	}
-
+	public function getPreview()
+	{
+		$preview = new Paper();
+		return $preview->get();
+	}
 	public function deleteExams(array $eid)
 	{
 		$n = 0;
@@ -184,5 +188,3 @@ EOF;
 	 * 
 	 */
 }
-
-?>

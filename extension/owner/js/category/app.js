@@ -7,7 +7,7 @@ $(document).ready(function(){
 		}];
 		$.ajax({
 			url: '/admin/category/gettree',
-			method: 'post',
+			method: 'GET',
 			async: false,
 			dataType: 'json'
 		}).success(function(d){
@@ -16,10 +16,10 @@ $(document).ready(function(){
 		tree.treeview({
 			enableLinks: true,
 			highlightSelected: false,
-			nodeIcon: 'glyphicon glyphicon-folder-close',
-			selectedIcon: "glyphicon glyphicon-folder-open text-primary",
-			collapseIcon: 'glyphicon glyphicon-chevron-down',
-			expandIcon: 'glyphicon glyphicon-chevron-right',
+			nodeIcon: 'fa fa-folder',
+			selectedIcon: "fa fa-folder-open-o",
+			collapseIcon: 'fa fa-chevron-down',
+			expandIcon: 'fa fa-chevron-right',
 			selectedBackColor: '#9f9f9f',
 			data: data,
 			onNodeUnselected: function(event, data){

@@ -11,7 +11,7 @@ class Model
 	private function Tree_Traversal($id, $list, $callback)
 	{
 		$stack = array();
-		$result = new Data();
+		$result = new DataTable();
 		if ($id)
 		{
 			$result->filterParent($id);
@@ -33,7 +33,7 @@ class Model
 						'arr_tree' => $list
 					));
 					$callback($data, TRUE, $list);
-					$result = new Data();
+					$result = new DataTable();
 					$result = $result->filterParent($data->id)->getCategory();
 					continue;
 				}
@@ -85,7 +85,7 @@ class Model
 	}
 	public function getCategoryById($id)
 	{
-		$data = new Data();
+		$data = new DataTable();
 		return $data->filterId($id)->getCategory()->fetch();
 	}
 	public function updateCategory($id, $new_name)

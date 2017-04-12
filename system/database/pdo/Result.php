@@ -46,7 +46,14 @@ class Result implements DB_Result
 	}
 	public function next()
 	{
-		($this->row = $this->pdo_stmt->fetchObject()) and $this->key+=1;
+		if  ($this->row = $this->pdo_stmt->fetchObject())
+		{
+			$this->key+=1;
+		}
+		else
+		{
+			$this->pdo_stmt->closeCursor();
+		}
 	}
 	public function rewind()
 	{

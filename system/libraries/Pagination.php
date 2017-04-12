@@ -67,16 +67,16 @@ class Pagination
 			'prev' => $this->p_link($this->current_page - 1),
 			'last' => $this->p_link($this->last_page),
 		);
-		$html .= "<li><a href=\"$link->first\" title=\"First\"><span class=\"glyphicon glyphicon-fast-backward\"></span> </a></li>"; // first
-		$html .= "<li><a href=\"$link->prev\" title=\"Previous\"><span class=\"glyphicon glyphicon-chevron-left\"></span></a></li>"; // prev
+		$html .= "<li><a href=\"$link->first\" title=\"First\"><span class=\"fa fa-fast-backward\"></span> </a></li>"; // first
+		$html .= "<li><a href=\"$link->prev\" title=\"Previous\"><span class=\"fa fa-chevron-left\"></span></a></li>"; // prev
 		for ($i = $show_left; $i <= $show_right; $i++)
 		{
 			$active = $i == $this->current_page ? ' class="active"' : '';
 			$addr = $this->p_link($i);
 			$html .= "<li$active><a href=\"$addr\"> $i </a></li>";
 		}
-		$html .= "<li><a href=\"$link->next\" title=\"Next\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a></li>"; // next
-		$html .= "<li><a href=\"$link->last\" title=\"Last\"><span class=\"glyphicon glyphicon-fast-forward\"></span></a></li>"; // last
+		$html .= "<li><a href=\"$link->next\" title=\"Next\"><span class=\"fa fa-chevron-right\"></span></a></li>"; // next
+		$html .= "<li><a href=\"$link->last\" title=\"Last\"><span class=\"fa fa-fast-forward\"></span></a></li>"; // last
 		$html .= '</ul>';
 		return $html;
 	}

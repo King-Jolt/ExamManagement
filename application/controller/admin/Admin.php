@@ -41,6 +41,3 @@ class Admin extends Controller
 		echo View::get('admin/template.php', $this->view_data);
 	}
 }
-
-
-?>

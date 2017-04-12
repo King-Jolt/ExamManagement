@@ -5,7 +5,7 @@ namespace Application\Model\Admin\Category;
 use System\Libraries\Auth;
 use System\Database\DB;
 
-class Data
+class DataTable
 {
 	/** @var \System\Database\DB_Query */
 	private $query = NULL;
