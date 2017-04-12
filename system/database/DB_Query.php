@@ -51,7 +51,7 @@ class DB_Query
 				$ret = "$column $operator ($in)";
 				break;
 			default:
-				$ret = "$column $operator ?";
+				$ret = is_array($param) ? $column : "$column $operator ?";
 			}
 			return $ret;
 		};
@@ -64,7 +64,7 @@ class DB_Query
 				$c = $k;
 				$o = '=';
 				$p = $w;
-				if (is_array($w))
+				if (is_numeric($k) and is_array($w))
 				{
 					$c = $w[0];
 					switch (count($w))

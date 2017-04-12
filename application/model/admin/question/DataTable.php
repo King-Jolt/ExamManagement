@@ -6,7 +6,7 @@ use System\Libraries\Auth;
 use System\Libraries\Request;
 use System\Database\DB;
 
-class Data
+class DataTable
 {
 	private $query = NULL;
 	public function __construct()
@@ -32,10 +32,6 @@ class Data
 			])
 			->orderBy('position', 'ASC');
 		$this->query = $query;
-	}
-	public function getAllQuestion()
-	{
-		return $this->query->execute();
 	}
 	public function getQuery()
 	{

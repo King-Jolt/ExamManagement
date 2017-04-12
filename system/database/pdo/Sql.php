@@ -111,4 +111,9 @@ class Sql extends \PDO implements DB_ISQL
 	{
 		return $this->n_affected_rows;
 	}
+	// MYSQL
+	public function setBufferedQuery($f = TRUE)
+	{
+		$this->setAttribute(self::MYSQL_ATTR_USE_BUFFERED_QUERY, $f);
+	}
 }

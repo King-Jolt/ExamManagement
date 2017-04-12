@@ -60,7 +60,7 @@ class View
 			if ($this->parse_data)
 			{
 				$data = &$this->_data;
-				return preg_replace_callback('/(\{\{\s*)([^\{^\^\s*}]+)(\s*\}\})/', function($m) use (&$data) {
+				return preg_replace_callback('/(\{{2}\s*)(\w+)(\s*\}{2})/', function($m) use (&$data) {
 					return isset($data[$m[2]]) ? $data[$m[2]] : $m[0];
 				}, $__html_result);
 			}

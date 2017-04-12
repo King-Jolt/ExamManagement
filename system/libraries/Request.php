@@ -40,7 +40,14 @@ class Request
 		);
 		foreach ($get_routes as $request => $controller)
 		{
+			$method = array('GET', 'POST');
 			$param = array();
+			if (is_array($controller))
+			{
+				$method = explode(',', $controller[0]);
+				$request = $controller[1];
+				$controller = $controller[3];
+			}
 			$regex_request = preg_replace_callback('/\{(\w+)\}/i', function($m) use (&$param) {
 				foreach (array_slice($m, 1) as $k)
 				{
@@ -49,7 +56,10 @@ class Request
 				return '(\w+)';
 			}, preg_replace('/\//i', '\/', $request));
 			$matches = array();
-			if (preg_match("/^$regex_request$/i", $uri, $matches))
+			if (
+				in_array($_SERVER['REQUEST_METHOD'], $method) and
+				preg_match("/^$regex_request$/i", $uri, $matches)
+			)
 			{
 				if (count($matches) >= 2)
 				{

@@ -3,7 +3,6 @@
 namespace Application\Model\Admin\Question;
 
 use System\Database\DB;
-use System\Database\DB_Exception;
 use System\Libraries\Auth;
 use System\Libraries\Request;
 use Application\Model\Misc;

@@ -9,7 +9,6 @@ $config['db'] = array(
 );
 
 $config['routes'] = array(
-	'/demo' => 'Test\Main',
 	/** Require Login */
 	'/' => 'Admin\Login',
 	'/admin/login' => 'Admin\Login',

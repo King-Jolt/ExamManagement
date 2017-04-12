@@ -22,7 +22,7 @@ class Login extends Controller
 			Auth::set_Function(function() {
 				$query = DB::query()->select()->from('user')->where(array(
 					'user' => Request::post('user'),
-					'pass' => sha1(Request::post('pass')),
+					'pass = SHA1(?)' => [Request::post('pass')],
 					'course_id' => Request::post('course')
 				));
 				$result = $query->execute();

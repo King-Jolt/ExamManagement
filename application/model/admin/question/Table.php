@@ -12,7 +12,7 @@ class Table extends \System\Libraries\Table
 	}
 	protected function Source()
 	{
-		$data = new Data();
+		$data = new DataTable();
 		return $data->getQuery();
 	}
 	protected function row($data, $index)
