@@ -14,7 +14,17 @@ class DB
 	private $connect = NULL;
 	private function __construct()
 	{
-		$db = Config::get('db');
+		$config = array(
+			'driver' => 'mysql',
+			'host' => 'localhost',
+			'port' => 3306,
+			'user' => 'root',
+			'password' => '',
+			'charset' => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'db' => ''
+		); // -> default config
+		$db = array_merge($config, Config::get('db'));
 		self::$db_driver = $db['driver'];
 		$this->connect = new PDO\Sql($db);
 	}

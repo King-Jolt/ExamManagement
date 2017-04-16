@@ -4,7 +4,7 @@ namespace System\Database;
 
 class DB_Query
 {
-	private $_query = 'SELECT @@VERSION as ver'; // default query
+	private $_query = '';
 	private $_join = array();
 	private $_where = array();
 	private $_group_by = array();
@@ -60,26 +60,41 @@ class DB_Query
 		switch (func_num_args())
 		{
 		case 1:
-			foreach (func_get_arg(0) as $k => $w)
+			$d = func_get_arg(0);
+			if (is_string($d))
 			{
-				$c = $k;
-				$o = '=';
-				$p = $w;
-				if (is_numeric($k) and is_array($w))
+				array_push($list, $d);
+			}
+			else
+			{
+				foreach (func_get_arg(0) as $k => $w)
 				{
-					$c = $w[0];
-					switch (count($w))
+					if (is_numeric($k) and is_string($w))
 					{
-					case 2:
-						$p = $w[1];
-						break;
-					case 3:
-						$o = $w[1];
-						$p = $w[2];
-						break;
+						array_push($list, $w);
+					}
+					else
+					{
+						$c = $k;
+						$o = '=';
+						$p = $w;
+						if (is_numeric($k) and is_array($w))
+						{
+							$c = $w[0];
+							switch (count($w))
+							{
+							case 2:
+								$p = $w[1];
+								break;
+							case 3:
+								$o = $w[1];
+								$p = $w[2];
+								break;
+							}
+						}
+						array_push($list, array($c, $o, $p));
 					}
 				}
-				array_push($list, array($c, $o, $p));
 			}
 			break;
 		case 2:
@@ -92,14 +107,21 @@ class DB_Query
 		$where_return = array('expression' => array(), 'param' => array());
 		foreach ($list as $where)
 		{
-			array_push($where_return['expression'], $get($where[0], $where[1], $where[2]));
-			if (is_array($where[2]))
+			if (is_string($where))
 			{
-				$where_return['param'] = array_merge($where_return['param'], $where[2]);
+				array_push($where_return['expression'], $where);
 			}
 			else
 			{
-				array_push($where_return['param'], $where[2]);
+				array_push($where_return['expression'], $get($where[0], $where[1], $where[2]));
+				if (is_array($where[2]))
+				{
+					$where_return['param'] = array_merge($where_return['param'], $where[2]);
+				}
+				else
+				{
+					array_push($where_return['param'], $where[2]);
+				}
 			}
 		}
 		return $where_return;

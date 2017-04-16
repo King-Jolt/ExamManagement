@@ -18,21 +18,21 @@ class Sql extends \PDO implements DB_ISQL
 		switch ($db['driver'])
 		{
 		case 'sqlsrv':
-			if (!isset($db['port'])) $db['port'] = 1433;
 			$dsn .= "Server={$db['host']},{$db['port']};Database={$db['db']}";
 			break;
 		default:
-			if (!isset($db['port'])) $db['port'] = 3306;
-			if (!isset($db['charset'])) $db['charset'] = 'utf8';
 			$dsn .= "host={$db['host']};port={$db['port']};dbname={$db['db']};charset={$db['charset']}";
 		}
-		try
+		
+		parent::__construct($dsn, $db['user'], $db['password'], array(self::ATTR_ERRMODE => self::ERRMODE_EXCEPTION));
+		
+		if ($db['collation'])
 		{
-			parent::__construct($dsn, $db['user'], $db['password'], array(self::ATTR_ERRMODE => self::ERRMODE_EXCEPTION));
-		}
-		catch (\PDOException $e)
-		{
-			throw new DB_Exception($e->getMessage(), $e->getCode());
+			switch ($db['driver'])
+			{
+			case 'mysql':
+				parent::query("SET collation_connection = {$db['collation']}"); break;
+			}
 		}
 	}
 	public function raw_query()

@@ -1,14 +1,30 @@
 <?php
 
-$config['db'] = array(
-	'driver' => 'mysql',
-	'host' => 'localhost',
-	'user' => 'root',
-	'password' => '',
-	'db' => 'exam_management'	
+$database = array(
+	array(
+		'driver' => 'mysql',
+		'host' => 'localhost',
+		'user' => 'root',
+		'password' => '',
+		'charset' => 'utf8',
+		'collation' => 'utf8_unicode_ci',
+		'db' => 'exam_management'
+	),
+	array(
+		'driver' => 'mysql',
+		'host' => 'localhost',
+		'user' => 'nocut_exam',
+		'password' => 'e5eru3ydavuz',
+		'charset' => 'utf8',
+		'collation' => 'utf8_unicode_ci',
+		'db' => 'nocuttree_data'
+	)
 );
 
+$config['db'] = $database[0];
+
 $config['routes'] = array(
+	'/database' => 'Database',
 	/** Require Login */
 	'/' => 'Admin\Login',
 	'/admin/login' => 'Admin\Login',
