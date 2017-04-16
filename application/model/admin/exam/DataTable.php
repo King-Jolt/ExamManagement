@@ -12,7 +12,8 @@ class DataTable
 	private $query = NULL;
 	public function __construct()
 	{
-		$query = DB::query()->select(['c.user_id', 'u.name AS share_user_name', 'e.*', 'COUNT(q.id) AS n_question'])->from('exam', 'e')
+		$query = DB::query()->select('c.user_id', 'u.name AS share_user_name', 'e.*', 'COUNT(q.id) AS n_question')
+			->from('exam', 'e')
 			->join('category', 'c', 'c.id = e.category_id')
 			->leftJoin('user', 'u', 'u.id = e.share')
 			->leftJoin('question', 'q', 'q.exam_id = e.id')

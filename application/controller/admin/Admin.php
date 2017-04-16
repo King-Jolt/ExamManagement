@@ -33,7 +33,7 @@ class Admin extends Controller
 	protected function output($html)
 	{
 		$this->view_data += array(
-			'title' => 'Ứng dụng quản lý bài kiểm tra',
+			'title' => 'Management',
 			'nav' => $this->nav->get(),
 			'content' => $html,
 			'user' => $this->user

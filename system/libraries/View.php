@@ -61,7 +61,7 @@ class View
 			{
 				$data = &$this->_data;
 				return preg_replace_callback('/(\{{2}\s*)(\w+)(\s*\}{2})/', function($m) use (&$data) {
-					return isset($data[$m[2]]) ? $data[$m[2]] : $m[0];
+					return isset($data[$m[2]]) ? $data[$m[2]] : NULL;
 				}, $__html_result);
 			}
 			return $__html_result;

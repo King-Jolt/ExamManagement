@@ -2,9 +2,9 @@ body
 {
 	font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
 	color: #73879C;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.471;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.471;
 }
 
 .no-border-radius, .list-group.no-border-radius > .list-group-item

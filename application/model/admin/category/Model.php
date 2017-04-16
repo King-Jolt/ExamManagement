@@ -92,7 +92,7 @@ class Model
 	{
 		$query = DB::query()
 			->update('category')
-			->set(['name' => $new_name])
+			->set('name', $new_name)
 			->where([
 				'user_id' => Auth::get()->id,
 				'id' => $id

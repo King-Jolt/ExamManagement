@@ -44,9 +44,9 @@
 										</ul>
 									</li>
 									<li class="dropdown">
-										<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-user"></span> <?php self::put($user->user) ?> <span class="caret"></span></a>
+										<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-user"></span> <?php echo $user->user ?> <span class="caret"></span></a>
 										<ul class="dropdown-menu">
-											<li class="dropdown-header">Giáo viên : <?php self::put($user->name) ?> </li>
+											<li class="dropdown-header">Giáo viên : <?php echo $user->name ?> </li>
 											<li class="divider"></li>
 											<li><a href="#"><span class="fa fa-id-badge"></span> Quản lý tài khoản </a></li>
 											<li><a href="/admin/logout"><span class="fa fa-sign-out"></span> Đăng xuất  </a></li>

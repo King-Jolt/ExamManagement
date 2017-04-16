@@ -1,0 +1,21 @@
+body
+{
+	counter-reset: section;
+}
+
+span[data-fill]:before
+{
+	counter-increment: section;
+	content: "[" counter(section) "] ";
+	font-style: normal;
+	font-size: 10px;
+	vertical-align: super;
+}
+
+span[data-fill]
+{
+	font-style: italic;
+	color: #777;
+	padding-bottom: 1px;
+	border-bottom: 1px dashed black;
+}

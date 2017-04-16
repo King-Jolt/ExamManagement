@@ -5,11 +5,11 @@
 	</div>
 	<div class="panel-body">
 		<div class="form-group">
-			<button class="btn btn-info btn-xs" type="button" id="t-tip"><span class="glyphicon glyphicon-question-sign"></span> Hướng dẫn </button>
+			<button class="btn btn-info btn-xs" type="button" id="t-tip"><span class="fa fa-question-circle"></span> Chia sẻ </button>
 		</div>
 		<div class="form-group form-inline">
 			<div class="input-group">
-				<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+				<span class="input-group-addon"><span class="fa fa-user"></span></span>
 				<select class="form-control" name="object" >
 					<optgroup label="Tùy chọn">
 						<option value="0"> Chia sẻ tất cả </option>

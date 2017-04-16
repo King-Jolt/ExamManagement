@@ -19,6 +19,7 @@ class DB_Query
 	{
 		if ($query_str) $this->_query = $query_str;
 		if ($parameter) $this->_param = $parameter;
+		DB::open();
 	}
 	private function _get_condition($data)
 	{
@@ -301,8 +302,20 @@ class DB_Query
 		}
 		return $this;
 	}
-	public function set(array $data)
+	public function set($data)
 	{
+		if (!is_array($data))
+		{
+			switch (func_num_args())
+			{
+			case 1:
+				$data = array($data);
+				break;
+			case 2:
+				$data = array($data => func_get_arg(1));
+				break;
+			}
+		}
 		$set = array();
 		$param = array();
 		foreach ($data as $column => $value)
@@ -398,7 +411,7 @@ class DB_Query
 			switch (DB::$db_driver)
 			{
 			case 'mysql':
-				$query = preg_replace('/(^\s*SELECT(?=\s))/i', '${1} SQL_CALC_FOUND_ROWS', $query);
+				$query = preg_replace('/(^\s*SELECT(?=\s))/i', '$1 SQL_CALC_FOUND_ROWS', $query);
 			default:
 				$query .= "LIMIT $this->_limit OFFSET $this->_offset ";
 			}

@@ -1,42 +1,40 @@
-$(document).ready(function(){
-	$('form#add-multiple-choice').validate({
-		rules: {
-			content: {
-				required: true
-			}
-		},
-		errorClass: 'text-danger'
-	});
-	$('form#add-multiple-choice').on('change', '.set-answer-number', function(){
-		var options = $('ol.answer-options');
-		var opt = options.find('li');
+$(document).ready(function () {
+	var form = $('form#add-multiple-choice');
+	var option = form.find('.answer-options .option').first().clone();
+		
+	CKEDITOR.inline('content');
+	CKEDITOR.inline(form.find('.answer-options .option textarea').first().prop('name'));
+
+	form.on('change', '.set-answer-number', function () {
+		var options = $('.answer-options .option');
 		var set = parseInt($(this).val().toString());
-		if (set > opt.length)
+		if (set > options.length)
 		{
-			for (var i = opt.length; i < set; i++)
+			for (var i = options.length; i < set; i++)
 			{
-				var new_option = opt.first().clone();
-				new_option.find('input[type="text"], input:checkbox').each(function(){
+				var n = option.clone();
+				$('.answer-options').append(n);
+				n.find('textarea, input:checkbox').each(function () {
 					$(this).prop('name', $(this).prop('name').replace(/\[(\d)\]/, '[' + i + ']'));
-					if ($(this).is('input:checkbox'))
+					if ($(this).is('textarea'))
 					{
-						$(this).removeProp('checked');
-					}
-					else
-					{
-						$(this).val('');
+						CKEDITOR.inline($(this).prop('name'));
 					}
 				});
-				options.append(new_option);
 			}
 		}
 		else
 		{
-			opt.slice(set).remove();
+			options.slice(set).each(function () {
+				var name = $(this).find('textarea').prop('name');
+				$(this).remove();
+				CKEDITOR.instances[name].destroy();
+			});
 		}
-	})
-	.submit(function(){
-		if (!$(this).find('ol.answer-options input:checked').length)
+
+	});
+	form.submit(function () {
+		if (!$(this).find('.answer-options input:checked').length)
 		{
 			$.alert({
 				title: 'Thông báo',
@@ -45,7 +43,7 @@ $(document).ready(function(){
 			});
 			return false;
 		}
-		if (!$(this).find('ol.answer-options input:checkbox:not(:checked)').length)
+		if (!$(this).find('.answer-options input:checkbox:not(:checked)').length)
 		{
 			$.alert({
 				title: 'Thông báo',
@@ -54,6 +52,6 @@ $(document).ready(function(){
 			});
 			return false;
 		}
-	})
-	.find('select.set-answer-number').val(4).trigger('change');
+	});
+	form.find('select.set-answer-number').val(4).trigger('change');
 });

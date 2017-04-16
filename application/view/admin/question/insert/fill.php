@@ -4,7 +4,10 @@
 	<hr />
 	<div class="form-hint"></div>
 	<div class="form-group">
-		<input class="form-control qt use-ckeditor" name="content" placeholder="Nhập câu hỏi vào đây" autofocus autocomplete="off" />
+		<textarea name="content" placeholder="data"></textarea>
+		<!--
+		<input class="form-control use-ckeditor" name="content" placeholder="Nhập câu hỏi vào đây" autofocus autocomplete="off" />
+		-->
 	</div>
 	<div class="form-group">
 		<div class="form-inline">

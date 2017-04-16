@@ -18,6 +18,7 @@ class Question extends Admin
 		$this->nav->add('Quản lý đề thi', sprintf('/admin/category/%s/exam', Request::params('category_id')));
 		$this->nav->add('Quản lý nhóm câu hỏi', sprintf("/admin/category/%s/exam/%s/group", Request::params('category_id'), Request::params('exam_id')));
 		$this->nav->add('Quản lý câu hỏi', sprintf("/admin/category/%s/exam/%s/group/%s/question", Request::params('category_id'), Request::params('exam_id'), Request::params('group_id')));
+		View::add('admin/plugin/mathjax.php');
 		$this->model = new Model();
 	}
 	public function index()
@@ -78,7 +79,6 @@ class Question extends Admin
 		else
 		{
 			$this->nav->add('Thêm câu hỏi mới', '');
-			View::add('admin/ckeditor.php');
 			switch (Request::params('question_type'))
 			{
 			case 'multiple_choice':
@@ -94,6 +94,7 @@ class Question extends Admin
 				View::add('admin/question/insert/essay.php');
 				break;;
 			}
+			View::add('admin/plugin/ckeditor.php');
 		}
 	}
 	private function redirectToIndex()

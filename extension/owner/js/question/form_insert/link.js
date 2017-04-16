@@ -1,9 +1,7 @@
 $(document).ready(function () {
 	$('#add-link').validate({
+		ignore: 'textarea',
 		rules: {
-			content: {
-				required: true
-			},
 			a_title: {
 				required: true
 			},
@@ -13,13 +11,11 @@ $(document).ready(function () {
 		},
 		errorClass: 'text-danger'
 	});
+	CKEDITOR.replace('content', { height: 100, startupFocus: true });
+	var frow = $('#add-link table .row-input').first().clone();
 	$(document).on('click', '#add-link .add', function () {
-		var tr = $(this).parents('table').first().find('.row-input');
-		var clone = tr.first().clone();
-		
-		
-		
-		clone.find('input[name]').val('');
+		var tr = $(this).closest('table').find('.row-input');
+		var clone = frow.clone();
 		clone.find('.rm-row').removeProp('disabled');
 		if ($(this).hasClass('add-a'))
 		{
@@ -30,7 +26,7 @@ $(document).ready(function () {
 			tr.last().after(clone);
 		}
 		$(this).closest('table').find('.row-input').each(function(index){
-			$(this).find('input[name]').each(function(){
+			$(this).find('textarea[name]').each(function(){
 				$(this).prop('name', $(this).prop('name').replace(/\[(\d)\]/, '[' + index + ']'));
 			});
 		});

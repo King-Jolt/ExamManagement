@@ -20,7 +20,8 @@ $(document).ready(function(){
 			selectedIcon: "fa fa-folder-open-o",
 			collapseIcon: 'fa fa-chevron-down',
 			expandIcon: 'fa fa-chevron-right',
-			selectedBackColor: '#9f9f9f',
+			selectedBackColor: '#e7e7e7',
+			selectedColor: 'inherit',
 			data: data,
 			onNodeUnselected: function(event, data){
 				$('#category-info .name').text('...');
@@ -51,6 +52,6 @@ $(document).ready(function(){
 			}
 		});
 		tree.treeview('expandAll', { levels: 5, silent: true });
-		tree.treeview('selectNode', 1);
+		tree.treeview('selectNode', 1, {silent: false});
 	})();
 });

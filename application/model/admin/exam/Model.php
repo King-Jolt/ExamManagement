@@ -33,9 +33,7 @@ class Model
 		$query = DB::query()->update('question', 'q')
 			->join('exam', 'e', 'e.id = q.exam_id')
 			->join('category', 'c', 'c.id = e.category_id')
-			->set([
-				'q.position = RAND() * 60000'
-			])
+			->set('q.position = RAND() * 60000')
 			->where([
 				'c.user_id' => Auth::get()->id,
 				'e.category_id' => Request::params('category_id'),
@@ -43,6 +41,31 @@ class Model
 			]);
 		if ($query->execute())
 		{
+			// Shuffle Link Question's options
+			DB::query()->update('_link_option', 'link')
+			->join('question', 'q', 'q.id = link.question_id')
+			->join('exam', 'e', 'e.id = q.exam_id')
+			->join('category', 'c', 'c.id = e.category_id')
+			->set([
+				'link.a_position = RAND() * 254',
+				'link.b_position = RAND() * 254',
+			])
+			->where([
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
+				'e.id' => $id
+			])->execute();
+			// Shuffle Multiple Choice's options
+			DB::query()->update('_multiple_choice', 'mc')
+			->join('question', 'q', 'q.id = mc.question_id')
+			->join('exam', 'e', 'e.id = q.exam_id')
+			->join('category', 'c', 'c.id = e.category_id')
+			->set('mc.position = RAND() * 254')
+			->where([
+				'c.user_id' => Auth::get()->id,
+				'e.category_id' => Request::params('category_id'),
+				'e.id' => $id
+			])->execute();
 			Misc::put_msg('success', 'Đã xáo trộn đề thi thành công');
 		}
 		else
@@ -88,11 +111,10 @@ class Model
 	}
 	public function setVisible($id, $object)
 	{
+		if (!$object) $object = NULL;
 		$query = DB::query()->update('exam', 'e')
 			->join('category', 'c', 'c.id = e.category_id')
-			->set([
-				'e.share' => $object ? $object : NULL
-			])
+			->set('e.share', $object)
 			->where([
 				'c.user_id' => Auth::get()->id,
 				'e.category_id' => Request::params('category_id'),

@@ -59,5 +59,3 @@ EOF;
 		return $data->getQuery();
 	}
 }
-
-?>

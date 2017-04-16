@@ -8,7 +8,7 @@ class Table extends \System\Libraries\Table
 	{
 		parent::__construct();
 		$this->columns = array('<input type="checkbox" />', 'No.', 'Nội dung câu hỏi', 'Loại câu hỏi', 'Điểm');
-		$this->class[] = 'table-with-checkbox';
+		//$this->
 	}
 	protected function Source()
 	{

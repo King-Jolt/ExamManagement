@@ -1,22 +1,22 @@
-.exam-wrap
+.exam-preview
 {
 	font-family: "Times New Roman";
 	font-size: 13pt;
 }
 
-.exam-wrap .header
+.exam-preview .exam-header
 {
 	padding: 0.5cm 0 0.5cm;
 }
 
-.exam-wrap .footer
+.exam-preview .exam-footer
 {
 	text-align: center;
 	width: 100%;
 	padding: 0.5cm 0 0.5cm;
 }
 
-.exam-wrap .question-preview ul > li
+.exam-preview .exam-body ul.list-question > li
 {
 	margin-top: 0.3cm;
 	list-style-type: none;
@@ -24,33 +24,37 @@
 
 /* link question */
 
-.exam-wrap .question-preview .link .link-table
+.exam-preview .exam-body .link table
 {
-	margin: auto;
+	margin-left: 10%;
+	width: 90%;
 }
 
-.exam-wrap .question-preview .link .link-table td:first-child, .question-preview .link-table th:first-child
+.exam-preview .exam-body .link table td:first-child,
+.exam-preview .exam-body .link table th:first-child
 {
 	width: 30%;
 }
 
-.exam-wrap .question-preview .link .link-table td:nth-child(2), .question-preview .link-table th:nth-child(2)
+.exam-preview .exam-body .link table td:nth-child(2),
+.exam-preview .exam-body .link table th:nth-child(2)
 {
 	width: 20%;
 }
 
-.exam-wrap .question-preview .link .link-table td, .question-preview .link-table th
+.exam-preview .exam-body .link table td,
+.exam-preview .exam-body .link table th
 {
 	vertical-align: top;
 	padding: 5px 0px 0px 5px;
 }
 
-.exam-wrap .question-preview .link .link-table td[answer]:before
+.exam-preview .exam-body .link table td[answer]:before
 {
 	content: '.............';
 }
 
-.exam-wrap.show-answer .question-preview .link .link-table td[answer]:before
+.exam-preview.show-answer .exam-body .link table td[answer]:before
 {
 	content: attr(answer);
 	color: red;
@@ -59,54 +63,88 @@
 
 /* multiple choice */
 
-.exam-wrap .question-preview .multiple-choice .list-option
+.exam-preview .exam-body .multiple-choice .select
 {
+	margin-top: 0.2cm;
 	counter-reset: section;
 }
 
-.exam-wrap .question-preview .multiple-choice .list-option .option:before
-{
-	counter-increment: section;
-	content: ""counter(section, upper-alpha)". ";
-}
-
-.exam-wrap .question-preview .multiple-choice .list-option .option
+.exam-preview .exam-body .multiple-choice .select .option
 {
 	display: inline-block;
 	vertical-align: top;
 }
 
-.exam-wrap .question-preview .multiple-choice .list-option
+.exam-preview .exam-body .multiple-choice .select .option:before
 {
-	margin-top: 0.2cm;
+	counter-increment: section;
+	content: ""counter(section, upper-alpha)". ";
 }
 
-.exam-wrap .question-preview .multiple-choice .list-option.col-2 > .option
-{
-	width: 50%;
-}
-
-.exam-wrap .question-preview .multiple-choice .list-option.col-4 > .option
-{
-	width: 25%;
-}
-
-.exam-wrap .question-preview .multiple-choice .list-option.col-10 > .option
+.exam-preview .exam-body .multiple-choice .select.col-1 > .option
 {
 	width: 100%;
 }
 
-.exam-wrap.show-answer .question-preview .multiple-choice .list-option .option[answer="1"]:before
+.exam-preview .exam-body .multiple-choice .select.col-2 > .option
+{
+	width: 50%;
+}
+
+.exam-preview .exam-body .multiple-choice .select.col-4 > .option
+{
+	width: 25%;
+}
+
+.exam-preview.show-answer .exam-body .multiple-choice .select .option[answer="1"]:after
+{
+	content: '\02714';
+	color: green;
+	font-weight: bold;
+}
+
+.exam-preview.show-answer .exam-body .multiple-choice .select .option[answer="1"]:before
 {
 	color: red;
 	font-weight: bold;
 }
 
-.exam-wrap.show-answer .question-preview .multiple-choice .list-option .option[answer="1"]:after
+/* fill */
+
+.exam-preview .exam-body .fill
 {
-	content: '\02714';
-	color: green;
+	counter-reset: fsection;
+}
+
+.exam-preview .exam-body .fill .data-fill
+{
+	display: none;
+}
+
+.exam-preview.show-answer .exam-body .fill .data-fill
+{
 	font-weight: bold;
+	display: inline;
+}
+
+.exam-preview.show-answer .exam-body .fill [ellipsis]
+{
+	display: none;
+}
+
+.exam-preview .exam-body .fill [ellipsis]:before
+{
+	counter-increment: fsection;
+	content: "[" counter(fsection) "] ";
+	font-style: normal;
+	color: #555;
+}
+
+.exam-preview.show-answer .exam-body .fill [data-fill]
+{
+	color: red;
+	font-weight: bold;
+	font-style: italic;
 }
 
 /* table answer */
@@ -142,25 +180,4 @@
 	width: 20%;
 	display: inline-block;
 	padding-left: 5px;
-}
-
-/* fill */
-.exam-wrap .question-preview .fill
-{
-	counter-reset: fsection;
-}
-
-.exam-wrap .question-preview .fill [data-fill]:before
-{
-	counter-increment: fsection;
-	content: "["counter(fsection)"] ";
-	font-style: normal;
-	color: black;
-}
-
-.exam-wrap.show-answer .question-preview .fill [data-fill]
-{
-	color: red;
-	font-weight: bold;
-	font-style: italic;
 }
