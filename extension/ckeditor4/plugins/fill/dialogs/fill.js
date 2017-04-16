@@ -50,7 +50,7 @@ CKEDITOR.dialog.add('fillDialog', function (editor) {
 			if (element)
 				element = element.getAscendant('span', true);
 			// Create a new <data-fill> element if it does not exist.
-			if (!element || (element.getName() !== 'span' && element.hasAttribute('data-fill') === false) ) {
+			if (!element || (element.getName() !== 'span' && !element.hasClass('data-fill'))) {
 				//console.log(editor.getSelection().getSelectedText());
 				element = editor.document.createElement('span');
 				element.setText(editor.getSelection().getSelectedText());
@@ -77,8 +77,8 @@ CKEDITOR.dialog.add('fillDialog', function (editor) {
 			// Create a new <span fill-data> element.
 			var fill = this.element;
 
-			fill.setAttribute("data-fill", 1);
-
+			fill.setAttribute('class', 'data-fill');
+			
 			// Invoke the commit methods of all dialog window elements, so the <data-fill> element gets modified.
 			this.commitContent(fill);
 

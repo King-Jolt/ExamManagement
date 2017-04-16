@@ -10,6 +10,7 @@
 <script src="/extension/ckeditor4/ckeditor.js"></script>
 <script>
 	$(document).ready(function () {
+		CKEDITOR.config.allowedContent = true;
 		CKEDITOR.config.toolbarCanCollapse = true;
 		CKEDITOR.config.toolbarStartupExpanded = false;
 		CKEDITOR.config.height = 200;

@@ -6,7 +6,7 @@
 		<script src="/extension/jquery/jquery-1.12.4.min.js"></script>
 		<script src="/extension/bootstrap/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="/extension/owner/css/question_preview.css">
-		<script src="/extension/owner/js/question/question_preview.js"></script>
+		<script src="/extension/owner/js/exam/preview.js"></script>
 		<script src="/extension/owner/js/app.js"></script>
 		{{ mathjax }}
 		<script type="text/x-mathjax-config">

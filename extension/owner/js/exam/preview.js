@@ -19,9 +19,9 @@ function layoutContent() {
 		}
 		$(this).addClass(col);
 	});
-	$('.exam-preview .exam-body .fill [data-fill]').each(function () {
+	$('.exam-preview .exam-body .fill .data-fill').each(function () {
 		var e = $(this).html().replace(/.?/g, '..');
-		$(this).before('<span ellipsis>' + e + '</span>');
+		$(this).before('<span class="ellipsis">' + e + '</span>');
 	});
 }
 ;

@@ -125,26 +125,20 @@
 {
 	font-weight: bold;
 	display: inline;
+	color: red;
 }
 
-.exam-preview.show-answer .exam-body .fill [ellipsis]
+.exam-preview.show-answer .exam-body .fill .ellipsis
 {
 	display: none;
 }
 
-.exam-preview .exam-body .fill [ellipsis]:before
+.exam-preview .exam-body .fill .ellipsis:before
 {
 	counter-increment: fsection;
 	content: "[" counter(fsection) "] ";
 	font-style: normal;
 	color: #555;
-}
-
-.exam-preview.show-answer .exam-body .fill [data-fill]
-{
-	color: red;
-	font-weight: bold;
-	font-style: italic;
 }
 
 /* table answer */

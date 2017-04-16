@@ -3,7 +3,7 @@ body
 	counter-reset: section;
 }
 
-span[data-fill]:before
+span.data-fill:before
 {
 	counter-increment: section;
 	content: "[" counter(section) "] ";
@@ -12,7 +12,7 @@ span[data-fill]:before
 	vertical-align: super;
 }
 
-span[data-fill]
+span.data-fill
 {
 	font-style: italic;
 	color: #777;

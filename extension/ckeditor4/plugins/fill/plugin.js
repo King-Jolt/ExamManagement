@@ -2,11 +2,7 @@ CKEDITOR.plugins.add('fill', {
 	icons: 'fill',
 	init: function (editor) {
 		editor.addContentsCss( this.path + 'styles/fill.css' );
-		editor.addCommand('fill', new CKEDITOR.dialogCommand('fillDialog', {
-			allowedContent: 'span[data-fill]',
-			requiredContent: 'span',
-			contentForms: ['span', 'acronym']
-		}));
+		editor.addCommand('fill', new CKEDITOR.dialogCommand('fillDialog'));
 		editor.ui.addButton('Fill', {
 			label: 'Thêm từ khuyết',
 			command: 'fill',
@@ -22,7 +18,7 @@ CKEDITOR.plugins.add('fill', {
 			});
 
 			editor.contextMenu.addListener(function (element) {
-				if (element.hasAttribute('data-fill') && element.getAscendant('span', true)) {
+				if (element.hasClass('data-fill') && element.getAscendant('span', true)) {
 					return {fillItem: CKEDITOR.TRISTATE_OFF};
 				}
 			});
