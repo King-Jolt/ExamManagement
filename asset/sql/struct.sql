@@ -1,6 +1,6 @@
 /*
-SQLyog Ultimate v10.00 Beta1
-MySQL - 5.5.5-10.1.13-MariaDB : Database - exam_management
+SQLyog Ultimate v12.09 (64 bit)
+MySQL - 10.1.13-MariaDB : Database - exam_management
 *********************************************************************
 */
 
@@ -9,13 +9,8 @@ MySQL - 5.5.5-10.1.13-MariaDB : Database - exam_management
 /*!40101 SET SQL_MODE=''*/;
 
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`exam_management` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `exam_management`;
-
 /*Table structure for table `_link_option` */
 
 DROP TABLE IF EXISTS `_link_option`;
@@ -172,7 +167,7 @@ DELIMITER $$
 
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `category_trigger_delete` */$$
 
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `category_trigger_delete` BEFORE DELETE ON `category` FOR EACH ROW DELETE FROM exam WHERE exam.category_id = OLD.id */$$
+/*!50003 CREATE */ /*!50003 TRIGGER `category_trigger_delete` BEFORE DELETE ON `category` FOR EACH ROW DELETE FROM exam WHERE exam.category_id = OLD.id */$$
 
 
 DELIMITER ;
@@ -183,7 +178,7 @@ DELIMITER $$
 
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `exam_trigger_delete` */$$
 
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `exam_trigger_delete` BEFORE DELETE ON `exam` FOR EACH ROW BEGIN
+/*!50003 CREATE */ /*!50003 TRIGGER `exam_trigger_delete` BEFORE DELETE ON `exam` FOR EACH ROW BEGIN
 DELETE FROM question WHERE question.exam_id = OLD.id;
 DELETE FROM question_group WHERE question_group.exam_id = OLD.id;
 END */$$
@@ -197,7 +192,7 @@ DELIMITER $$
 
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `question_trigger_delete` */$$
 
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `question_trigger_delete` BEFORE DELETE ON `question` FOR EACH ROW BEGIN
+/*!50003 CREATE */ /*!50003 TRIGGER `question_trigger_delete` BEFORE DELETE ON `question` FOR EACH ROW BEGIN
 DELETE FROM _link_option WHERE _link_option.question_id = OLD.id;
 DELETE FROM _multiple_choice WHERE _multiple_choice.question_id = OLD.id;
 END */$$
@@ -205,39 +200,15 @@ END */$$
 
 DELIMITER ;
 
-/* Function  structure for function  `create_temp_table` */
+/* Trigger structure for table `question_group` */
 
-/*!50003 DROP FUNCTION IF EXISTS `create_temp_table` */;
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `create_temp_table`() RETURNS varchar(64) CHARSET utf8mb4
-    NO SQL
-BEGIN
-CREATE TEMPORARY TABLE ref
-(
-    question_id VARCHAR(15) COLLATE utf8_unicode_ci PRIMARY KEY
-) ENGINE=INNODB;
-RETURN 'ref';
-END */$$
-DELIMITER ;
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `question_group_trigger_delete` */$$
 
-/* Function  structure for function  `get_rand` */
+/*!50003 CREATE */ /*!50003 TRIGGER `question_group_trigger_delete` BEFORE DELETE ON `question_group` FOR EACH ROW DELETE FROM question WHERE question.group_id = OLD.id */$$
 
-/*!50003 DROP FUNCTION IF EXISTS `get_rand` */;
-DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `get_rand`() RETURNS tinyint(3) unsigned
-RETURN RAND() * 254 */$$
-DELIMITER ;
-
-/* Function  structure for function  `get_rand_w` */
-
-/*!50003 DROP FUNCTION IF EXISTS `get_rand_w` */;
-DELIMITER $$
-
-/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `get_rand_w`() RETURNS smallint(5) unsigned
-    NO SQL
-RETURN RAND() * 60000 */$$
 DELIMITER ;
 
 /* Procedure structure for procedure `get_question_from_ref` */
@@ -246,7 +217,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_question_from_ref`()
+/*!50003 CREATE PROCEDURE `get_question_from_ref`()
     NO SQL
 SELECT
     (CASE WHEN @qid != question.id THEN question.a_title ELSE NULL END) AS 'q_a_title',
@@ -279,25 +250,29 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `list_question_by_exam`(IN `user_id` VARCHAR(15) CHARSET utf8mb4, IN `category_id` VARCHAR(15) CHARSET utf8mb4, IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
+/*!50003 CREATE PROCEDURE `list_question_by_exam`(IN `user_id` VARCHAR(15) CHARSET utf8mb4, IN `category_id` VARCHAR(15) CHARSET utf8mb4, IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 SELECT
-    (CASE WHEN @qid != list_question.id THEN list_question.a_title ELSE NULL END) AS 'q_a_title',
-    (CASE WHEN @qid != list_question.id THEN list_question.b_title ELSE NULL END) AS 'q_b_title',
-    (CASE WHEN @qid != list_question.id THEN list_question.score ELSE NULL END) AS 'q_score',
-    (CASE WHEN @qid != list_question.id THEN list_question.type ELSE NULL END) AS 'q_type',
-    (CASE WHEN @qid != list_question.id THEN list_question.content ELSE NULL END) AS 'q_content',
-    (CASE WHEN @qid != list_question.id THEN list_question.position ELSE NULL END) AS 'q_position',
+	question_group.id AS 'g_id',
+    question_group.title AS 'g_title',
+    question_group.content AS 'g_content',
+    (CASE WHEN @qid != question.id THEN question.a_title ELSE NULL END) AS 'link_a_title',
+    (CASE WHEN @qid != question.id THEN question.b_title ELSE NULL END) AS 'link_b_title',
+    (CASE WHEN @qid != question.id THEN question.score ELSE NULL END) AS 'q_score',
+    (CASE WHEN @qid != question.id THEN question.type ELSE NULL END) AS 'q_type',
+    (CASE WHEN @qid != question.id THEN question.content ELSE NULL END) AS 'q_content',
+    (CASE WHEN @qid != question.id THEN question.position ELSE NULL END) AS 'q_position',
     link.a_content AS 'link_a_content',
     link.a_mark AS 'link_a_mark',
     link.b_content AS 'link_b_content',
-    link.b_mark AS 'link_b_mark',
-    link.answer AS 'link_answer',
+    CHAR(link.b_mark + 64) AS 'link_b_mark',
+    CHAR(link.answer + 64) AS 'link_answer',
     multiple_choice.mark AS 'multiple_choice_mark',
     multiple_choice.content AS 'multiple_choice_content',
     multiple_choice.answer AS 'multiple_choice_answer',
-    (@qid:=list_question.id) AS 'question_id'
-FROM list_question
+    (CASE WHEN @qid != question.id THEN question.id ELSE NULL END) AS 'question_id',
+    IF((@qid:=question.id), NULL, NULL) AS 'temp_a'
+FROM question
 JOIN (SELECT @qid:='') AS qvar
 LEFT JOIN
     (
@@ -309,7 +284,7 @@ LEFT JOIN
     JOIN (SELECT @mcid:='', @mcn:=0) AS mark
     ORDER BY _multiple_choice.question_id, _multiple_choice.position
     ) AS multiple_choice
-ON multiple_choice.question_id = list_question.id
+ON multiple_choice.question_id = question.id
 LEFT JOIN
     (
     SELECT
@@ -349,9 +324,12 @@ LEFT JOIN
         ) AS c
     ON c.id = a.id
     ) AS link
-ON link.question_id = list_question.id
-WHERE list_question.user_id = user_id AND list_question.category_id = category_id AND list_question.exam_id = exam_id
-ORDER BY list_question.position ASC */$$
+ON link.question_id = question.id
+JOIN exam ON exam.id = question.exam_id
+JOIN category ON category.id = exam.category_id
+LEFT JOIN question_group ON question_group.exam_id = question.exam_id AND question_group.id = question.group_id
+WHERE category.user_id = user_id AND exam.category_id = category_id AND question.exam_id = exam_id
+ORDER BY question_group.id, question.position ASC */$$
 DELIMITER ;
 
 /* Procedure structure for procedure `list_shared_exam` */
@@ -360,7 +338,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `list_shared_exam`(IN `course_id` VARCHAR(15) CHARSET utf8mb4, IN `include_user_id` VARCHAR(15) CHARSET utf8mb4, IN `except_exam_id` VARCHAR(15) CHARSET utf8mb4)
+/*!50003 CREATE PROCEDURE `list_shared_exam`(IN `course_id` VARCHAR(15) CHARSET utf8mb4, IN `include_user_id` VARCHAR(15) CHARSET utf8mb4, IN `except_exam_id` VARCHAR(15) CHARSET utf8mb4)
     NO SQL
 SELECT
     user.id AS 'user_id', user.user AS 'user_user', user.name AS 'user_name',
@@ -382,7 +360,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `select_random_from_exam`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4, IN `n_question` INT UNSIGNED)
+/*!50003 CREATE PROCEDURE `select_random_from_exam`(IN `exam_id` VARCHAR(15) CHARSET utf8mb4, IN `n_question` INT UNSIGNED)
     NO SQL
 INSERT INTO ref (
     SELECT question.id FROM question
@@ -392,48 +370,6 @@ INSERT INTO ref (
 ) */$$
 DELIMITER ;
 
-/* Procedure structure for procedure `shuffle_question` */
-
-/*!50003 DROP PROCEDURE IF EXISTS  `shuffle_question` */;
-
-DELIMITER $$
-
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `shuffle_question`(IN `user_id` VARCHAR(15) CHARSET utf8mb4, IN `category_id` VARCHAR(15) CHARSET utf8mb4, IN `exam_id` VARCHAR(15) CHARSET utf8mb4)
-    NO SQL
-BEGIN
-/* shuffle Multiple Choice */
-UPDATE list_question_for_update SET
-list_question_for_update._multiple_choice_position = get_rand()
-WHERE
-list_question_for_update.user_id = user_id AND
-list_question_for_update.category_id = category_id AND
-list_question_for_update.exam_id = exam_id;
-/* shuffle Link with Option - First */
-UPDATE list_question_for_update SET
-list_question_for_update._link_a_position = get_rand()
-WHERE
-list_question_for_update._link_a_position != 255 AND
-list_question_for_update.user_id = user_id AND
-list_question_for_update.category_id = category_id AND
-list_question_for_update.exam_id = exam_id;
-/* shuffle Link with Option - Second */
-UPDATE list_question_for_update SET
-list_question_for_update._link_b_position = get_rand()
-WHERE
-list_question_for_update.user_id = user_id AND
-list_question_for_update.category_id = category_id AND
-list_question_for_update.exam_id = exam_id;
-/* shuffle question position */
-UPDATE list_question_for_update SET
-list_question_for_update.q_position = get_rand_w()
-WHERE
-list_question_for_update.user_id = user_id AND
-list_question_for_update.category_id = category_id AND
-list_question_for_update.exam_id = exam_id;
-END */$$
-DELIMITER ;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

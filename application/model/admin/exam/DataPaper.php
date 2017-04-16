@@ -32,7 +32,7 @@ class DataPaper
 		->leftJoin(
 			DB::query()->select(
 				'(CASE WHEN @mcid != _multiple_choice.question_id THEN @mcn:=1 ELSE @mcn:=@mcn + 1 END) AS mark',
-				'_multiple_choice.content, _multiple_choice.answer',
+				'_multiple_choice.content, CAST(_multiple_choice.answer AS int) AS answer',
 				'(@mcid:=_multiple_choice.question_id) AS question_id'
 			)->from('_multiple_choice')
 			->join(DB::query()->select("@mcid:=''", "@mcn:=0"), 'mark', true)
