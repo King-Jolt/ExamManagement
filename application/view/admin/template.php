@@ -65,6 +65,9 @@
 				</div>
 				<div class="col-xs-12 no-padding">
 					<div class="inner-content">
+						<div class="alert alert-info">
+							Hệ thống đang trong quá trình hoàn thiện, các chức năng và các lỗi sẽ được fix sau !
+						</div>
 						{{ nav }}
 						{{ content }}
 					</div>

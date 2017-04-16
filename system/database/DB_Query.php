@@ -4,6 +4,8 @@ namespace System\Database;
 
 class DB_Query
 {
+	CONST DESC = 'DESC';
+	CONST ASC = 'ASC';
 	private $_query = '';
 	private $_join = array();
 	private $_where = array();
@@ -69,7 +71,7 @@ class DB_Query
 			{
 				foreach (func_get_arg(0) as $k => $w)
 				{
-					if (is_numeric($k) and is_string($w))
+					if (is_int($k) and is_string($w))
 					{
 						array_push($list, $w);
 					}
@@ -78,7 +80,7 @@ class DB_Query
 						$c = $k;
 						$o = '=';
 						$p = $w;
-						if (is_numeric($k) and is_array($w))
+						if (is_int($k) and is_array($w))
 						{
 							$c = $w[0];
 							switch (count($w))
@@ -154,8 +156,7 @@ class DB_Query
 			$alias = $argument[1];
 			$condition = $argument[2];
 		}
-		$table = $this->_table_alias($table, $alias);
-		array_push($this->_join, "$type JOIN $table ON $condition");
+		array_push($this->_join, "$type JOIN {$this->_table_alias($table, $alias)}" . ($condition ? " ON $condition" : ''));
 		return $this;
 	}
 	private function _table_alias($table, $alias)
@@ -266,12 +267,15 @@ class DB_Query
 		$this->_param = array_merge($this->_param, array_values($param));
 		return $this;
 	}
-	public function orderBy($column, $sort = 'DESC')
+	public function orderBy($column, $sort = self::DESC)
 	{
-		$sort = strtoupper($sort);
-		if (is_string($column))
+		if (is_string($column) and in_array($sort, array(self::ASC, self::DESC)))
 		{
-			$column = array($column => $sort);
+			$column = array($column => strtoupper($sort));
+		}
+		else
+		{
+			$column = func_get_args();
 		}
 		$this->_order_by = array_merge($this->_order_by, $column);
 		return $this;
@@ -342,7 +346,7 @@ class DB_Query
 		$param = array();
 		foreach ($data as $column => $value)
 		{
-			if (is_numeric($column))
+			if (is_int($column))
 			{
 				array_push($set, $value);
 			}
@@ -420,11 +424,7 @@ class DB_Query
 		if (!empty($this->_order_by))
 		{
 			$order = implode(', ', array_map(function($column, $sort){
-				if (in_array(strtoupper($sort), array('ASC', 'DESC')))
-				{
-					return "$column $sort";
-				}
-				return $sort;
+				return is_int($column) ? $sort : "$column $sort";
 			}, array_keys($this->_order_by), $this->_order_by));
 			$query .= "ORDER BY $order ";
 		}

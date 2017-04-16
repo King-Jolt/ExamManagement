@@ -24,7 +24,6 @@ $database = array(
 $config['db'] = $database[0];
 
 $config['routes'] = array(
-	'/database' => 'Database',
 	/** Require Login */
 	'/' => 'Admin\Login',
 	'/admin/login' => 'Admin\Login',

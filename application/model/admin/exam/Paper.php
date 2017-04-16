@@ -38,15 +38,12 @@ class Paper
 		$this->html .= '<li class="multiple-choice">';
 		$this->html .= "<div> {$this->get_QuestionHeader()} {$this->data->current()->q_content} </div>";
 		$this->html .= '<div class="select">';
-		while (true)
+		do
 		{
 			$this->html .= "<div class=\"option\" answer=\"{$this->data->current()->multiple_choice_answer}\"> {$this->data->current()->multiple_choice_content} </div>";
 			$this->data->next();
-			if (!$this->data->valid() or $this->data->current()->question_id !== NULL)
-			{
-				break;
-			}
 		}
+		while ($this->data->valid() and $this->data->current()->question_id === NULL);
 		$this->html .= '<div>';
 		$this->html .= '</li>';
 	}
@@ -64,7 +61,7 @@ class Paper
 				'</tr>' .
 			'</thead>';
 		$this->html .= '<tbody>';
-		while (true)
+		do
 		{
 			$this->html .=
 			'<tr>' .
@@ -73,11 +70,8 @@ class Paper
 				"<td> {$this->data->current()->link_b_mark}. {$this->data->current()->link_b_content} </td>".
 			'</tr>';
 			$this->data->next();
-			if (!$this->data->valid() or $this->data->current()->question_id !== NULL)
-			{
-				break;
-			}
 		}
+		while ($this->data->valid() and $this->data->current()->question_id === NULL);
 		$this->html .= '</tbody>';
 		$this->html .= '</table>';
 		$this->html .= '</li>';
